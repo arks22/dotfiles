@@ -1,10 +1,12 @@
 #!/bin/sh
 
-#brewがない場合はinstall
+#brewがない場合インストール
 if ! which -s brew; then
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
+
+#gitとかzshとかインストール
 BREW_PACKAGES="
   zsh
   git
@@ -22,7 +24,7 @@ for package in $BREW_PACKAGES; do
 done
 
 
-#zplugがない場合はinstall
+#zplugがない場合インストール
 if [ ! -e ~/.zplug ]; then
   echo "Instaling zplug..."
   curl -fLo ~/.zplug/zplug --create-dirs git.io/zplug
@@ -30,7 +32,7 @@ if [ ! -e ~/.zplug ]; then
 fi 
 
 
-#nodebrewのinstall
+#nodebrewのインストール
 if [ ! -e ~/.nodebrew ]; then
   echo "Instaling nodebrew..."
   curl -L git.io/nodebrew | perl - setup
