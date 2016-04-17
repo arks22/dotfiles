@@ -44,6 +44,8 @@ zplug "stedolan/jq", \
     from:gh-r \
     | zplug "b4b4r07/emoji-cli"
 
+
+#未インストールの項目をインストール
 if ! zplug check --verbose; then
   printf "Install? [y/N]: "
   if read -q; then
