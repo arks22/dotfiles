@@ -3,6 +3,7 @@ export EDITOR=vim
 export LANG=ja_JP.UTF-8
 
 #alias
+alias vi="vim"
 alias t="tmux"
 alias ta="tmux a -t"
 alias tls="tmux list-sessions"
