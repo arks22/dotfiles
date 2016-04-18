@@ -1,28 +1,38 @@
 let g:user_emmet_leader_key='<c-m>'
-let g:indentLine_faster=1
+let g:indentLine_faster=1 "indetlineのなんか
+"カーソルの形
 let &t_ti.="\e[1 q"
 let &t_SI.="\e[5 q"
 let &t_EI.="\e[1 q"
 let &t_te.="\e[0 q"
 
+"syntaxとかね
 syntax enable
-map <C-l> gt
-map <C-h> gT
-nmap <silent><Leader>i :<C-u>IndentLinesToggle<CR>
 colorscheme solarized 
 set background=dark
-set number
+
+set cursorline
+set cursorcolumn
+set number 
 set noswapfile
 set expandtab
 set tabstop=2
+set softtabstop=2
 set shiftwidth=2
-set hlsearch
-set nowrap
-set vb t_vb= "beepを鳴らさない
-set backspace=indent,eol,start "インサートモードでバックスペースが効かない時の設定
+set hlsearch 
+set backspace=indent,eol,start 
+set wrap
+set showcmd
+set wildmenu
 
 
 "キーマップの設定
+map <C-l> gt
+map <C-h> gT
+map <silent>tn :tabnew<CR>
+nnoremap j gj
+nnoremap j gj
+nnoremap Y y$
 nnoremap s <Nop>
 nnoremap <silent><C-e> :NERDTree<CR>
 nnoremap s <Nop>

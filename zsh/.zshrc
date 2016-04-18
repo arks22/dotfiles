@@ -2,13 +2,14 @@
 export EDITOR=vim
 export LANG=ja_JP.UTF-8
 
-#alias
+#aliases
 alias vi="vim"
 alias t="tmux"
 alias ta="tmux a -t"
 alias tls="tmux list-sessions"
 alias reload="source ~/.zshrc"
 alias r="rails"
+alias cl="clear"
 alias v="vagrant"
 alias electron="reattach-to-user-namespace electron"
 
@@ -24,9 +25,9 @@ ZSH_THEME="robbyrussell"
 
 source ~/dotfiles/zsh/tmux_attach.zsh
 
+#zplug
 source ~/.zplug/zplug
 
-#zplugの読み込むやつ
 zplug "mollifier/anyframe"
 
 zplug "peco/peco", as:command, from:gh-r, of:"*amd64*"
@@ -53,4 +54,5 @@ if ! zplug check --verbose; then
     echo; zplug install
   fi
 fi
+
 zplug load --verbose

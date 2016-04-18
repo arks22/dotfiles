@@ -1,18 +1,19 @@
 #!/bin/sh
 
+source ~/dotfiles/etc/install.sh
 
-#brewとかnodeのインストールとかを書きたい
-#そのうち書く
+#brewとかのインストールとかを書きたい
 
 
 
 #brewのインストール
 install_homebrew() {
   emojify "Installing Homebrew :beer:  ..."
+  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 }
 
 install_linuxbrew() {
-  emojify "Installing linuxbrew :beer: ..."
+  emojify "まだlinuxbrewは書いてないよ :beer: ..."
 }
 
 if [ ! `which brew` ]; then
@@ -51,3 +52,4 @@ if [ ! -e ~/.zplug ]; then
   source ~/.zplug/zplug && zplug update --self
 fi
 
+source ~/.zshrc
