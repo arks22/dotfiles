@@ -13,7 +13,7 @@ alias cl="clear"
 alias v="vagrant"
 alias electron="reattach-to-user-namespace electron"
 
-#いろいろ便利な設定
+#いろいろ設定
 setopt auto_cd
 setopt correct
 setopt no_beep

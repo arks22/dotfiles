@@ -5,7 +5,7 @@ source ~/dotfiles/etc/install.sh
 #brewとかのインストールとかを書きたい
 
 
-
+#--------------------------------------------------------
 #brewのインストール
 install_homebrew() {
   emojify "Installing Homebrew :beer:  ..."
@@ -25,9 +25,17 @@ if [ ! `which brew` ]; then
 else
   emojify "Already Installed brew :beer: ."
 fi
+#--------------------------------------------------------
 
 
+#--------------------------------------------------------
+#brewでいろいろインストール
+brew tap homebrew/brewdler
+brew brewdle
+#--------------------------------------------------------
 
+
+#--------------------------------------------------------
 #nodebrewのインストール
 install_nodebrew() {
   echo Installing nodebrew...
@@ -43,13 +51,19 @@ elif [ ! -e ~/.nodebrew ]; then
 else
   echo "Already Installed nodebrew."
 fi
+#--------------------------------------------------------
 
 
-
+#--------------------------------------------------------
 #zplugのインストール
 if [ ! -e ~/.zplug ]; then
   curl -fLo ~/.zplug/zplug --create-dirs git.io/zplug
   source ~/.zplug/zplug && zplug update --self
+else
+  echo "Already Installed zplug."
 fi
+
+#--------------------------------------------------------
+chsh -s /bin/zsh
 
 source ~/.zshrc
