@@ -54,10 +54,13 @@ fi
 #--------------------------------------------------------
 
 
+chsh -s /bin/zsh
+
 
 #--------------------------------------------------------
 #zplugのインストール
 if [ ! -e ~/.zplug ]; then
+  echo "Installing zplug...."
   curl -fLo ~/.zplug/zplug --create-dirs git.io/zplug
   source ~/.zplug/zplug && zplug update --self
 else
@@ -65,7 +68,6 @@ else
 fi
 #--------------------------------------------------------
 
-chsh -s /bin/zsh
 
 source ~/dotfiles/etc/install.sh
 
