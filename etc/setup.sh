@@ -1,19 +1,17 @@
 #!/bin/sh
 
-source ~/dotfiles/etc/install.sh
-
 #brewとかのインストールとかを書きたい
 
 
 #--------------------------------------------------------
 #brewのインストール
 install_homebrew() {
-  emojify "Installing Homebrew :beer:  ..."
+  echo "Installing Homebrew ..."
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 }
 
 install_linuxbrew() {
-  emojify "まだlinuxbrewは書いてないよ :beer: ..."
+  echo "まだlinuxbrewは書いてないよ ..."
 }
 
 if [ ! `which brew` ]; then
@@ -23,9 +21,10 @@ if [ ! `which brew` ]; then
     install_linuxbrew
   fi
 else
-  emojify "Already Installed brew :beer: ."
+  echo "Already Installed brew."
 fi
 #--------------------------------------------------------
+
 
 
 #--------------------------------------------------------
@@ -33,6 +32,7 @@ fi
 brew tap homebrew/brewdler
 brew brewdle
 #--------------------------------------------------------
+
 
 
 #--------------------------------------------------------
@@ -54,6 +54,7 @@ fi
 #--------------------------------------------------------
 
 
+
 #--------------------------------------------------------
 #zplugのインストール
 if [ ! -e ~/.zplug ]; then
@@ -62,8 +63,10 @@ if [ ! -e ~/.zplug ]; then
 else
   echo "Already Installed zplug."
 fi
-
 #--------------------------------------------------------
+
 chsh -s /bin/zsh
+
+source ~/dotfiles/etc/install.sh
 
 source ~/.zshrc
