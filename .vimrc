@@ -118,5 +118,3 @@ nnoremap s< <C-w><
 nnoremap s> <C-w>>
 nnoremap s+ <C-w>+
 nnoremap s- <C-w>-
-
-

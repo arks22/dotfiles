@@ -8,17 +8,11 @@ fi
 source ~/.zplug/zplug && zplug update --self
 
 zplug "mollifier/anyframe"
-
 zplug "peco/peco", as:command, from:gh-r, of:"*amd64*"
-
 zplug "zsh-users/zsh-syntax-highlighting"
-
 zplug "zsh-users/zsh-history-substring-search"
-
 zplug "mrowa44/emojify", as:command
-
 zplug "plugins/git", from:oh-my-zsh
-
 zplug "stedolan/jq", \
     as:command, \
     file:jq, \
@@ -32,9 +26,9 @@ if ! zplug check --verbose; then
     echo; zplug install
   fi
 fi
-
-
 zplug load --verbose
+
+
 #PATHはできるだけ.zshenvの方に
 export EDITOR=vim
 export LANG=ja_JP.UTF-8
