@@ -1,30 +1,3 @@
-#PATHはできるだけ.zshenvの方に
-export EDITOR=vim
-export LANG=ja_JP.UTF-8
-
-#aliases
-alias vi="vim"
-alias t="tmux"
-alias ta="tmux a -t"
-alias tls="tmux list-sessions"
-alias reload="source ~/.zshrc"
-alias r="rails"
-alias cl="clear"
-alias v="vagrant"
-alias electron="reattach-to-user-namespace electron"
-
-#いろいろ設定
-setopt auto_cd
-setopt correct
-setopt no_beep
-setopt no_share_history
-setopt mark_dirs 
-
-DEFAULT_USER="arks22"
-ZSH_THEME="robbyrussell"
-
-source ~/dotfiles/zsh/tmux_attach.zsh
-
 #zplug
 if [ ! -e ~/.zplug ]; then
   echo "Installing zplug...."
@@ -52,7 +25,6 @@ zplug "stedolan/jq", \
     from:gh-r \
     | zplug "b4b4r07/emoji-cli"
 
-
 #未インストールの項目をインストール
 if ! zplug check --verbose; then
   printf "Install? [y/N]: "
@@ -61,4 +33,32 @@ if ! zplug check --verbose; then
   fi
 fi
 
+
 zplug load --verbose
+#PATHはできるだけ.zshenvの方に
+export EDITOR=vim
+export LANG=ja_JP.UTF-8
+
+#aliases
+alias vi="vim"
+alias t="tmux"
+alias ta="tmux a -t"
+alias tls="tmux list-sessions"
+alias reload="source ~/.zshrc"
+alias r="rails"
+alias cl="clear"
+alias v="vagrant"
+alias electron="reattach-to-user-namespace electron"
+
+#いろいろ設定
+setopt auto_cd
+setopt correct
+setopt no_beep
+setopt no_share_history
+setopt mark_dirs 
+
+DEFAULT_USER="arks22"
+ZSH_THEME="robbyrussell"
+
+source ~/dotfiles/zsh/tmux_attach.zsh
+

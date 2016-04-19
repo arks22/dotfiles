@@ -1,5 +1,81 @@
+"Dein.vimの設定
+if &compatible
+  set nocompatible
+endif
+set runtimepath^=~/.vim/repos/github.com/Shougo/dein.vim
+
+call dein#begin(expand('~/.cache/dein'))
+call dein#add('/Users/arks22/.vim/repos/github.com/Shougo/dein.vim')
+call dein#add('Shougo/neocomplete.vim')
+call dein#add('Shougo/unite.vim')
+call dein#add('Shougo/vimfiler')
+call dein#add('scrooloose/nerdtree')
+call dein#add('mattn/emmet-vim')
+call dein#add('Yggdroot/indentLine')
+call dein#add('w0ng/vim-hybrid')
+call dein#end()
+
+filetype plugin indent on
+
+
+"--------------------------------------------------------
+"neocompleteの設定
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_smart_case = 1
+" Set minimum syntax keyword length.
+let g:neocomplete#sources#syntax#min_keyword_length = 2
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+" Define dictionary.
+let g:neocomplete#sources#dictionary#dictionaries = {
+  \ 'default' : '',
+  \ 'scheme' : $HOME.'/.gosh_completions'
+    \ }
+if !exists('g:neocomplete#keyword_patterns')
+  let g:neocomplete#keyword_patterns = {}
+endi
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+"For no inserting <CR> key.
+"return pumvisible() ? "\<C-y>" : "\<CR>"
+endfunction
+" <TAB>: completion.
+noremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>".
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+endfunction
+
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+
+"rubyの"."を押して時のやつ
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+"--------------------------------------------------------
+
+
+
 let g:user_emmet_leader_key='<c-m>'
 let g:indentLine_faster=1 "indetlineのなんか
+
 "カーソルの形
 let &t_ti.="\e[1 q"
 let &t_SI.="\e[5 q"
@@ -12,7 +88,6 @@ colorscheme solarized
 set background=dark
 
 set cursorline
-set cursorcolumn
 set number 
 set noswapfile
 set expandtab
@@ -21,7 +96,6 @@ set softtabstop=2
 set shiftwidth=2
 set hlsearch 
 set backspace=indent,eol,start 
-set wrap
 set showcmd
 set wildmenu
 
@@ -46,23 +120,3 @@ nnoremap s+ <C-w>+
 nnoremap s- <C-w>-
 
 
-"Dein.vimの設定
-if &compatible
-  set nocompatible
-endif
-set runtimepath^=~/.vim/repos/github.com/Shougo/dein.vim
-
-call dein#begin(expand('~/.cache/dein'))
-
-call dein#add('/Users/arks22/.vim/repos/github.com/Shougo/dein.vim')
-call dein#add('Shougo/neocomplete.vim')
-call dein#add('Shougo/unite.vim')
-call dein#add('Shougo/vimfiler')
-call dein#add('scrooloose/nerdtree')
-call dein#add('mattn/emmet-vim')
-call dein#add('Yggdroot/indentLine')
-call dein#add('w0ng/vim-hybrid')
-
-call dein#end()
-
-filetype plugin indent on
