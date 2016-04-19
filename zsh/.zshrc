@@ -26,7 +26,13 @@ ZSH_THEME="robbyrussell"
 source ~/dotfiles/zsh/tmux_attach.zsh
 
 #zplug
-source ~/.zplug/zplug
+if [ ! -e ~/.zplug ]; then
+  echo "Installing zplug...."
+  curl -fLo ~/.zplug/zplug --create-dirs git.io/zplug
+  source ~/.zplug/zplug && zplug update --self
+fi
+
+source ~/.zplug/zplug && zplug update --self
 
 zplug "mollifier/anyframe"
 

@@ -5,20 +5,13 @@
 
 #--------------------------------------------------------
 #brewのインストール
-install_homebrew() {
-  echo "Installing Homebrew ..."
-  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-}
-
-install_linuxbrew() {
-  echo "まだlinuxbrewは書いてないよ ..."
-}
 
 if [ ! `which brew` ]; then
   if [ $(uname -s) == "Darwin" ]; then
-    install_homebrew
+  echo "Installing Homebrew ..."
+  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   else
-    install_linuxbrew
+    echo "まだlinuxbrewは書いてないよ ..."
   fi
 else
   echo "Already Installed brew."
@@ -55,20 +48,6 @@ else
 fi
 #--------------------------------------------------------
 
-
-zsh
-
-
-#--------------------------------------------------------
-#zplugのインストール
-if [ ! -e ~/.zplug ]; then
-  echo "Installing zplug...."
-  curl -fLo ~/.zplug/zplug --create-dirs git.io/zplug
-  source ~/.zplug/zplug && zplug update --self
-else
-  echo "Already Installed zplug."
-fi
-#--------------------------------------------------------
 
 
 source ~/dotfiles/etc/install.sh
