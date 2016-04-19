@@ -1,3 +1,7 @@
+if [ ! $SHELL = "/bin/zsh" ]; then
+  chsh -s /bin/zsh
+fi
+
 DEFAULT_USER="arks22"
 ZSH_THEME="robbyrussell"
 

@@ -52,4 +52,8 @@ fi
 
 source ~/dotfiles/etc/install.sh
 
+if [ ! $SHELL = "/bin/zsh" ]; then
+  chsh -s /bin/zsh
+fi
+
 zsh
