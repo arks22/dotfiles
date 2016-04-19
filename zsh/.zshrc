@@ -1,3 +1,7 @@
+DEFAULT_USER="arks22"
+ZSH_THEME="robbyrussell"
+
+
 #zplug
 if [ ! -e ~/.zplug ]; then
   echo "Installing zplug...."
@@ -5,7 +9,7 @@ if [ ! -e ~/.zplug ]; then
   source ~/.zplug/zplug && zplug update --self
 fi
 
-source ~/.zplug/zplug && zplug update --self
+source ~/.zplug/zplug 
 
 zplug "mollifier/anyframe"
 zplug "peco/peco", as:command, from:gh-r, of:"*amd64*"
@@ -51,8 +55,4 @@ setopt no_beep
 setopt no_share_history
 setopt mark_dirs 
 
-DEFAULT_USER="arks22"
-ZSH_THEME="robbyrussell"
-
 source ~/dotfiles/zsh/tmux_attach.zsh
-
