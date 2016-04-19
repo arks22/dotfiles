@@ -52,4 +52,4 @@ fi
 
 source ~/dotfiles/etc/install.sh
 
-chsh -s /bin/zsh
+zsh
