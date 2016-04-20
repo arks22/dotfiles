@@ -13,6 +13,7 @@ brew 'ruby'
 brew 'tmux'
 brew 'vim', args: ['with-lua']
 brew 'zsh'
+brew 'coreutils'
 brew 'homebrew/dupes/libiconv'
 
 cask 'iterm2'

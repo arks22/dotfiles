@@ -35,7 +35,6 @@ fi
 install_nodebrew() {
   echo Installing nodebrew...
   curl -L git.io/nodebrew | perl - setup
-  echo "export PATH=$HOME/.nodebrew/current/bin:$PATH" > ~/.zshenv
 }
 
 if [ ! `which node` ]; then

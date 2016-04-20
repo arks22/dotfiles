@@ -71,7 +71,6 @@ let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 "--------------------------------------------------------
 
 
-
 let g:user_emmet_leader_key='<c-m>'
 let g:indentLine_faster=1 "indetlineのなんか
 
@@ -86,6 +85,7 @@ syntax enable
 colorscheme solarized
 set background=dark
 set t_Co=256
+let g:solarized_termcolors=256
 
 set cursorline
 set cursorcolumn

@@ -1,6 +1,4 @@
-DEFAULT_USER="arks22"
 ZSH_THEME="robbyrussell"
-
 
 #zplug
 if [ ! -e ~/.zplug ]; then
@@ -32,16 +30,30 @@ if ! zplug check --verbose; then
 fi
 zplug load --verbose
 
+eval $(gdircolors ~/dircolors-solarized/dircolors.ansi-universal)
 
-#PATHはできるだけ.zshenvの方に
+#補完候補でもLS_COLORSを使う
+if [ -n "$LS_COLORS" ]; then
+  zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+fi
+
+#環境変数はzshenvとかzshprofileに
 export EDITOR=vim
 export LANG=ja_JP.UTF-8
 
+bindkey -v #zleでvimを使う
+
+#履歴を100000件保存
+HISTFILE=$HOME/.zsh-history
+HISTSIZE=100000
+SAVEHIST=100000
+
 #aliases
 alias vi="vim"
-alias l="ls -A"
+alias l="gls -A --color=auto"
+alias ls="gls --color=auto"
 alias t="tmux"
-alias x="exit"
+alias q="exit"
 alias ta="tmux a -t"
 alias tls="tmux list-sessions"
 alias reload="source ~/.zshrc"
@@ -49,6 +61,7 @@ alias r="rails"
 alias cl="clear"
 alias v="vagrant"
 alias electron="reattach-to-user-namespace electron"
+alias -g G='| grep'
 
 source ~/dotfiles/zsh/functions.sh
 
@@ -58,11 +71,10 @@ source ~/dotfiles/zsh/tmux_attach.zsh
 setopt auto_cd
 setopt correct
 setopt no_beep
-setopt no_share_history
+setopt share_history
 setopt mark_dirs 
 setopt interactive_comments
 setopt list_types
 setopt print_eight_bit
-
-bindkey -v #zleでvimを使う
-
+setopt auto_param_keys
+setopt auto_list
