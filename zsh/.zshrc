@@ -50,6 +50,9 @@ alias cl="clear"
 alias v="vagrant"
 alias electron="reattach-to-user-namespace electron"
 
+source ~/dotfiles/zsh/functions.sh
+
+
 #いろいろ設定
 setopt auto_cd
 setopt correct
@@ -62,5 +65,3 @@ setopt print_eight_bit
 
 bindkey -v #zleでvimを使う
 
-
-source ~/dotfiles/zsh/tmux_attach.zsh
