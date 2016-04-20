@@ -30,7 +30,7 @@ if ! zplug check --verbose; then
 fi
 zplug load --verbose
 
-eval $(gdircolors ~/dircolors-solarized/dircolors.ansi-universal)
+eval $(gdircolors ~/dircolors)
 
 #補完候補でもLS_COLORSを使う
 if [ -n "$LS_COLORS" ]; then
