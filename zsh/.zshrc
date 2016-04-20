@@ -52,6 +52,7 @@ alias electron="reattach-to-user-namespace electron"
 
 source ~/dotfiles/zsh/functions.sh
 
+source ~/dotfiles/zsh/tmux_attach.zsh
 
 #いろいろ設定
 setopt auto_cd
