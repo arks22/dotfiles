@@ -39,7 +39,9 @@ export LANG=ja_JP.UTF-8
 
 #aliases
 alias vi="vim"
+alias l="ls -A"
 alias t="tmux"
+alias x="exit"
 alias ta="tmux a -t"
 alias tls="tmux list-sessions"
 alias reload="source ~/.zshrc"
@@ -54,5 +56,11 @@ setopt correct
 setopt no_beep
 setopt no_share_history
 setopt mark_dirs 
+setopt interactive_comments
+setopt list_types
+setopt print_eight_bit
+
+bindkey -v #zleでvimを使う
+
 
 source ~/dotfiles/zsh/tmux_attach.zsh
