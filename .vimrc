@@ -2,17 +2,16 @@
 if &compatible
   set nocompatible
 endif
-set runtimepath^=~/.vim/repos/github.com/Shougo/dein.vim
+set runtimepath^=$HOME/.vim/repos/github.com/Shougo/dein.vim
 
 call dein#begin(expand('~/.cache/dein'))
-call dein#add('/Users/arks22/.vim/repos/github.com/Shougo/dein.vim')
+call dein#add('~/.vim/repos/github.com/Shougo/dein.vim')
 call dein#add('Shougo/neocomplete.vim')
 call dein#add('Shougo/unite.vim')
 call dein#add('Shougo/vimfiler')
 call dein#add('scrooloose/nerdtree')
 call dein#add('mattn/emmet-vim')
 call dein#add('Yggdroot/indentLine')
-call dein#add('w0ng/vim-hybrid')
 call dein#end()
 
 filetype plugin indent on
@@ -84,10 +83,12 @@ let &t_te.="\e[0 q"
 
 "syntaxとかね
 syntax enable
-colorscheme solarized 
+colorscheme solarized
 set background=dark
+set t_Co=256
 
 set cursorline
+set cursorcolumn
 set number 
 set noswapfile
 set expandtab
