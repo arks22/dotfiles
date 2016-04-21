@@ -63,7 +63,7 @@ autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 
-"rubyの"."を押した時のやつ
+""."を押した時のやつ
 if !exists('g:neocomplete#sources#omni#input_patterns')
   let g:neocomplete#sources#omni#input_patterns = {}
 endif
@@ -104,7 +104,6 @@ set wildmenu
 "キーマップの設定
 map <C-l> gt
 map <C-h> gT
-map <silent>tn :tabnew<CR>
 nnoremap j gj
 nnoremap j gj
 nnoremap Y y$
