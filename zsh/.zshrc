@@ -1,25 +1,26 @@
 ZSH_THEME="robbyrussell"
 
 #zplug
+autoload -Uz compinit
+compinit
+
 if [ ! -e ~/.zplug ]; then
   echo "Installing zplug...."
-  curl -fLo ~/.zplug/zplug --create-dirs git.io/zplug
-  source ~/.zplug/zplug && zplug update --self
+  curl -sL git.io/zplug | zsh
+  source ~/.zplug/init.zsh && zplug update --self
 fi
 
-source ~/.zplug/zplug 
+source ~/.zplug/init.zsh
 
+zplug "b4b4r07/zplug"
 zplug "mollifier/anyframe"
-zplug "peco/peco", as:command, from:gh-r, of:"*amd64*"
+zplug "peco/peco", as:command, from:gh-r, use:"*amd64*"
 zplug "zsh-users/zsh-syntax-highlighting"
 zplug "zsh-users/zsh-history-substring-search"
 zplug "mrowa44/emojify", as:command
-zplug "plugins/git", from:oh-my-zsh
-zplug "stedolan/jq", \
-    as:command, \
-    file:jq, \
-    from:gh-r \
-    | zplug "b4b4r07/emoji-cli"
+zplug "plugins/git", from:oh-my-zsh, if:"(( $+commands[git] ))"
+zplug "stedolan/jq", rename-to:jq, from:gh-r, as:command 
+zplug "b4b4r07/emoji-cli", on:"stedolan/jq"
 
 #未インストールの項目をインストール
 if ! zplug check --verbose; then
@@ -61,7 +62,7 @@ alias r="rails"
 alias cl="clear"
 alias v="vagrant"
 alias electron="reattach-to-user-namespace electron"
-alias -g G='| grep'
+alias -g G='|grep'
 
 source ~/dotfiles/zsh/functions.sh
 
