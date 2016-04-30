@@ -61,6 +61,7 @@ alias tls="tmux list-sessions"
 alias r="source ~/.zshrc"
 alias cl="clear"
 alias v="vagrant"
+alias g="git"
 alias electron="reattach-to-user-namespace electron"
 alias -g G='|grep'
 
