@@ -1,13 +1,10 @@
-ZSH_THEME="robbyrussell"
-
 #zplug
 autoload -Uz compinit
 compinit
 
 if [ ! -e ~/.zplug ]; then
   echo "Installing zplug...."
-  curl -sL git.io/zplug | zsh
-  source ~/.zplug/init.zsh && zplug update --self
+  git clone https://github.com/b4b4r07/zplug ~/.zplug
 fi
 
 source ~/.zplug/init.zsh
@@ -15,10 +12,9 @@ source ~/.zplug/init.zsh
 zplug "b4b4r07/zplug"
 zplug "mollifier/anyframe"
 zplug "peco/peco", as:command, from:gh-r, use:"*amd64*"
-zplug "zsh-users/zsh-syntax-highlighting"
+zplug "zsh-users/zsh-syntax-highlighting", nice:10
 zplug "zsh-users/zsh-history-substring-search"
 zplug "mrowa44/emojify", as:command
-zplug "plugins/git", from:oh-my-zsh, if:"(( $+commands[git] ))"
 zplug "stedolan/jq", rename-to:jq, from:gh-r, as:command 
 zplug "b4b4r07/emoji-cli", on:"stedolan/jq"
 
@@ -38,11 +34,16 @@ if [ -n "$LS_COLORS" ]; then
   zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 fi
 
+#補完候補をハイライト
+zstyle ':completion:*:default' menu select=2
+
 #環境変数はzshenvとかzshprofileに
 export EDITOR=vim
 export LANG=ja_JP.UTF-8
 
 bindkey -v #zleでvimを使う
+
+ZSH_THEME="robbyrussell"
 
 #履歴を100000件保存
 HISTFILE=$HOME/.zsh-history
@@ -57,8 +58,7 @@ alias t="tmux"
 alias q="exit"
 alias ta="tmux a -t"
 alias tls="tmux list-sessions"
-alias reload="source ~/.zshrc"
-alias r="rails"
+alias r="source ~/.zshrc"
 alias cl="clear"
 alias v="vagrant"
 alias electron="reattach-to-user-namespace electron"
