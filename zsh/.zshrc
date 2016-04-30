@@ -10,13 +10,18 @@ fi
 source ~/.zplug/init.zsh
 
 zplug "b4b4r07/zplug"
+
 zplug "mollifier/anyframe"
 zplug "peco/peco", as:command, from:gh-r, use:"*amd64*"
+
 zplug "zsh-users/zsh-syntax-highlighting", nice:10
 zplug "zsh-users/zsh-history-substring-search"
+
 zplug "mrowa44/emojify", as:command
-zplug "stedolan/jq", rename-to:jq, from:gh-r, as:command 
 zplug "b4b4r07/emoji-cli", on:"stedolan/jq"
+
+zplug "themes/af-magic", from:oh-my-zsh
+zplug "plugins/git", from:oh-my-zsh
 
 #未インストールの項目をインストール
 if ! zplug check --verbose; then
@@ -30,12 +35,13 @@ zplug load --verbose
 eval $(gdircolors ~/dircolors)
 
 #補完候補でもLS_COLORSを使う
-if [ -n "$LS_COLORS" ]; then
-  zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-fi
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 #補完候補をハイライト
 zstyle ':completion:*:default' menu select=2
+zstyle ':completion:*' list-separator '-->'
+
+ZSH_THEME="af-magic"
 
 #環境変数はzshenvとかzshprofileに
 export EDITOR=vim
@@ -43,12 +49,10 @@ export LANG=ja_JP.UTF-8
 
 bindkey -v #zleでvimを使う
 
-ZSH_THEME="robbyrussell"
-
 #履歴を100000件保存
 HISTFILE=$HOME/.zsh-history
-HISTSIZE=100000
-SAVEHIST=100000
+HISTSIZE=10000
+SAVEHIST=10000
 
 #aliases
 alias vi="vim"
