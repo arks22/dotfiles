@@ -52,7 +52,7 @@ SAVEHIST=10000
 
 #auto_cdでもcdでも実行後にhomeにいなければls
 function chpwd() {
-  echo "${fg[blue]}_____[$PWD]____________________________${reset_color}"
+  echo "${fg[blue]}________________[$PWD]_________________${reset_color}"
   if [ ! $PWD = $HOME ]; then 
     gls -A --color=auto
   fi
