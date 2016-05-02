@@ -92,11 +92,11 @@ autoload -Uz add-zsh-hook
 
 zstyle ':vcs_info:git:*' check-for-changes true
 zstyle ":vcs_info:*" enable git
-zstyle ':vcs_info:git:*' unstagedstr "%F{black}+"
+zstyle ':vcs_info:git:*' unstagedstr "%F{black}±"
 zstyle ":vcs_info:git:*" formats '%b %u'
 zstyle ':vcs_info:git:*' actionformats '(%s)-[%b|%a]'
 
-#vcs関数をプロンプト表示前に実行
+#prompt表示前に実行
 _vcs_precmd () {
   vcs_info
   if [ ! -z $vcs_info_msg_0_ ]; then
