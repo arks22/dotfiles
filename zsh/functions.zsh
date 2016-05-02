@@ -1,0 +1,35 @@
+#!/bin/sh
+
+function battery() {
+  result=`/usr/bin/pmset -g ps | awk '{ if (NR == 2) print $2 " " $3 }' | sed "s/;//g"`
+  echo $result
+}
+
+function get_ssid() {
+  result=`/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep " SSID" | tr -d " " | cut -c6-`
+  if [ $result ]; then
+    echo $result
+  else
+    echo No network
+  fi
+}
+
+#auto_cdでもcdでも実行後にhomeにいなければls
+function chpwd() {
+  echo "${fg[blue]}——————————————[$PWD]——————————————${reset_color}"
+  [ $PWD = $HOME ] || gls -A --color=auto
+}
+
+#ディレクトリ作って入る
+function mkcd() {
+  mkdir $1 && cd $1
+}
+
+#カレントディレクトリを削除して抜ける
+function rms() {
+  echo -n "remove current directory, OK? [y, any]"
+  read answer
+  if [ $answer = "y" ]; then
+    rm -r $PWD && cd ..
+  fi
+}

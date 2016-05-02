@@ -2,4 +2,5 @@
 
 source ~/dotfiles/zsh/functions.zsh
 
-battery
+get_ssid
+

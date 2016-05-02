@@ -27,7 +27,7 @@ fi
 
 zplug load --verbose
 
-#PROMPTの色
+#色
 autoload -U colors
 colors
 
@@ -50,13 +50,6 @@ HISTFILE=$HOME/.zsh-history
 HISTSIZE=10000
 SAVEHIST=10000
 
-#auto_cdでもcdでも実行後にhomeにいなければls
-function chpwd() {
-  echo "${fg[blue]}________________[$PWD]_________________${reset_color}"
-  if [ ! $PWD = $HOME ]; then 
-    gls -A --color=auto
-  fi
-}
 
 #aliases
 alias vi="vim"
@@ -73,7 +66,7 @@ alias g="git"
 alias electron="reattach-to-user-namespace electron"
 alias -g G='| grep'
 
-source ~/dotfiles/zsh/functions.sh
+source ~/dotfiles/zsh/functions.zsh
 
 source ~/dotfiles/zsh/tmux_attach.zsh
 
@@ -89,6 +82,15 @@ setopt print_eight_bit
 setopt auto_param_keys
 setopt auto_list
 
+
 #Prompt
+
+autoload -Uz vcs_info
+setopt prompt_subst
+
 PROMPT="%{${fg[cyan]}%}%C%{${reset_color}%} %{${fg[blue]}%}» %{${reset_color}%}" #左側
-RPROMPT="%{${fg[green]}%}[%T]%{${reset_color}%}" #右側
+
+RPROMPT="%{${fg[yellow]}%}[%T]%{${reset_color}%}" #右側
+
+PROMPT2="%{${fg[blue]}%}» %{${reset_color}%}" #2行以上
+
