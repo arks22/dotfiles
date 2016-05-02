@@ -107,6 +107,6 @@ _vcs_precmd () {
 }
 add-zsh-hook precmd _vcs_precmd
 
-PROMPT='%F{cyan}%C %F{blue}» %f' #左側
+PROMPT='%F{cyan}%C %(?,%F{blue}»,%F{red}») %f' #左側
 RPROMPT='${git_branch}%K{green}%F{black} %T %f%k' #右側
 PROMPT2='%F{blue}» %f' #2行以上
