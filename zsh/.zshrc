@@ -41,7 +41,7 @@ zstyle ':completion:*' list-separator '-->'
 
 #環境変数はzshenvとかzshprofileに
 export EDITOR=vim
-export LANG=ja_JP.UTF-8
+export LANG=en_US.UTF-8
 
 bindkey -v #zleでvimを使う
 
@@ -81,16 +81,32 @@ setopt list_types
 setopt print_eight_bit
 setopt auto_param_keys
 setopt auto_list
+setopt prompt_subst
+
 
 
 #Prompt
 
 autoload -Uz vcs_info
-setopt prompt_subst
+autoload -Uz add-zsh-hook
 
-PROMPT="%{${fg[cyan]}%}%C%{${reset_color}%} %{${fg[blue]}%}» %{${reset_color}%}" #左側
+zstyle ':vcs_info:git:*' check-for-changes true
+zstyle ":vcs_info:*" enable git
+zstyle ':vcs_info:git:*' unstagedstr "%F{black}+"
+zstyle ":vcs_info:git:*" formats '%b %u'
+zstyle ':vcs_info:git:*' actionformats '(%s)-[%b|%a]'
 
-RPROMPT="%{${fg[yellow]}%}[%T]%{${reset_color}%}" #右側
+#vcs関数をプロンプト表示前に実行
+_vcs_precmd () {
+  vcs_info
+  if [ ! -z $vcs_info_msg_0_ ]; then
+    git_branch=" %K{blue}%F{black}* ${vcs_info_msg_0_} %k%f"
+  else
+    git_branch=""
+  fi
+}
+add-zsh-hook precmd _vcs_precmd
 
-PROMPT2="%{${fg[blue]}%}» %{${reset_color}%}" #2行以上
-
+PROMPT='%F{cyan}%C %F{blue}» %f' #左側
+RPROMPT='${git_branch}%K{green}%F{black} %T %f%k' #右側
+PROMPT2='%F{blue}» %f' #2行以上
