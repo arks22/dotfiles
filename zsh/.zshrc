@@ -90,10 +90,14 @@ autoload -Uz add-zsh-hook
 
 #prompt表示前に実行
 function git_info() {
-  if [[ ! `git status 2>&1` =~ "Not a git" ]]; then
-    git_branch=`git symbolic-ref HEAD | sed -e "s/refs\/heads\///g"`
-    git_unstage=``
-    git_info="%K{blue}%F{black}* $git_branch $git_unstage%k%f"
+  git_status=`git status 2>&1`
+  if [[ ! $git_status =~ "Not a git" ]]; then
+    git_branch=`echo $git_status | awk 'NR==1 {print $3}'`
+    git_unstaged=`echo $git_status \
+      | grep -v untracked \
+      | awk '/modified:|deleted:/{print}' \
+      | wc -l | sed -e "s/ *//g" `
+    git_info="%K{blue}%F{black}* $git_branch ±$git_unstaged %k%f"
   else
     git_info=""
   fi
