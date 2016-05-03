@@ -96,7 +96,7 @@ function git_info() {
     git_unstaged=`echo $git_status \
       | awk '/modified:|deleted:/{print}' \
       | grep -v untracked \
-      | wc -l | sed -e "s/ *//g" `
+      | awk 'END{print NR}'`
     git_info="%K{blue}%F{black}* $git_branch ±$git_unstaged %k%f"
   else
     git_info=""
