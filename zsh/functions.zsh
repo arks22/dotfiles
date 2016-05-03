@@ -17,9 +17,7 @@ function get_ssid() {
 #auto_cdでもcdでも実行後にhomeにいなければls
 function chpwd() {
   echo \
-    "${fg[blue]}——————————————${reset_color}"\
-    "${fg[black]}${bg[blue]}$PWD${reset_color}"\
-    "${reset_color}${fg[blue]}——————————————${reset_color}"
+    "${fg[blue]}——————————————${reset_color}${fg[black]}${bg[blue]}$PWD${reset_color}${reset_color}${fg[blue]}——————————————${reset_color}"
   [ $PWD = $HOME ] || gls -A --color=auto
 }
 

@@ -29,7 +29,6 @@ zplug load --verbose
 
 #色
 autoload -U colors
-colors
 
 eval $(gdircolors ~/dircolors)
 
@@ -87,26 +86,25 @@ setopt prompt_subst
 
 #Prompt
 
-autoload -Uz vcs_info
 autoload -Uz add-zsh-hook
 
-zstyle ':vcs_info:git:*' check-for-changes true
-zstyle ":vcs_info:*" enable git
-zstyle ':vcs_info:git:*' unstagedstr "%F{black}±"
-zstyle ":vcs_info:git:*" formats '%b %u'
-zstyle ':vcs_info:git:*' actionformats '(%s)-[%b|%a]'
-
 #prompt表示前に実行
-_vcs_precmd () {
-  vcs_info
-  if [ ! -z $vcs_info_msg_0_ ]; then
-    git_branch=" %K{blue}%F{black}* ${vcs_info_msg_0_} %k%f"
+function git_info() {
+  if [[ ! `git status 2>&1` =~ "Not a git" ]]; then
+    git_branch=`git symbolic-ref HEAD | sed -e "s/refs\/heads\///g"`
+    git_unstage=``
+    git_info="%K{blue}%F{black}* $git_branch $git_unstage%k%f"
   else
-    git_branch=""
+    git_info=""
   fi
 }
-add-zsh-hook precmd _vcs_precmd
+
+if [ `which git` ]; then
+  add-zsh-hook precmd git_info
+else
+  git_info=""
+fi
 
 PROMPT='%F{cyan}%C %(?,%F{blue}»,%F{red}») %f' #左側
-RPROMPT='${git_branch}%K{green}%F{black} %T %f%k' #右側
+RPROMPT='${git_info}%K{green}%F{black} %T %f%k' #右側
 PROMPT2='%F{blue}» %f' #2行以上
