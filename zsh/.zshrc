@@ -94,8 +94,8 @@ function git_info() {
   if [[ ! $git_status =~ "Not a git" ]]; then
     git_branch=`echo $git_status | awk 'NR==1 {print $3}'`
     git_unstaged=`echo $git_status \
-      | grep -v untracked \
       | awk '/modified:|deleted:/{print}' \
+      | grep -v untracked \
       | wc -l | sed -e "s/ *//g" `
     git_info="%K{blue}%F{black}* $git_branch ±$git_unstaged %k%f"
   else
