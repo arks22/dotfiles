@@ -27,8 +27,6 @@ fi
 
 zplug load --verbose
 
-#色
-autoload -U colors
 
 eval $(gdircolors ~/dircolors)
 
@@ -38,7 +36,6 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*:default' menu select=2
 zstyle ':completion:*' list-separator '-->'
 
-#環境変数はzshenvとかzshprofileに
 export EDITOR=vim
 export LANG=en_US.UTF-8
 
@@ -87,6 +84,7 @@ setopt prompt_subst
 #Prompt
 
 autoload -Uz add-zsh-hook
+autoload -U colors
 
 #prompt表示前に実行
 function git_info() {
@@ -94,7 +92,7 @@ function git_info() {
   if [[ ! $git_status =~ "Not a git" ]]; then
     git_branch=`echo $git_status | awk 'NR==1 {print $3}'`
     git_unstaged=`echo $git_status \
-      | awk '/modified:|deleted:/{print}' \
+      | awk '/modified:|deleted:/ {print}' \
       | grep -v untracked \
       | awk 'END{print NR}'`
     git_info="%K{blue}%F{black}* $git_branch ±$git_unstaged %k%f"
