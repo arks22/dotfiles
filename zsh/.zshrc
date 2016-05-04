@@ -90,12 +90,24 @@ autoload -U colors
 function git_info() {
   git_status=`git status 2>&1`
   if [[ ! $git_status =~ "Not a git" ]]; then
+
     git_branch=`echo $git_status | awk 'NR==1 {print $3}'`
-    git_unstaged=`echo $git_status \
-      | awk '/modified:|deleted:/ {print}' \
-      | grep -v untracked \
-      | awk 'END{print NR}'`
-    git_info="%K{blue}%F{black}* $git_branch ±$git_unstaged %k%f"
+    
+    if [[ $git_status =~ "not staged for commit" ]]; then
+      git_unstaged=`echo $git_status \
+        | sed -e '1,/Changes not staged/ d' -e '/\(untracked content\)/ d' \
+        | sed '1,/^$/ d' | sed '/^$/,$ d' \
+        | awk 'END{print NR}'`
+    fi
+
+    if [[ $git_status =~ "Changes to be committed" ]]; then
+      git_uncommited=`echo $git_status \
+        | sed -e '1,/Changes to be committed/ d' \
+        | sed '1,/^$/ d' | sed '/^$/,$ d' \
+        | awk 'END{print NR}'`
+    fi
+
+    git_info="%K{blue}%F{black}* $git_branch ±$git_unstaged c$git_uncommited%k%f"
   else
     git_info=""
   fi
