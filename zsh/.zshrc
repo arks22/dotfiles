@@ -98,6 +98,8 @@ function git_info() {
         | sed -e '1,/Changes not staged/ d' -e '/\(untracked content\)/ d' \
         | sed '1,/^$/ d' | sed '/^$/,$ d' \
         | awk 'END{print NR}'`
+    else
+      git_uncommited=0
     fi
 
     if [[ $git_status =~ "Changes to be committed" ]]; then
@@ -105,6 +107,8 @@ function git_info() {
         | sed -e '1,/Changes to be committed/ d' \
         | sed '1,/^$/ d' | sed '/^$/,$ d' \
         | awk 'END{print NR}'`
+    else
+      git_uncommited=0
     fi
 
     git_info="%K{blue}%F{black}* $git_branch ±$git_unstaged c$git_uncommited%k%f"
