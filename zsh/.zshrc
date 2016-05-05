@@ -93,7 +93,7 @@ function git_info() {
 
     git_branch=`echo $git_status | awk 'NR==1 {print $3}'`
     
-    if [[ $git_status =~ "not staged for commit" ]]; then
+    if [[ $git_status =~ "Changes not staged" ]]; then
       git_unstaged=`echo $git_status \
         | sed -e '1,/Changes not staged/ d' -e '/\(untracked content\)/ d' \
         | sed '1,/^$/ d' | sed '/^$/,$ d' \
@@ -111,7 +111,7 @@ function git_info() {
       git_uncommited=0
     fi
 
-    git_info="%K{blue}%F{black}* $git_branch ±$git_unstaged c$git_uncommited%k%f"
+    git_info="%K{blue}%F{black}*$git_branch ±$git_unstaged c$git_uncommited %k%f"
   else
     git_info=""
   fi
