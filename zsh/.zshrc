@@ -99,7 +99,7 @@ function git_info() {
         | sed '1,/^$/ d' | sed '/^$/,$ d' \
         | awk 'END{print NR}'`
     else
-      git_uncommited=0
+      git_unstaged=0
     fi
 
     if [[ $git_status =~ "Changes to be committed" ]]; then
