@@ -33,7 +33,7 @@ function mkcd() {
 }
 
 #カレントディレクトリを削除して抜ける
-function rms() {
+function rmc() {
   echo -n "remove current directory, OK? [y, any]"
   read answer
   if [ $answer = "y" ]; then
