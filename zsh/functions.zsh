@@ -2,7 +2,13 @@
 
 function battery() {
   result=`/usr/bin/pmset -g ps | awk '{ if (NR == 2) print $2 " " $3 }' | sed "s/;//g"`
-  echo $result
+  battery=`echo $result | awk '{print $1}'`
+
+  if [[ $result =~ "discharging" ]]; then
+    echo $battery
+  else
+    echo $battery ⚡
+  fi
 }
 
 function get_ssid() {
