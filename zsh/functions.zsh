@@ -7,7 +7,7 @@ function battery() {
   if [[ $result =~ "discharging" ]]; then
     echo $battery
   else
-    echo $battery ⚡
+    echo ⚡ $battery
   fi
 }
 
