@@ -1,8 +1,8 @@
 #!/bin/sh
 
 function battery() {
-  battery=`/usr/bin/pmset -g ps | awk '{ if (NR == 2) print $2 " " $3 }' | sed "s/;//g"`
-  battery_quantity=`echo $battery | awk '{print $1}' | sed "s/%//"`
+  battery=`/usr/bin/pmset -g ps | awk '{ if (NR == 2) print $2 " " $3 }' | sed -e "s/;//g" -e "s/%//"`
+  battery_quantity=`echo $battery | awk '{print $1}'`
 }
 
 function is_battery_charging() {
