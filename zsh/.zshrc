@@ -96,7 +96,8 @@ function git_info() {
     if [[ $git_status =~ "Changes not staged" ]]; then
       git_unstaged=`echo $git_status \
         | sed -e '1,/Changes not staged/ d' -e '/\(untracked content\)/ d' \
-        | sed '1,/^$/ d' | sed '/^$/,$ d' \
+        | sed '1,/^$/ d' \
+        | sed '/^$/,$ d' \
         | awk 'END{print NR}'`
     else
       git_unstaged=0

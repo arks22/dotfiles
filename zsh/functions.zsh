@@ -1,22 +1,23 @@
 #!/bin/sh
 
 function battery() {
-  result=`/usr/bin/pmset -g ps | awk '{ if (NR == 2) print $2 " " $3 }' | sed "s/;//g"`
-  battery=`echo $result | awk '{print $1}'`
+  battery=`/usr/bin/pmset -g ps | awk '{ if (NR == 2) print $2 " " $3 }' | sed "s/;//g"`
+  battery_quantity=`echo $battery | awk '{print $1}'`
 
-  if [[ $result =~ "discharging" ]]; then
-    echo $battery
+  if [[ $battery =~ "discharging" ]]; then
+    echo $battery_quantity
   else
-    echo ⚡ $battery
+    echo ⚡ $battery_quantity
   fi
 }
 
 function get_ssid() {
-  result=`/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep " SSID" | tr -d " " | cut -c6-`
-  if [ $result ]; then
-    echo $result
-  else
-    echo No network
+  /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep " SSID" | tr -d " " | cut -c6-
+}
+
+function is_network_connecting() {
+  if [ ! `get_ssid` ]; then
+    echo "✘"
   fi
 }
 
