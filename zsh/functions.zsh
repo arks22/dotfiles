@@ -27,7 +27,7 @@ function high_battery() {
 }
 
 function get_ssid() {
-  /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep " SSID" | tr -d " " | cut -c6-
+  /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | awk '{print $2}'
 }
 
 function is_network_connecting() {
