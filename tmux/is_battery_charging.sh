@@ -2,4 +2,4 @@
 
 source ~/dotfiles/zsh/functions.zsh
 
-get_ssid
+is_battery_charging

@@ -2,12 +2,27 @@
 
 function battery() {
   battery=`/usr/bin/pmset -g ps | awk '{ if (NR == 2) print $2 " " $3 }' | sed "s/;//g"`
-  battery_quantity=`echo $battery | awk '{print $1}'`
+  battery_quantity=`echo $battery | awk '{print $1}' | sed "s/%//"`
+}
 
-  if [[ $battery =~ "discharging" ]]; then
-    echo $battery_quantity
-  else
-    echo ⚡ $battery_quantity
+function is_battery_charging() {
+  battery
+  if [[ ! $battery =~ "discharging" ]]; then
+   echo ⚡
+  fi
+}
+
+function low_battery() {
+  battery
+  if [ $battery_quantity -le 10 ] && [[ $battery =~ "discharging" ]]; then
+    echo $battery_quantity%
+  fi
+}
+
+function high_battery() {
+  battery
+  if [ $battery_quantity -gt 10 ] || [[ ! $battery =~ "discharging" ]]; then
+    echo $battery_quantity%
   fi
 }
 
