@@ -81,7 +81,7 @@ setopt prompt_subst
 
 #ssid
 function get_ssid() {
-  /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep " SSID" | awk '{print $2}'
+  /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep " SSID" | awk '{$1="";print}' | sed "s/ //"
 }
 
 #battery
