@@ -61,8 +61,6 @@ alias g="git"
 alias electron="reattach-to-user-namespace electron"
 alias -g G='| grep'
 
-source ~/dotfiles/zsh/functions.zsh
-
 source ~/dotfiles/zsh/tmux_attach.zsh
 
 #いろいろ設定
@@ -80,6 +78,16 @@ setopt prompt_subst
 
 
 #functions
+
+#ssid
+function get_ssid() {
+  /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep " SSID" | awk '{print $2}'
+}
+
+#battery
+function battery() {
+  /usr/bin/pmset -g ps | awk '{ if (NR == 2) print $2 " " $3 }' | sed -e "s/;//g"
+}
 
 #auto_cdでもcdでも実行後にhomeにいなければls
 function chpwd() {
@@ -101,6 +109,7 @@ function rmc() {
   fi
 }
 
+#git statusをPromptに表示させるため
 function git_info() {
   git_status=`git status 2>&1`
   if [[ ! $git_status =~ "Not a git" ]]; then
