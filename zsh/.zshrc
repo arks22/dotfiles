@@ -28,7 +28,6 @@ zplug load --verbose
 
 
 eval $(gdircolors ~/dircolors)
-
 #補完候補でもLS_COLORSを使う
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 #補完候補をハイライト
@@ -61,8 +60,6 @@ alias g="git"
 alias electron="reattach-to-user-namespace electron"
 alias -g G='| grep'
 
-source ~/dotfiles/zsh/tmux_attach.zsh
-
 #いろいろ設定
 setopt auto_cd
 setopt correct
@@ -76,6 +73,39 @@ setopt auto_param_keys
 setopt auto_list
 setopt prompt_subst
 
+#tmuxの自動attach,自動起動
+
+if [ ! -z $TMUX ]; then
+  echo "${fg_bold[red]}Welcome to TMUX"
+else
+  session_list=`tmux list-sessions`
+  if [ -n $session_list ]; then
+    echo $session_list
+    if [ `echo $session_list | awk 'END{print NR}'` -eq 1 ]; then
+      echo -n "Tmux: attach? (any/n)"
+      read -k 1 answer
+      if [ ! $answer = "n" ]; then
+        tmux attach
+      fi
+    else
+      echo -n "Tmux: attach? (num/any/n)"
+      read -k 1 answer
+      if [ ! $answer = "n" ]; then
+        if [[ "$answer" =~ ^[0-9]+$ ]]; then
+          tmux attach -t $answer
+        else
+          tmux attach
+        fi
+      fi
+    fi
+  else
+    echo -n "Tmux: Create new session? (any/n)"
+    read -k 1 answer
+    if [ ! $answer = "n" ]; then
+      tmux
+    fi
+  fi
+fi
 
 #functions
 
@@ -91,7 +121,7 @@ function battery() {
 
 #auto_cdでもcdでも実行後にhomeにいなければls
 function chpwd() {
-  echo "${fg[blue]}——————————————${reset_color}${fg[black]}${bg[blue]}$PWD${reset_color}${reset_color}${fg[blue]}——————————————${reset_color}"
+  echo "${fg[blue]}——————————————${fg[black]}${bg[blue]}$PWD${reset_color}${fg[blue]}——————————————"
   [ $PWD = $HOME ] || gls -A --color=auto
 }
 

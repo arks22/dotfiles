@@ -94,6 +94,7 @@ set hlsearch
 set backspace=indent,eol,start 
 set showcmd
 set wildmenu
+set vb t_vb=
 
 
 "キーマップの設定
