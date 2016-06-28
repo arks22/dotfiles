@@ -11,7 +11,6 @@ source ~/.zplug/init.zsh
 zplug "mollifier/anyframe"
 zplug "peco/peco", as:command, from:gh-r, use:"*amd64*"
 
-zplug "zsh-users/zsh-syntax-highlighting", nice:19
 zplug "zsh-users/zsh-history-substring-search"
 
 zplug "mrowa44/emojify", as:command 
@@ -41,7 +40,7 @@ export LANG=en_US.UTF-8
 
 bindkey -v #zleでvimを使う
 
-#履歴を100000件保存
+#履歴を10000件保存
 HISTFILE=$HOME/.zsh-history
 HISTSIZE=10000
 SAVEHIST=10000
@@ -80,13 +79,28 @@ setopt auto_list
 setopt prompt_subst
 
 
+#functions
 
-#Prompt
+#auto_cdでもcdでも実行後にhomeにいなければls
+function chpwd() {
+  echo "${fg[blue]}——————————————${reset_color}${fg[black]}${bg[blue]}$PWD${reset_color}${reset_color}${fg[blue]}——————————————${reset_color}"
+  [ $PWD = $HOME ] || gls -A --color=auto
+}
 
-autoload -Uz add-zsh-hook
-autoload -U colors
+#ディレクトリ作って入る
+function mkcd() {
+  mkdir $1 && cd $1
+}
 
-#prompt表示前に実行
+#カレントディレクトリを削除して抜ける
+function rmc() {
+  echo -n "remove current directory, OK? [y, any]"
+  read answer
+  if [ $answer = "y" ]; then
+    rm -r $PWD && cd ..
+  fi
+}
+
 function git_info() {
   git_status=`git status 2>&1`
   if [[ ! $git_status =~ "Not a git" ]]; then
@@ -117,6 +131,14 @@ function git_info() {
     git_info=""
   fi
 }
+
+
+#Prompt
+
+autoload -Uz add-zsh-hook
+autoload -U colors
+
+#prompt表示前に実行
 
 if [ `which git` ]; then
   add-zsh-hook precmd git_info
