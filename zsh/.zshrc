@@ -73,39 +73,45 @@ setopt auto_param_keys
 setopt auto_list
 setopt prompt_subst
 
-#tmuxの自動attach,自動起動
 
-if [ ! -z $TMUX ]; then
-  echo "${fg_bold[red]}Welcome to TMUX"
-else
-  session_list=`tmux list-sessions`
-  if [ -n $session_list ]; then
-    echo $session_list
-    if [ `echo $session_list | awk 'END{print NR}'` -eq 1 ]; then
-      echo -n "Tmux: attach? (any/n)"
-      read -k 1 answer
-      if [ ! $answer = "n" ]; then
-        tmux attach
-      fi
-    else
-      echo -n "Tmux: attach? (num/any/n)"
-      read -k 1 answer
-      if [ ! $answer = "n" ]; then
-        if [[ "$answer" =~ ^[0-9]+$ ]]; then
-          tmux attach -t $answer
-        else
+
+#tmuxの自動attach,自動起動
+tmux_auto() {
+  if [ ! -z $TMUX ]; then
+    echo "${fg_bold[red]}Welcome to TMUX"
+  else
+    session_list=`tmux list-sessions 2>&1`
+    if [[ ! $session_list =~ "no server running" ]]; then
+      echo $session_list
+      if [ `echo $session_list | grep -c ''` -eq 1 ]; then
+        echo -n "Tmux: attach? (any/n)"
+        read -k 1 answer
+        if [ ! $answer = "n" ]; then
           tmux attach
         fi
+      else
+        echo -n "Tmux: attach? (num[0-9]/any/n)"
+        read -k 1 answer
+        if [ ! $answer = "n" ]; then
+          if [[ "$answer" =~ ^[0-9]+$ ]]; then
+            tmux attach -t $answer
+          else
+            tmux attach
+          fi
+        fi
+      fi
+    else
+      echo -n "Tmux: Create new session? (any/n)"
+      read -k 1 answer
+      if [ ! $answer = "n" ]; then
+        tmux
       fi
     fi
-  else
-    echo -n "Tmux: Create new session? (any/n)"
-    read -k 1 answer
-    if [ ! $answer = "n" ]; then
-      tmux
-    fi
   fi
-fi
+}
+
+tmux_auto
+
 
 #functions
 
@@ -160,7 +166,7 @@ function git_info() {
       git_uncommited=`echo $git_status \
         | sed -e '1,/Changes to be committed/ d' \
         | sed '1,/^$/ d' | sed '/^$/,$ d' \
-        | awk 'END{print NR}'`
+        | grep -c ''`
     else
       git_uncommited=0
     fi
