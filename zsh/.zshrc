@@ -81,13 +81,13 @@ setopt prompt_subst
 #とても便利
 ggl() {
   local str opt
-    if [ $# != 0 ]; then
-      for i in $*; do
-        str="$str${str:++}$i"
-      done
-      opt="search?q=${str}"
-    fi
-    open -a Google\ Chrome http://www.google.co.jp/$opt
+  if [ $# != 0 ]; then
+    for i in $*; do
+      str="$str${str:++}$i"
+    done
+    opt="search?q=${str}"
+  fi
+  open -a Google\ Chrome http://www.google.co.jp/$opt
 }
 
 #tmuxの自動attach,自動起動
