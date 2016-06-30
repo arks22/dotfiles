@@ -76,6 +76,9 @@ setopt prompt_subst
 
 
 
+#functions
+
+#とても便利
 ggl() {
   local str opt
     if [ $# != 0 ]; then
@@ -86,7 +89,6 @@ ggl() {
     fi
     open -a Google\ Chrome http://www.google.co.jp/$opt
 }
-
 
 #tmuxの自動attach,自動起動
 tmux_auto() {
@@ -122,9 +124,6 @@ tmux_auto() {
     fi
   fi
 }
-
-
-#functions
 
 #ssid
 function get_ssid() {
