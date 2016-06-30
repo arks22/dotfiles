@@ -57,6 +57,7 @@ alias r="source ~/.zshrc"
 alias cl="clear"
 alias v="vagrant"
 alias g="git"
+alias c="open -a Google\ Chrome"
 alias electron="reattach-to-user-namespace electron"
 alias -g G='| grep'
 
@@ -73,6 +74,18 @@ setopt auto_param_keys
 setopt auto_list
 setopt prompt_subst
 
+
+
+ggl() {
+  local str opt
+    if [ $# != 0 ]; then
+      for i in $*; do
+        str="$str${str:++}$i"
+      done
+      opt="search?q=${str}"
+    fi
+    open -a Google\ Chrome http://www.google.co.jp/$opt
+}
 
 
 #tmuxの自動attach,自動起動
@@ -104,13 +117,11 @@ tmux_auto() {
       echo -n "Tmux: Create new session? (any/n)"
       read -k 1 answer
       if [ ! $answer = "n" ]; then
-        tmux
+        tmux new-session
       fi
     fi
   fi
 }
-
-tmux_auto
 
 
 #functions
@@ -176,6 +187,8 @@ function git_info() {
     git_info=""
   fi
 }
+
+tmux_auto
 
 
 #Prompt
