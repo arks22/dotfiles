@@ -49,11 +49,12 @@ SAVEHIST=10000
 alias vi="vim"
 alias l="gls -A --color=auto"
 alias ls="gls --color=auto"
-alias t="tmux"
 alias q="exit"
-alias ta="tmux a -t"
+alias tn="tmux new-session"
+alias t="tmux_auto"
 alias tls="tmux list-sessions"
 alias r="source ~/.zshrc"
+alias rls="rails"
 alias cl="clear"
 alias v="vagrant"
 alias g="git"
@@ -90,33 +91,51 @@ ggl() {
   open -a Google\ Chrome http://www.google.co.jp/$opt
 }
 
+
 #tmuxの自動attach,自動起動
 tmux_auto() {
+  session_list=`tmux list-sessions 2>&1`
+  echo "–––––––––––––––––––––––––– ${fg[blue]}tmux sessions${reset_color} ––––––––––––––––––––––––"
+  echo $session_list
+  echo "–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––"
   if [ ! -z $TMUX ]; then
-    echo "${fg_bold[red]}Welcome to TMUX"
+    echo "${fg_bold[red]}IN TMUX${reset_color}"
   else
-    session_list=`tmux list-sessions 2>&1`
     if [[ ! $session_list =~ "no server running" ]]; then
-      echo $session_list
       if [ `echo $session_list | grep -c ''` -eq 1 ]; then
-        echo -n "Tmux: attach? (any/n)"
+        echo  "${fg[blue]}Tmux: ${reset_color}What do you want to do ?"
+        echo  "    ${fg[cyan]}c${reset_color}      --> create new session"
+        echo  "    ${fg[cyan]}n${reset_color}      --> do nothing"
+        echo  -n "    ${fg[cyan]}other${reset_color}  --> attach to newest session"
         read -k 1 answer
         if [ ! $answer = "n" ]; then
-          tmux attach
+          if [ $answer = "c" ]; then
+            tmux new-session
+          else
+            tmux attach
+          fi
         fi
       else
-        echo -n "Tmux: attach? (num[0-9]/any/n)"
+        echo  "${fg[blue]}Tmux: ${reset_color}What do you want to do ?"
+        echo  "    ${fg[cyan]}c${reset_color}      --> create new session"
+        echo  "    ${fg[cyan]}X[0-9]${reset_color} --> attach to session X"
+        echo  "    ${fg[cyan]}n${reset_color}      --> do nothing"
+        echo -n  "    ${fg[cyan]}other${reset_color}  --> attach to newest session"
         read -k 1 answer
         if [ ! $answer = "n" ]; then
           if [[ "$answer" =~ ^[0-9]+$ ]]; then
             tmux attach -t $answer
+          elif [ $answer = "c" ]; then
+            tmux new-session
           else
             tmux attach
           fi
         fi
       fi
     else
-      echo -n "Tmux: Create new session? (any/n)"
+      echo  "${fg[blue]}Tmux: ${reset_color}What do you want to do ?"
+      echo  "    ${fg[cyan]}n${reset_color}      --> do nothing"
+      echo -n  "    ${fg[cyan]}other${reset_color}  --> create new session"
       read -k 1 answer
       if [ ! $answer = "n" ]; then
         tmux new-session
