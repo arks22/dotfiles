@@ -50,8 +50,8 @@ alias vi="vim"
 alias l="gls -A --color=auto"
 alias ls="gls --color=auto"
 alias q="exit"
-alias tn="tmux new-session"
-alias tm="tmux_auto m"
+alias tn="tmux_new_session_orderly"
+alias tk="tmux_auto k"
 alias t="tmux_auto"
 alias tls="tmux list-sessions"
 alias r="source ~/.zshrc"
@@ -95,30 +95,45 @@ ggl() {
 
 
 #tmuxの自動attach,自動起動
+
+tmux_new_session_orderly() {
+  session_list=`tmux list-sessions 2>&1`
+  if [[ $session_list =~ "no server running" ]]; then
+    tmux new-session -s 0
+  else
+    session_number=`echo $session_list | grep -c ''`
+    tmux new-session -s $session_number
+  fi
+}
+
 tmux_auto() {
   session_list=`tmux list-sessions 2>&1`
-  echo "–––––––––––––––––––––––––– ${fg[blue]}tmux sessions${reset_color} ––––––––––––––––––––––––"
-  echo $session_list
+  echo "––––––––––––––––––––––––––– ${fg[blue]}tmux sessions${reset_color} –––––––––––––––––––––––––––"
+  if [[ $session_list =~ "no server running" ]]; then
+    echo "${fg_bold[blue]}no sessions${reset_color}"
+  else
+    echo $session_list
+  fi
   echo "–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––"
   if [ ! -z $TMUX ]; then
     echo "${fg_bold[red]}IN TMUX${reset_color}"
-    if [ $# = 1 ] && if [ $1 = "m" ]; then
-      tmux_menu
+    if [ $# = 1 ] && if [ $1 = "k" ]; then
+      tmux_kill_session
     fi
   else
     if [[ ! $session_list =~ "no server running" ]]; then
       if [ `echo $session_list | grep -c ''` -eq 1 ]; then
         echo "${fg[blue]}Tmux: ${reset_color}What do you want to do ?"
         echo "    ${fg[cyan]}c${reset_color}      --> create new session"
-        echo "    ${fg[cyan]}m${reset_color}  --> do other thing about tmux"
+        echo "    ${fg[cyan]}k${reset_color}      --> kill session"
         echo "    ${fg[cyan]}n${reset_color}      --> do nothing"
         echo -n "    ${fg[cyan]}other${reset_color}  --> attach to newest session"
         read -k 1 answer
         if [ ! $answer = "n" ]; then
           if [ $answer = "c" ]; then
-            tmux new-session
-          elif [ $answer = "m" ];then
-            tmux_menu
+            tmux_new_session_orderly
+          elif [ $answer = "k" ];then
+            tmux_kill_session
           else
             tmux attach
           fi
@@ -126,8 +141,8 @@ tmux_auto() {
       else
         echo "${fg[blue]}Tmux: ${reset_color}What do you want to do ?"
         echo "    ${fg[cyan]}c${reset_color}      --> create new session"
+        echo "    ${fg[cyan]}k${reset_color}      --> kill session"
         echo "    ${fg[cyan]}X[0-9]${reset_color} --> attach to session X"
-        echo "    ${fg[cyan]}m${reset_color}  --> do other thing about tmux"
         echo "    ${fg[cyan]}n${reset_color}      --> do nothing"
         echo -n "    ${fg[cyan]}other${reset_color}  --> attach to newest session"
         read -k 1 answer
@@ -135,9 +150,9 @@ tmux_auto() {
           if [[ "$answer" =~ ^[0-9]+$ ]]; then
             tmux attach -t $answer
           elif [ $answer = "c" ]; then
-            tmux new-session
-          elif [ $answer = "m" ]; then
-            tmux_menu
+            tmux_new_session_orderly
+          elif [ $answer = "k" ]; then
+            tmux_kill_session
           else
             tmux attach
           fi
@@ -145,36 +160,32 @@ tmux_auto() {
       fi
     else
       echo "${fg[blue]}Tmux: ${reset_color}What do you want to do ?"
-      echo "    ${fg[cyan]}m${reset_color}  --> do other thing about tmux"
+      echo "    ${fg[cyan]}k${reset_color}      --> kill session"
       echo "    ${fg[cyan]}n${reset_color}      --> do nothing"
       echo -n  "    ${fg[cyan]}other${reset_color}  --> create new session"
       read -k 1 answer
       if [ ! $answer = "n" ]; then
-        if [ $answer = "m" ];then
-          tmux_menu
+        if [ $answer = "k" ];then
+          tmux_kill_session
         else
-          tmux new-session
+          tmux_new_session_orderly
         fi
       fi
     fi
   fi
 }
 
-tmux_menu() {
+tmux_kill_session() {
   echo -e "\n––––––––––––––––––––––––––––––––––––––––––––––––––"
-  echo  "${fg[blue]}Tmux: ${reset_color}What do you want to do ?"
-  echo  "    ${fg[cyan]}k${reset_color}      --> kill session"
-  echo  "    ${fg[cyan]}c${reset_color}      --> create new session"
-  echo  -n "    ${fg[cyan]}other${reset_color}  --> do nothing"
+  echo "${fg[blue]}Tmux: ${reset_color}What session number do you want to kill ?"
+  echo "    ${fg[cyan]}X[0-9]${reset_color} --> kill session X"
+  echo "    ${fg[cyan]}a${reset_color}      --> kill all sessions"
+  echo "    ${fg[cyan]}other${reset_color}  --> back"
+  echo -n "    ${fg[cyan]}n${reset_color}      --> do nothing"
   read -k 1 answer
-  if [ $answer = "k" ]; then
-    echo -e "\n––––––––––––––––––––––––––––––––––––––––––––––––––"
-    echo "${fg[blue]}Tmux: ${reset_color}What session number do you want to kill ?"
-    echo "    ${fg[cyan]}X[0-9]${reset_color} --> kill session X"
-    echo "    ${fg[cyan]}a${reset_color}      --> kill all sessions"
-    echo -n "    ${fg[cyan]}other${reset_color}  --> do nothing"
-    read -k 1 answer
+  if [ ! $answer = "n" ]; then
     if [ $answer = "a" ]; then
+      echo -e "\n––––––––––––––––––––––––––––––––––––––––––––––––––"
       echo "${fg[blue]}Tmux: ${reset_color}kill all sessions, OK? (Y,any)"
       read -k 1 answer
       if [ $answer = "Y" ];then
@@ -182,12 +193,9 @@ tmux_menu() {
       fi
     elif [[ "$answer" =~ ^[0-9]+$ ]]; then
       tmux kill-session -t $answer
+    else
+      tmux_auto
     fi
-  elif [ $answer = "c" ]; then
-    if [ ! -z $TMUX ]; then
-      tmux detach
-    fi
-    tmux new-session
   fi
 }
 
