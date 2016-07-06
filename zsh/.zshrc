@@ -136,10 +136,6 @@ tmux_auto() {
   if [ ! -z $TMUX ];then
     tmux_kill_session
   else
-    echo "––––––––––––––––––––––––––– ${fg[blue]}tmux sessions${reset_color} –––––––––––––––––––––––––––"
-      echo $sessions_list
-    echo "–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––"
-    echo ""
     answer=`tmux_auto_choices | fzf-tmux --prompt="Tmux: What do you want to do ? >"`
     if [ $answer = "attach to newest session" ]; then
       tmux attach
@@ -179,7 +175,7 @@ tmux_kill_session() {
         tmux kill-server
       fi
     else
-      tmux kill-session `$answer | awk '{print $1}' | sed "s/://g"` 
+      tmux kill-session -t `echo $answer | awk '{print $1}' | sed "s/://g"` 
     fi
   fi
 }
@@ -218,7 +214,7 @@ function battery() {
 
 #auto_cdでもcdでも実行後にhomeにいなければls
 function chpwd() {
-  echo "${fg[blue]}——————————————${fg[black]}${bg[blue]}$PWD${reset_color}${fg[blue]}——————————————"
+  echo "${fg[blue]}=================== $PWD ==================="
   [ $PWD = $HOME ] || gls -A --color=auto
 }
 
