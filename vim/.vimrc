@@ -1,3 +1,4 @@
+
 "Dein.vimの設定
 if &compatible
   set nocompatible
@@ -81,6 +82,8 @@ let &t_te.="\e[0 q"
 syntax enable
 colorscheme solarized
 set background=dark
+
+set rtp+=~/.fzf
 
 set cursorline
 set cursorcolumn
