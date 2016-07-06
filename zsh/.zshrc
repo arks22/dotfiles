@@ -9,14 +9,11 @@ compinit
 source ~/.zplug/init.zsh
 
 zplug "mollifier/anyframe"
-
+zplug "b4b4r07/enhancd", use:init.sh
 zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
 zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
-
 zplug "zsh-users/zsh-history-substring-search"
-
 zplug "mrowa44/emojify", as:command 
-
 zplug "b4b4r07/emoji-cli", \
   if:'(( $+commands[jq] ))', \
   on:"junegunn/fzf-bin"
@@ -188,7 +185,7 @@ tmux_kill_choices() {
 
 if [ ! -z $TMUX ]; then
   echo "–––––––––––––––––––––––––– ${fg[blue]}tmux sessions${reset_color} –––––––––––––––––––––––––––"
-  tmux_list_sessions
+  tmux list-sessions
   echo "––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––"
   echo "– – – – – – – – – – – – – – – – ${fg_bold[red]}TMUX${reset_color} – – – – – – – – – – – – – – – –"
 else
@@ -214,7 +211,7 @@ function battery() {
 
 #auto_cdでもcdでも実行後にhomeにいなければls
 function chpwd() {
-  echo "${fg[blue]}=================== $PWD ==================="
+  echo "=================== ${fg[green]}$PWD${reset_color} ==================="
   [ $PWD = $HOME ] || gls -A --color=auto
 }
 
