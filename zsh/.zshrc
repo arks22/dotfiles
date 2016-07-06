@@ -212,7 +212,7 @@ function battery() {
 #auto_cdでもcdでも実行後にhomeにいなければls
 function chpwd() {
   echo "=================== ${fg[green]}$PWD${reset_color} ==================="
-  [ $PWD = $HOME ] || gls -A --color=auto
+  [ $PWD = $HOME ] || gls -A --color=auto 
 }
 
 #ディレクトリ作って入る
@@ -223,7 +223,7 @@ function mkcd() {
 #カレントディレクトリを削除して抜ける
 function rmc() {
   echo -n "remove current directory, OK? [y, any]"
-  read answer
+  read -k 1 answer
   if [ $answer = "y" ]; then
     rm -r $PWD && cd ..
   fi
