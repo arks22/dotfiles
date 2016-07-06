@@ -59,6 +59,7 @@ alias tn="tmux new-session"
 alias tk="tmux_auto k"
 alias t="tmux_auto"
 alias tls="tmux list-sessions"
+alias fzf="fzf-tmux"
 alias r="source ~/.zshrc"
 alias rls="rails"
 alias cl="clear"
@@ -164,8 +165,7 @@ tmux_auto_choices() {
 }
 
 tmux_kill_session() {
-  echo "${fg[blue]}Tmux: ${reset_color}What session do you want to kill ?"
-  answer=`tmux_kill_choices | fzf-tmux`
+  answer=`tmux_kill_choices | fzf-tmux --prompt="TMUX: What session do you want to kill ? >"`
   if [ ! $answer = "do nothing" ]; then
     if [ $answer = "kill all sessions" ]; then
       echo "${fg[blue]}Tmux: ${reset_color}kill all sessions, OK? (Y,any)"
