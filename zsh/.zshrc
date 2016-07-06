@@ -130,38 +130,7 @@ tmux_list_sessions() {
   echo $sessions_list
 }
 
-tmux_kill_choices() {
-  echo "kil all sessions"
-  tmux list-sessions
-}
-
-tmux_kill_session() {
-  echo "${fg[blue]}Tmux: ${reset_color}What session do you want to kill ?"
-  answer=`tmux_kill_choices | fzf-tmux`
-  if [ $answer = "kill all sessions" ]; then
-    echo "${fg[blue]}Tmux: ${reset_color}kill all sessions, OK? (Y,any)"
-    read -k 1 answer
-    if [ $answer = "Y" ];then
-      tmux kill-server
-    fi
-  else
-    tmux kill-session `$answer | awk '{print $1}' | sed "s/://g"` 
-  fi
-}
-
-tmux_auto_choices() {
-  if [[ ! $sessions_list =~ "no sessions" ]]; then
-    echo "attach to newest session"
-    if [ ! `echo $sessions_list | grep -c ''` -eq 1 ]; then
-      echo "attach to session X"
-    fi
-  fi
-  echo "create new session"
-  echo "kill session"
-}
-
 tmux_auto() {
-  export sessions_list
   sessions_list=`tmux_list_sessions`
   if [ ! -z $TMUX ];then
     tmux_kill_session
@@ -182,6 +151,39 @@ tmux_auto() {
   fi
 }
 
+tmux_auto_choices() {
+  if [[ ! $sessions_list =~ "no sessions" ]]; then
+    echo "attach to newest session"
+    if [ ! `echo $sessions_list | grep -c ''` -eq 1 ]; then
+      echo "attach to session X"
+    fi
+  fi
+  echo "create new session"
+  echo "kill session"
+  echo "do nothing"
+}
+
+tmux_kill_session() {
+  echo "${fg[blue]}Tmux: ${reset_color}What session do you want to kill ?"
+  answer=`tmux_kill_choices | fzf-tmux`
+  if [ ! $answer = "do nothing" ]; then
+    if [ $answer = "kill all sessions" ]; then
+      echo "${fg[blue]}Tmux: ${reset_color}kill all sessions, OK? (Y,any)"
+      read -k 1 answer
+      if [ $answer = "Y" ];then
+        tmux kill-server
+      fi
+    else
+      tmux kill-session `$answer | awk '{print $1}' | sed "s/://g"` 
+    fi
+  fi
+}
+
+tmux_kill_choices() {
+  tmux list-sessions
+  echo "kil all sessions"
+  echo "do nothing"
+}
 
 if [ ! -z $TMUX ]; then
   echo "–––––––––––––––––––––––––– ${fg[blue]}tmux sessions${reset_color} –––––––––––––––––––––––––––"
