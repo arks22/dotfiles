@@ -139,11 +139,16 @@ tmux_auto() {
     echo "––––––––––––––––––––––––––– ${fg[blue]}tmux sessions${reset_color} –––––––––––––––––––––––––––"
       echo $sessions_list
     echo "–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––"
-    echo "${fg[blue]}Tmux: ${reset_color}What do you want to do ?"
-    answer=`tmux_auto_choices | fzf-tmux`
+    echo ""
+    answer=`tmux_auto_choices | fzf-tmux --prompt="Tmux: What do you want to do ? >"`
     if [ $answer = "attach to newest session" ]; then
       tmux attach
     elif [ $answer = "attach to session X" ]; then
+      answer=`echo $sessions_list \
+        | fzf-tmux --prompt="What session do you want to kill? >" \
+        | awk '{print $1}' \
+        | sed "s/://g"`
+      tmux attach -t $answer
     elif [ $answer = "create new session" ]; then
       tmux new-session
     elif [ $answer = "kill session" ]; then
