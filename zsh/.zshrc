@@ -133,7 +133,7 @@ tmux_auto() {
   if [ ! -z $TMUX ];then
     tmux_kill_session
   else
-    answer=`tmux_auto_choices | fzf-tmux --prompt="Tmux >"`
+    answer=`tmux_auto_choices | fzf-tmux --ansi --prompt="Tmux >"`
     if [ $answer = "attach to newest session" ]; then
       tmux attach
     elif [ $answer = "attach to session X" ]; then
@@ -152,14 +152,14 @@ tmux_auto() {
 
 tmux_auto_choices() {
   if [[ ! $sessions_list =~ "no sessions" ]]; then
-    echo "attach to newest session"
+    echo "${fg[green]}attach${reset_color} to newest session"
     if [ ! `echo $sessions_list | grep -c ''` -eq 1 ]; then
       echo "attach to session X"
     fi
   fi
   echo "create new session"
-  echo "kill session"
-  echo "cancel"
+  echo "${fg[red]}kill session${reset_color}"
+  echo "${fg[blue]}cancel${reset_color}"
 }
 
 tmux_kill_session() {
@@ -173,16 +173,18 @@ tmux_kill_session() {
       fi
     else
       tmux kill-session -t `echo $answer | awk '{print $4}' | sed "s/://g"` 
+      tmux_kill_session
     fi
   fi
 }
 
 tmux_kill_choices() {
   tmux list-sessions | while read line; do
+    [[ ! $line =~ "attached" ]] || line="${fg[green]}$line${reset_color}"
     echo  "${fg[red]}kill${reset_color} --> [ $line ]"
   done
   echo "${fg[red]}kill${reset_color} --> [ Server ]"
-  echo "cancel"
+  echo "${fg[blue]}cancel${reset_color}"
 }
 
 if [ ! -z $TMUX ]; then

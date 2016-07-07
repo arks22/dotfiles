@@ -18,7 +18,6 @@ call dein#end()
 filetype plugin indent on
 
 
-"--------------------------------------------------------
 "neocompleteの設定
 " Use neocomplete.
 let g:neocomplete#enable_at_startup = 1
