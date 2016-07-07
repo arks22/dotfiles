@@ -120,28 +120,14 @@ ggl() {
 
 #tmux
 
-tmux_list_sessions() {
-  sessions_list=`tmux list-sessions 2>&1`
-  if [[ ! $sessions_list =~ "windows" ]]; then
-    sessions_list="no sessions"
-  fi
-  echo $sessions_list
-}
-
 tmux_auto() {
-  sessions_list=`tmux_list_sessions`
+  sessions_list=$(tmux list-sessions)
   if [ ! -z $TMUX ];then
     tmux_kill_session
   else
-    answer=`tmux_auto_choices | fzf-tmux --ansi --prompt="Tmux >"`
-    if [ $answer = "attach to newest session" ]; then
-      tmux attach
-    elif [ $answer = "attach to session X" ]; then
-      answer=`echo $sessions_list \
-        | fzf-tmux --prompt="Tmux >" \
-        | awk '{print $1}' \
-        | sed "s/://g"`
-      tmux attach -t $answer
+    answer=$(tmux_auto_choices | fzf-tmux --ansi --prompt="Tmux >")
+    if [[ $answer =~ "windows" ]]; then
+      tmux attach -t $(echo $answer | awk '{print $4}')
     elif [ $answer = "create new session" ]; then
       tmux new-session
     elif [ $answer = "kill session" ]; then
@@ -151,19 +137,19 @@ tmux_auto() {
 }
 
 tmux_auto_choices() {
-  if [[ ! $sessions_list =~ "no sessions" ]]; then
-    echo "${fg[green]}attach${reset_color} to newest session"
-    if [ ! `echo $sessions_list | grep -c ''` -eq 1 ]; then
-      echo "attach to session X"
-    fi
-  fi
+  tmux list-sessions | while read line; do
+    [[ ! $line =~ "attached" ]] || line="${fg[green]}$line${reset_color}"
+    echo "${fg[green]}attach${reset_color} --> [ $line ]"
+  done
   echo "create new session"
-  echo "${fg[red]}kill session${reset_color}"
+  if [ $(tmux has-session) ]; then
+    echo "${fg[red]}kill${reset_color} session"
+  fi
   echo "${fg[blue]}cancel${reset_color}"
 }
 
 tmux_kill_session() {
-  answer=`tmux_kill_choices | fzf-tmux --ansi --prompt="Tmux >"`
+  answer=$(tmux_kill_choices | fzf-tmux --ansi --prompt="Tmux >")
   if [ ! $answer = "cancel" ]; then
     if [[ $answer =~ "Server" ]]; then
       echo "${fg[blue]}Tmux: ${reset_color}kill all sessions, OK? (Y,any)"
@@ -172,8 +158,10 @@ tmux_kill_session() {
         tmux kill-server
       fi
     else
-      tmux kill-session -t `echo $answer | awk '{print $4}' | sed "s/://g"` 
-      tmux_kill_session
+      tmux kill-session -t $(echo $answer | awk '{print $4}' | sed "s/://g")
+      if $(tmux has-session); then
+        tmux_kill_session
+      fi
     fi
   fi
 }
@@ -183,7 +171,7 @@ tmux_kill_choices() {
     [[ ! $line =~ "attached" ]] || line="${fg[green]}$line${reset_color}"
     echo  "${fg[red]}kill${reset_color} --> [ $line ]"
   done
-  echo "${fg[red]}kill${reset_color} --> [ Server ]"
+  echo "${fg[red]}kill${reset_color} --> [ ${fg[red]}Server${reset_color} ]"
   echo "${fg[blue]}cancel${reset_color}"
 }
 
@@ -216,7 +204,7 @@ function battery() {
 #auto_cdでもcdでも実行後にhomeにいなければls
 function chpwd() {
   echo "=================== ${fg[green]}$PWD${reset_color} ==================="
-  [ $PWD = $HOME ] || gls -A --color=auto 
+  [ $PWD = $HOME ] || gls -A --color=auto
 }
 
 #ディレクトリ作って入る
@@ -235,23 +223,23 @@ function rmc() {
 
 #git statusをPromptに表示させるため
 function git_info() {
-  git_status=`git status 2>&1`
+  git_status=$(git status 2>&1)
   if [[ ! $git_status =~ "Not a git" ]]; then
-    git_branch=`echo $git_status | awk 'NR==1 {print $3}'`
+    git_branch=$(echo $git_status | awk 'NR==1 {print $3}')
     if [[ $git_status =~ "Changes not staged" ]]; then
-      git_unstaged=`echo $git_status \
+      git_unstaged=$(echo $git_status \
         | sed -e '1,/Changes not staged/ d' -e '/\(untracked content\)/ d' \
         | sed '1,/^$/ d' \
         | sed '/^$/,$ d' \
-        | awk 'END{print NR}'`
+        | awk 'END{print NR}')
     else
       git_unstaged=0
     fi
     if [[ $git_status =~ "Changes to be committed" ]]; then
-      git_uncommited=`echo $git_status \
+      git_uncommited=$(echo $git_status \
         | sed -e '1,/Changes to be committed/ d' \
         | sed '1,/^$/ d' | sed '/^$/,$ d' \
-        | grep -c ''`
+        | grep -c '')
     else
       git_uncommited=0
     fi
@@ -270,7 +258,7 @@ autoload -U colors
 
 #prompt表示前に実行
 
-if [ `which git` ]; then
+if [ $(which git) ]; then
   add-zsh-hook precmd git_info
 else
   git_info=""
