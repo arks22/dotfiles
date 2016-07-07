@@ -69,7 +69,7 @@ let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 "--------------------------------------------------------
 
 
-let g:user_emmet_leader_key='<c-m>'
+let g:user_emmet_leader_key='<C-m>'
 let g:indentLine_faster=1 "indetlineのなんか
 
 "カーソルの形

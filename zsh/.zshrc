@@ -133,12 +133,12 @@ tmux_auto() {
   if [ ! -z $TMUX ];then
     tmux_kill_session
   else
-    answer=`tmux_auto_choices | fzf-tmux --prompt="Tmux: What do you want to do ? >"`
+    answer=`tmux_auto_choices | fzf-tmux --prompt="Tmux >"`
     if [ $answer = "attach to newest session" ]; then
       tmux attach
     elif [ $answer = "attach to session X" ]; then
       answer=`echo $sessions_list \
-        | fzf-tmux --prompt="What session do you want to kill? >" \
+        | fzf-tmux --prompt="Tmux >" \
         | awk '{print $1}' \
         | sed "s/://g"`
       tmux attach -t $answer
@@ -159,28 +159,30 @@ tmux_auto_choices() {
   fi
   echo "create new session"
   echo "kill session"
-  echo "do nothing"
+  echo "cancel"
 }
 
 tmux_kill_session() {
-  answer=`tmux_kill_choices | fzf-tmux --prompt="TMUX: What session do you want to kill ? >"`
-  if [ ! $answer = "do nothing" ]; then
-    if [ $answer = "kill all sessions" ]; then
+  answer=`tmux_kill_choices | fzf-tmux --ansi --prompt="Tmux >"`
+  if [ ! $answer = "cancel" ]; then
+    if [[ $answer =~ "Server" ]]; then
       echo "${fg[blue]}Tmux: ${reset_color}kill all sessions, OK? (Y,any)"
       read -k 1 answer
       if [ $answer = "Y" ];then
         tmux kill-server
       fi
     else
-      tmux kill-session -t `echo $answer | awk '{print $1}' | sed "s/://g"` 
+      tmux kill-session -t `echo $answer | awk '{print $4}' | sed "s/://g"` 
     fi
   fi
 }
 
 tmux_kill_choices() {
-  tmux list-sessions
-  echo "kil all sessions"
-  echo "do nothing"
+  tmux list-sessions | while read line; do
+    echo  "${fg[red]}kill${reset_color} --> [ $line ]"
+  done
+  echo "${fg[red]}kill${reset_color} --> [ Server ]"
+  echo "cancel"
 }
 
 if [ ! -z $TMUX ]; then
