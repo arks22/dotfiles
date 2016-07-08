@@ -166,13 +166,11 @@ tmux_interactively() {
     tmux_kill_session_interactively
   else
     answer=$(tmux_choices | fzf-tmux --ansi --prompt="Tmux >")
-    if [[ $answer =~ "windows" ]]; then
-      tmux attach -t $(echo $answer | awk '{print $4}')
-    elif [ $answer = "create new session" ]; then
-      tmux new-session \; split-window -vp 23 \; select-pane -t 1 \; split-window -h
-    elif [ $answer = "kill session" ]; then
-      tmux_kill_session_interactively
-    fi
+    case $answer in
+      "windows" ) tmux attach -t $(echo $answer | awk '{print $4}') ;;
+      "create new session" ) tmux new-session \; split-window -vp 23 \; select-pane -t 1 \; split-window -h ;;
+      "kill session" ) tmux_kill_session_interactively ;;
+    esac
   fi
 }
 
@@ -194,20 +192,26 @@ tmux_choices() {
 tmux_kill_session_interactively() {
   local answer
   answer=$(tmux_kill_choices | fzf-tmux --ansi --prompt="Tmux >")
-  if [ ! $answer = "cancel" ]; then
-    if [[ $answer =~ "Server" ]]; then
+  case $answer in
+    "Server" )
       echo "${fg[blue]}Tmux: ${reset_color}kill all sessions, OK? (Y,any)"
       read -k 1 answer
       if [ $answer = "Y" ];then
         tmux kill-server
       fi
-    else
+    ;;
+    "cancel" )
+      if [ -z $TMUX ];then
+        tmux_interactively
+      fi
+    ;;
+    *)
       tmux kill-session -t $(echo $answer | awk '{print $4}' | sed "s/://g")
       if $(tmux has-session > /dev/null 2>&1); then
         tmux_kill_session_interactively
       fi
-    fi
-  fi
+    ;;
+  esac
 }
 
 tmux_kill_choices() {
