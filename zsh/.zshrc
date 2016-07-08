@@ -83,8 +83,26 @@ setopt prompt_subst
 
 #functions
 
+#コミットメッセージ自動生成
 git_commit_automatically() {
-
+  local commmit_message added_changes action
+  git status \
+    | sed -e '1,/Changes to be committed/ d' \
+    | sed '1,/^$/ d' \
+    | sed '/^$/,$ d' \
+    | while read line; do
+    action=$(echo $line | awk '{print $1}' | sed s/://)
+    if [ $action  = "new" ]; then
+      added_changes="[add] $(echo $line | awk '{print $3}')"
+    elif [ $action = "deleted" ]; then
+      added_changes="[remove] $(echo $line | awk '{print $2}')"
+    elif [ $action = "modified" ]; then
+      added_changes="[update] $(echo $line | awk '{print $2}')"
+    elif [ $action = "renamed" ]; then
+      added_changes="[rename] $(echo $line | awk '{print $2 $3 $4}')"
+    fi
+    commmit_message="$commmit_message $added_changes"
+  done
   git commit -m "$commmit_message"
 }
 
@@ -128,7 +146,13 @@ ggl() {
 setting() {
   if [ ! -z $TMUX ]; then
     echo "–––––––––––––––––––––––––– ${fg[blue]}tmux sessions${reset_color} –––––––––––––––––––––––––––"
-    tmux list-sessions
+    tmux list-sessions > /dev/null 2>&1 | while read line; do
+      if [[ $line =~ "attached" ]]; then
+        echo "${fg[yellow]}* ${reset_color}$line"
+      else
+        echo "  $line"
+      fi
+    done
     echo "––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––"
     echo "– – – – – – – – – – – – – – – – ${fg_bold[red]}TMUX${reset_color} – – – – – – – – – – – – – – – –"
   else
@@ -248,7 +272,8 @@ function git_info() {
     if [[ $git_status =~ "Changes to be committed" ]]; then
       git_uncommited=$(echo $git_status \
         | sed -e '1,/Changes to be committed/ d' \
-        | sed '1,/^$/ d' | sed '/^$/,$ d' \
+        | sed '1,/^$/ d' \
+        | sed '/^$/,$ d' \
         | grep -c '')
     else
       git_uncommited=0
