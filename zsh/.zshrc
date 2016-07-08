@@ -83,6 +83,11 @@ setopt prompt_subst
 
 #functions
 
+git_commit_automatically() {
+
+  git commit -m "$commmit_message"
+}
+
 #gitのlog
 git_log_fzf() {
   local out shas sha q k
@@ -126,23 +131,8 @@ setting() {
     tmux list-sessions
     echo "––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––"
     echo "– – – – – – – – – – – – – – – – ${fg_bold[red]}TMUX${reset_color} – – – – – – – – – – – – – – – –"
-    tmux_auto_setting
   else
     tmux_interactively
-  fi
-}
-
-tmux_auto_setting() {
-  list_panes=$(tmux list-panes)
-  if [ $(echo $list_panes | grep -c '' ) = 1 ]; then
-    tmux split-window -dp 23
-    vim
-  fi
-  first_pane_number=$(echo $list_panes | awk 'NR==1 {print $7}' | sed s/%//)
-  second_pane_number=$(echo $list_panes | awk 'NR==2 {print $7}' | sed s/%//)
-  if [ $first_pane_number = $(($second_pane_number - 1)) ]; then
-    tmux split-window -h
-    tmux select-pane -t 0
   fi
 }
 
@@ -155,7 +145,7 @@ tmux_interactively() {
     if [[ $answer =~ "windows" ]]; then
       tmux attach -t $(echo $answer | awk '{print $4}')
     elif [ $answer = "create new session" ]; then
-      tmux new-session
+      tmux new-session \; split-window -vp 23 \; select-pane -t 1 \; split-window -h
     elif [ $answer = "kill session" ]; then
       tmux_kill_session_interactively
     fi
@@ -202,6 +192,7 @@ tmux_kill_choices() {
   echo "${fg[red]}kill${reset_color} --> [ ${fg[red]}Server${reset_color} ]"
   echo "${fg[blue]}cancel${reset_color}"
 }
+
 
 
 #ssid
@@ -261,7 +252,7 @@ function git_info() {
     else
       git_uncommited=0
     fi
-    git_info="%K{blue}%F{black}*$git_branch ±$git_unstaged c$git_uncommited %k%f"
+    git_info="%K{blue}%F{black}$git_branch ±$git_unstaged c$git_uncommited %k%f"
   else
     git_info=""
   fi
