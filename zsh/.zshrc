@@ -61,7 +61,8 @@ alias rls="rails"
 alias cl="clear"
 alias v="vagrant"
 alias g="git"
-alias git log="git_log_fzf"
+alias glog="git_log_fzf"
+alias gcmmt="git_commit_automatically"
 alias c="open -a Google\ Chrome"
 alias electron="reattach-to-user-namespace electron"
 alias -g G='| grep'
@@ -92,15 +93,12 @@ git_commit_automatically() {
     | sed '/^$/,$ d' \
     | while read line; do
     action=$(echo $line | awk '{print $1}' | sed s/://)
-    if [ $action  = "new" ]; then
-      added_changes="[add] $(echo $line | awk '{print $3}')"
-    elif [ $action = "deleted" ]; then
-      added_changes="[remove] $(echo $line | awk '{print $2}')"
-    elif [ $action = "modified" ]; then
-      added_changes="[update] $(echo $line | awk '{print $2}')"
-    elif [ $action = "renamed" ]; then
-      added_changes="[rename] $(echo $line | awk '{print $2 $3 $4}')"
-    fi
+    case $action in
+      "new" ) added_changes="[add] $(echo $line | awk '{print $3}')" ;;
+      "deleted" ) added_changes="[remove] $(echo $line | awk '{print $2}')" ;;
+      "renamed" ) added_changes="[rename] $(echo $line | awk '{print $2 $3 $4}')" ;;
+      "modified" ) added_changes="[update] $(echo $line | awk '{print $2}')" ;;
+    esac
     commmit_message="$commmit_message $added_changes"
   done
   git commit -m "$commmit_message"
