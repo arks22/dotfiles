@@ -52,8 +52,6 @@ alias vi="vim"
 alias l="gls -A --color=auto"
 alias ls="gls --color=auto"
 alias q="exit"
-alias tn="tmux new-session"
-alias tk="tmux_auto k"
 alias t="tmux_auto"
 alias tls="tmux list-sessions"
 alias fzf="fzf-tmux"
@@ -62,6 +60,7 @@ alias rls="rails"
 alias cl="clear"
 alias v="vagrant"
 alias g="git"
+alias git log="git_log_fzf"
 alias c="open -a Google\ Chrome"
 alias electron="reattach-to-user-namespace electron"
 alias -g G='| grep'
@@ -84,7 +83,7 @@ setopt prompt_subst
 #functions
 
 #gitのlog
-fglog() {
+git_log_fzf() {
   local out shas sha q k
   while out=$(
     git log --graph --color=always \
@@ -105,7 +104,7 @@ fglog() {
   done
 }
 
-#とても便利
+#google
 ggl() {
   local str opt
   if [ $# != 0 ]; then
@@ -121,7 +120,6 @@ ggl() {
 #tmux
 
 tmux_auto() {
-  sessions_list=$(tmux list-sessions)
   if [ ! -z $TMUX ];then
     tmux_kill_session
   else
@@ -137,13 +135,15 @@ tmux_auto() {
 }
 
 tmux_auto_choices() {
-  tmux list-sessions | while read line; do
-    [[ ! $line =~ "attached" ]] || line="${fg[green]}$line${reset_color}"
-    echo "${fg[green]}attach${reset_color} --> [ $line ]"
-  done
-  echo "create new session"
-  if [ $(tmux has-session) ]; then
+  if $(tmux has-session > /dev/null 2>&1); then
+    tmux list-sessions > /dev/null 2>&1 | while read line; do
+      [[ ! $line =~ "attached" ]] || line="${fg[green]}$line${reset_color}"
+      echo "${fg[green]}attach${reset_color} --> [ $line ]"
+    done
+    echo "create new session"
     echo "${fg[red]}kill${reset_color} session"
+  else
+    echo "create new session"
   fi
   echo "${fg[blue]}cancel${reset_color}"
 }
@@ -159,7 +159,7 @@ tmux_kill_session() {
       fi
     else
       tmux kill-session -t $(echo $answer | awk '{print $4}' | sed "s/://g")
-      if $(tmux has-session); then
+      if $(tmux has-session > /dev/null 2>&1); then
         tmux_kill_session
       fi
     fi
@@ -167,7 +167,7 @@ tmux_kill_session() {
 }
 
 tmux_kill_choices() {
-  tmux list-sessions | while read line; do
+  tmux list-sessions > /dev/null 2>&1 | while read line; do
     [[ ! $line =~ "attached" ]] || line="${fg[green]}$line${reset_color}"
     echo  "${fg[red]}kill${reset_color} --> [ $line ]"
   done
@@ -203,7 +203,7 @@ function battery() {
 
 #auto_cdでもcdでも実行後にhomeにいなければls
 function chpwd() {
-  echo "=================== ${fg[green]}$PWD${reset_color} ==================="
+  echo "=================== ${fg[blue]}$PWD${reset_color} ==================="
   [ $PWD = $HOME ] || gls -A --color=auto
 }
 
