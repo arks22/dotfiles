@@ -52,8 +52,9 @@ alias vi="vim"
 alias l="gls -A --color=auto"
 alias ls="gls --color=auto"
 alias q="exit"
-alias t="tmux_auto"
+alias t="tmux_interactively"
 alias tls="tmux list-sessions"
+alias tnw="tmux new-window"
 alias fzf="fzf-tmux"
 alias r="source ~/.zshrc"
 alias rls="rails"
@@ -119,36 +120,63 @@ ggl() {
 
 #tmux
 
-tmux_auto() {
-  if [ ! -z $TMUX ];then
-    tmux_kill_session
+setting() {
+  if [ ! -z $TMUX ]; then
+    echo "–––––––––––––––––––––––––– ${fg[blue]}tmux sessions${reset_color} –––––––––––––––––––––––––––"
+    tmux list-sessions
+    echo "––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––"
+    echo "– – – – – – – – – – – – – – – – ${fg_bold[red]}TMUX${reset_color} – – – – – – – – – – – – – – – –"
+    tmux_auto_setting
   else
-    answer=$(tmux_auto_choices | fzf-tmux --ansi --prompt="Tmux >")
+    tmux_interactively
+  fi
+}
+
+tmux_auto_setting() {
+  list_panes=$(tmux list-panes)
+  if [ $(echo $list_panes | grep -c '' ) = 1 ]; then
+    tmux split-window -dp 23
+    vim
+  fi
+  first_pane_number=$(echo $list_panes | awk 'NR==1 {print $7}' | sed s/%//)
+  second_pane_number=$(echo $list_panes | awk 'NR==2 {print $7}' | sed s/%//)
+  if [ $first_pane_number = $(($second_pane_number - 1)) ]; then
+    tmux split-window -h
+    tmux select-pane -t 0
+  fi
+}
+
+
+tmux_interactively() {
+  if [ ! -z $TMUX ];then
+    tmux_kill_session_interactively
+  else
+    answer=$(tmux_choices | fzf-tmux --ansi --prompt="Tmux >")
     if [[ $answer =~ "windows" ]]; then
       tmux attach -t $(echo $answer | awk '{print $4}')
     elif [ $answer = "create new session" ]; then
       tmux new-session
     elif [ $answer = "kill session" ]; then
-      tmux_kill_session
+      tmux_kill_session_interactively
     fi
   fi
 }
 
-tmux_auto_choices() {
+tmux_choices() {
   if $(tmux has-session > /dev/null 2>&1); then
     tmux list-sessions > /dev/null 2>&1 | while read line; do
       [[ ! $line =~ "attached" ]] || line="${fg[green]}$line${reset_color}"
       echo "${fg[green]}attach${reset_color} --> [ $line ]"
     done
     echo "create new session"
-    echo "${fg[red]}kill${reset_color} session"
+    echo "kill session"
   else
     echo "create new session"
   fi
   echo "${fg[blue]}cancel${reset_color}"
 }
 
-tmux_kill_session() {
+tmux_kill_session_interactively() {
   answer=$(tmux_kill_choices | fzf-tmux --ansi --prompt="Tmux >")
   if [ ! $answer = "cancel" ]; then
     if [[ $answer =~ "Server" ]]; then
@@ -160,7 +188,7 @@ tmux_kill_session() {
     else
       tmux kill-session -t $(echo $answer | awk '{print $4}' | sed "s/://g")
       if $(tmux has-session > /dev/null 2>&1); then
-        tmux_kill_session
+        tmux_kill_session_interactively
       fi
     fi
   fi
@@ -174,16 +202,6 @@ tmux_kill_choices() {
   echo "${fg[red]}kill${reset_color} --> [ ${fg[red]}Server${reset_color} ]"
   echo "${fg[blue]}cancel${reset_color}"
 }
-
-if [ ! -z $TMUX ]; then
-  echo "–––––––––––––––––––––––––– ${fg[blue]}tmux sessions${reset_color} –––––––––––––––––––––––––––"
-  tmux list-sessions
-  echo "––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––"
-  echo "– – – – – – – – – – – – – – – – ${fg_bold[red]}TMUX${reset_color} – – – – – – – – – – – – – – – –"
-else
-  tmux_auto
-fi
-
 
 
 #ssid
@@ -248,6 +266,9 @@ function git_info() {
     git_info=""
   fi
 }
+
+
+setting
 
 
 
