@@ -86,7 +86,7 @@ setopt prompt_subst
 
 #コミットメッセージ自動生成
 git_commit_automatically() {
-  local commmit_message added_changes action
+  local commmit_message added_changes action line
   git status \
     | sed -e '1,/Changes to be committed/ d' \
     | sed '1,/^$/ d' \
@@ -142,6 +142,7 @@ ggl() {
 #tmux
 
 setting() {
+  local line
   if [ ! -z $TMUX ]; then
     echo "–––––––––––––––––––––––––– ${fg[blue]}tmux sessions${reset_color} –––––––––––––––––––––––––––"
     tmux list-sessions > /dev/null 2>&1 | while read line; do
@@ -160,6 +161,7 @@ setting() {
 
 
 tmux_interactively() {
+  local answer
   if [ ! -z $TMUX ];then
     tmux_kill_session_interactively
   else
@@ -175,6 +177,7 @@ tmux_interactively() {
 }
 
 tmux_choices() {
+  local line
   if $(tmux has-session > /dev/null 2>&1); then
     tmux list-sessions > /dev/null 2>&1 | while read line; do
       [[ ! $line =~ "attached" ]] || line="${fg[green]}$line${reset_color}"
@@ -189,6 +192,7 @@ tmux_choices() {
 }
 
 tmux_kill_session_interactively() {
+  local answer
   answer=$(tmux_kill_choices | fzf-tmux --ansi --prompt="Tmux >")
   if [ ! $answer = "cancel" ]; then
     if [[ $answer =~ "Server" ]]; then
@@ -207,6 +211,7 @@ tmux_kill_session_interactively() {
 }
 
 tmux_kill_choices() {
+  local list_sessions line
   list_sessions=$(tmux list-sessions)
   echo $list_sessions > /dev/null 2>&1 | while read line; do
     [[ ! $line =~ "attached" ]] || line="${fg[green]}$line${reset_color}"
