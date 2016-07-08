@@ -185,11 +185,12 @@ tmux_kill_session_interactively() {
 }
 
 tmux_kill_choices() {
-  tmux list-sessions > /dev/null 2>&1 | while read line; do
+  list_sessions=$(tmux list-sessions)
+  echo $list_sessions > /dev/null 2>&1 | while read line; do
     [[ ! $line =~ "attached" ]] || line="${fg[green]}$line${reset_color}"
     echo  "${fg[red]}kill${reset_color} --> [ $line ]"
   done
-  echo "${fg[red]}kill${reset_color} --> [ ${fg[red]}Server${reset_color} ]"
+  [ $(echo $list_sessions | grep -c '')  = 1 ] || echo "${fg[red]}kill${reset_color} --> [ ${fg[red]}Server${reset_color} ]"
   echo "${fg[blue]}cancel${reset_color}"
 }
 
