@@ -62,8 +62,10 @@ alias cl="clear"
 alias v="vagrant"
 alias g="git"
 alias glog="git_log_fzf"
-alias gcmmt="git_commit_automatically"
+alias gcommit="git_commit_automatically"
+alias gca="git add -A && git_commit_automatically"
 alias c="open -a Google\ Chrome"
+alias ggl="google"
 alias electron="reattach-to-user-namespace electron"
 alias -g G='| grep'
 
@@ -101,7 +103,7 @@ git_commit_automatically() {
     esac
     commmit_message="$commmit_message $added_changes"
   done
-  git commit -m "$commmit_message"
+  git commit -m "$commmit_message $1"
 }
 
 #gitのlog
@@ -126,8 +128,7 @@ git_log_fzf() {
   done
 }
 
-#google
-ggl() {
+google() {
   local str opt
   if [ $# != 0 ]; then
     for i in $*; do
@@ -165,13 +166,23 @@ tmux_interactively() {
   if [ ! -z $TMUX ];then
     tmux_kill_session_interactively
   else
-    answer=$(tmux_choices | fzf-tmux --ansi --prompt="Tmux >")
-    case $answer in
-      "windows" ) tmux attach -t $(echo $answer | awk '{print $4}') ;;
-      "create new session" ) tmux new-session \; split-window -vp 23 \; select-pane -t 1 \; split-window -h ;;
-      "kill session" ) tmux_kill_session_interactively ;;
-    esac
+    if $(tmux has-session > /dev/null 2>&1); then
+      answer=$(tmux_choices | fzf-tmux --ansi --prompt="Tmux >")
+      if [ ! $answer = "cancel" ]; then
+        case $answer in
+          "create new session" ) tmux_new_session ;;
+          "kill session" ) tmux_kill_session_interactively ;;
+          * ) tmux attach -t $(echo $answer | awk '{print $4}' | sed 's/://') ;;
+        esac
+      fi
+    else
+      tmux_new_session
+    fi
   fi
+}
+
+tmux_new_session() {
+  tmux new-session \; split-window -vp 23 \; select-pane -t 1 \; split-window -h
 }
 
 tmux_choices() {
@@ -194,7 +205,7 @@ tmux_kill_session_interactively() {
   answer=$(tmux_kill_choices | fzf-tmux --ansi --prompt="Tmux >")
   case $answer in
     "Server" )
-      echo "${fg[blue]}Tmux: ${reset_color}kill all sessions, OK? (Y,any)"
+      echo "${fg[blue]}Tmux: ${reset_color}kill all sessions, OK? [Y,any]"
       read -k 1 answer
       if [ $answer = "Y" ];then
         tmux kill-server
@@ -255,7 +266,7 @@ function mkcd() {
 
 #カレントディレクトリを削除して抜ける
 function rmc() {
-  echo -n "remove current directory, OK? [y, any]"
+  echo -n "remove current directory, OK? [Y, any]"
   read -k 1 answer
   if [ $answer = "y" ]; then
     rm -r $PWD && cd ..
@@ -285,7 +296,7 @@ function git_info() {
     else
       git_uncommited=0
     fi
-    git_info="%K{blue}%F{black}$git_branch ±$git_unstaged c$git_uncommited %k%f"
+    git_info="%K{blue}%F{black} $git_branch ±$git_unstaged c$git_uncommited %k%f"
   else
     git_info=""
   fi
