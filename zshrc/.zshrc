@@ -20,5 +20,5 @@ if [ ! -z $TMUX ]; then
   echo "––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––"
   echo "– – – – – – – – – – – – – – – – ${fg_bold[red]}TMUX${reset_color} – – – – – – – – – – – – – – – –"
 else
-  tmux_interactively
+  tmux_operation_interactively
 fi
