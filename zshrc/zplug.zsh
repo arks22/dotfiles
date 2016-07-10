@@ -6,18 +6,29 @@ fi
 autoload -Uz compinit
 compinit
 
+
 source ~/.zplug/init.zsh
 
 zplug "mollifier/anyframe"
+
 zplug "b4b4r07/enhancd", use:init.sh
+
 zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
+
 zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
-zplug "zsh-users/zsh-history-substring-search"
+
 zplug "mrowa44/emojify", as:command 
+
 zplug "b4b4r07/emoji-cli", \
   if:'(( $+commands[jq] ))', \
   on:"junegunn/fzf-bin"
-zplug "zsh-users/zsh-syntax-highlighting", nice:10
+
+zplug "zsh-users/zsh-history-substring-search"
+
+zplug "zsh-users/zsh-autosuggestions"
+
+zplug "zsh-users/zsh-syntax-highlighting", nice:10 
+
 
 #未インストールの項目をインストール
 if ! zplug check --verbose; then
