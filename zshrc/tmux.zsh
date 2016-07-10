@@ -18,11 +18,11 @@ tmux_operation_interactively() {
     tmux_operations_interactively_in_tmux
   else
     if $(tmux has-session > /dev/null 2>&1); then
-      answer=$(tmux_choices | fzf-tmux --ansi --prompt="Tmux >")
+      answer=$(tmux_operation_interactively_choices | fzf-tmux --ansi --prompt="Tmux >")
       if [ ! $answer = "cancel" ]; then
         case $answer in
           "create new session" ) tmux_new_session ;;
-          "kill session" ) tmux_operations_interactively_in_tmux ;;
+          "kill session" ) tmux_kill_session_interactively ;;
           * ) tmux attach -t $(echo $answer | awk '{print $4}' | sed 's/://') ;;
         esac
       fi
@@ -33,7 +33,7 @@ tmux_operation_interactively() {
 }
 
 
-tmux_choices() {
+tmux_operation_interactively_choices() {
   if $(tmux has-session > /dev/null 2>&1); then
     tmux list-sessions > /dev/null 2>&1 | while read line; do
       [[ ! $line =~ "attached" ]] || line="${fg[green]}$line${reset_color}"
@@ -50,7 +50,7 @@ tmux_choices() {
 #-------------------- operation --------------------
 
 tmux_operations_interactively_in_tmux() {
-  answer=$(tmux_operation_choices | fzf-tmux --ansi --prompt="Tmux >")
+  answer=$(tmux_operation_interactively_in_tmux_choices | fzf-tmux --ansi --prompt="Tmux >")
   if [ ! $answer = "cancel" ]; then
     if [ $answer = "create new window" ]; then
       tmux new-window
@@ -65,7 +65,7 @@ tmux_operations_interactively_in_tmux() {
 }
 
 
-tmux_operation_choices() {
+tmux_operation_interactively_in_tmux_choices() {
   local list_sessions list_windows
   list_sessions=$(tmux list-sessions)
   list_windows=$(tmux list-windows)
@@ -86,7 +86,7 @@ tmux_operation_choices() {
 #-------------------- kill session --------------------
 
 tmux_kill_session_interactively() {
-  answer=$(tmux_kill_session_choices | fzf-tmux --ansi --prompt="Tmux >")
+  answer=$(tmux_kill_session_interactively_choices | fzf-tmux --ansi --prompt="Tmux >")
   if [ $answer = "cancel" ]; then
     if [ -z $TMUX ]; then
       tmux_operation_interactively
@@ -114,7 +114,7 @@ tmux_kill_session_interactively() {
   fi
 }
 
-tmux_kill_session_choices() {
+tmux_kill_session_interactively_choices() {
   list_sessions=$(tmux list-sessions);
   echo $list_sessions > /dev/null 2>&1 | while read line; do
     [[ $line =~ "attached" ]] && line="${fg[green]}$line${reset_color}"
@@ -127,7 +127,7 @@ tmux_kill_session_choices() {
 #-------------------- kill window--------------------
 
 tmux_kill_window_interactively() {
-  answer=$(tmux_kill_window_choices | fzf-tmux --ansi --prompt="Tmux >")
+  answer=$(tmux_kill_window_interactively_choices | fzf-tmux --ansi --prompt="Tmux >")
   if [ $answer = "cancel" ]; then
     tmux_operations_interactively_in_tmux
   else
@@ -137,7 +137,7 @@ tmux_kill_window_interactively() {
 }
 
 
-tmux_kill_window_choices() {
+tmux_kill_window_interactively_choices() {
   list_windows=$(tmux list-windows);
   echo $list_windows > /dev/null 2>&1 | while read line; do
     result_line=$(echo $line | awk '{print $1 " " $2 " " $3 " " $4 " " $5}')
