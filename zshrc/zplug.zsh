@@ -1,4 +1,5 @@
 #zplug
+
 if [ ! -e ~/.zplug ]; then
   git clone https://github.com/b4b4r07/zplug ~/.zplug
 fi
@@ -24,8 +25,6 @@ zplug "b4b4r07/emoji-cli", \
   on:"junegunn/fzf-bin"
 
 zplug "zsh-users/zsh-history-substring-search"
-
-zplug "zsh-users/zsh-autosuggestions"
 
 zplug "zsh-users/zsh-completions"
 
