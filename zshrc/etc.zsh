@@ -20,4 +20,3 @@ bindkey -v
 HISTFILE=$HOME/.zsh-history
 HISTSIZE=10000
 SAVEHIST=10000
-
