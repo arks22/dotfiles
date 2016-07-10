@@ -11,7 +11,8 @@ tmux_new_session() {
     \; send-keys -t 2 "ls" C-m \
 }
 
-#-------------------- tmux --------------------
+
+#-------------------- tmux operation --------------------
 
 tmux_operation_interactively() {
   if [ ! -z $TMUX ]; then
@@ -39,15 +40,15 @@ tmux_operation_interactively_choices() {
       [[ ! $line =~ "attached" ]] || line="${fg[green]}$line${reset_color}"
       echo "${fg[green]}attach${reset_color} --> [ $line ]"
     done
-    echo "create ${fg_bold[default]}new session${reset_color}"
+    echo "create --> [ ${fg_bold[default]}new session${reset_color} ]"
     echo "kill ${fg_bold[default]}session${reset_color}"
   else
-    echo "create ${fg_bold[default]}new session${reset_color}"
+    echo "create --> [ ${fg_bold[default]}new session${reset_color} ]"
   fi
   echo "${fg[blue]}cancel${reset_color}"
 }
 
-#-------------------- operation --------------------
+
 
 tmux_operations_interactively_in_tmux() {
   answer=$(tmux_operation_interactively_in_tmux_choices | fzf-tmux --ansi --prompt="Tmux >")
@@ -77,7 +78,7 @@ tmux_operation_interactively_in_tmux_choices() {
       fi
     done
   fi
-  echo "create ${fg_bold[default]}new window${reset_color}"
+  echo  "${fg[cyan]}switch${reset_color} --> [ ${fg_bold[default]}new window${reset_color} ]"
   echo "kill ${fg_bold[default]}session${reset_color}"
   echo "kill ${fg_bold[default]}window${reset_color}"
   echo "${fg[blue]}cancel${reset_color}"
@@ -124,7 +125,7 @@ tmux_kill_session_interactively_choices() {
   echo "${fg[blue]}cancel${reset_color}"
 }
 
-#-------------------- kill window--------------------
+#-------------------- kill window --------------------
 
 tmux_kill_window_interactively() {
   answer=$(tmux_kill_window_interactively_choices | fzf-tmux --ansi --prompt="Tmux >")

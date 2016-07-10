@@ -17,6 +17,7 @@ zplug "mrowa44/emojify", as:command
 zplug "b4b4r07/emoji-cli", \
   if:'(( $+commands[jq] ))', \
   on:"junegunn/fzf-bin"
+zplug "zsh-users/zsh-syntax-highlighting", nice:10
 
 #未インストールの項目をインストール
 if ! zplug check --verbose; then
