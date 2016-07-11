@@ -1,10 +1,17 @@
 #!/bin/sh
 
-  git status \
+git_commit_automatically() {
+  commit_message=$( git status \
     | sed -e '1,/Changes to be committed/ d' \
     | sed '1,/^$/ d' \
     | sed '/^$/,$ d' \
-    | while read line; do
+    | loop
+  )
+  git commit -m "$commit_message $1"
+}
+
+loop() {
+  while read line; do
     action=$(echo $line | awk '{print $1}' | sed "s/://")
     case $action in
       "new" ) added_changes="[add] $(echo $line | awk '{print $3}')" ;;
@@ -14,4 +21,7 @@
     esac
     commit_message="$commit_message $added_changes"
   done
-  git commit -m "$commit_message $1"
+  echo $commit_message
+}
+
+git_commit_automatically
