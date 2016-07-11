@@ -5,8 +5,6 @@ autoload -U colors
 
 eval $(gdircolors ~/dircolors)
 
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="20"
-
 #補完候補でもLS_COLORSを使う
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 

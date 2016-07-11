@@ -1,6 +1,6 @@
 
 #source separated files
-files=( zplug etc aliases options functions tmux git prompt )
+files=( zplug etc aliases functions tmux git prompt )
 
 for file in ${files[@]}; do
   source ~/dotfiles/zshrc/$file.zsh
