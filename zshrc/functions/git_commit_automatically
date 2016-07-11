@@ -1,7 +1,5 @@
 #!/bin/sh
 
-git_commit_automatically() {
-  local commmit_message added_changes action line
   git status \
     | sed -e '1,/Changes to be committed/ d' \
     | sed '1,/^$/ d' \
@@ -14,9 +12,6 @@ git_commit_automatically() {
       "renamed" ) added_changes="[rename] $(echo $line | awk '{print $2 $3 $4}')" ;;
       "modified" ) added_changes="[update] $(echo $line | awk '{print $2}')" ;;
     esac
-    commmit_message="$commmit_message $added_changes"
+    commit_message="$commit_message $added_changes"
   done
-  git commit -m "$commmit_message $1"
-}
-
-git_commit_automatically
+  git commit -m "$commit_message $1"
