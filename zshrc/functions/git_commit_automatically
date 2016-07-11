@@ -7,7 +7,7 @@ git_commit_automatically() {
     | sed '1,/^$/ d' \
     | sed '/^$/,$ d' \
     | while read line; do
-    action=$(echo $line | awk '{print $1}' | sed s/://)
+    action=$(echo $line | awk '{print $1}' | sed "s/://")
     case $action in
       "new" ) added_changes="[add] $(echo $line | awk '{print $3}')" ;;
       "deleted" ) added_changes="[remove] $(echo $line | awk '{print $2}')" ;;
@@ -18,3 +18,5 @@ git_commit_automatically() {
   done
   git commit -m "$commmit_message $1"
 }
+
+git_commit_automatically

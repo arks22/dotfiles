@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 
 git_log_fzf() {
   local out shas sha q k
@@ -21,3 +21,4 @@ git_log_fzf() {
   done
 }
 
+git_log_fzf

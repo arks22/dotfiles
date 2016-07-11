@@ -7,7 +7,7 @@ done
 
 #copy functions to ~/bin and give permission
 ls -1 $HOME/dotfiles/zshrc/functions > /dev/null 2>&1 | while read line; do 
-  cp $HOME/dotfiles/zshrc/functions/$line $HOME/bin/$line
+  ln -f $HOME/dotfiles/zshrc/functions/$line $HOME/bin/$line
   chmod a+x $HOME/bin/$line
 done
 
