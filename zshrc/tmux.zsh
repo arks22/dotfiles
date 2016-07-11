@@ -44,7 +44,7 @@ tmux_operation_interactively_choices() {
 tmux_operations_interactively_in_tmux() {
   answer=$(tmux_operation_interactively_in_tmux_choices | fzf-tmux --ansi --prompt="Tmux >")
   if [ ! "$answer" = "cancel" ]; then
-    if [ "$answer" = "create new window" ]; then
+    if [[ "$answer" =~ "new window" ]]; then
       tmux new-window
     elif [ "$answer" = "kill session" ]; then
       tmux_kill_session_interactively

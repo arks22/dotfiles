@@ -1,0 +1,9 @@
+#!/bin/sh
+
+function rmc() {
+  echo -n "remove current directory, OK? [Y, any]"
+  read -k 1 answer
+  if [ $answer = "y" ]; then
+    rm -r $PWD && cd ..
+  fi
+}

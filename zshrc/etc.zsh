@@ -47,3 +47,9 @@ setopt auto_list
 
 setopt prompt_subst
 
+
+#auto_cdでもcdでも実行後にhomeにいなければls
+function chpwd() {
+  echo "=================== ${fg[blue]}$PWD${reset_color} ==================="
+  [ $PWD = $HOME ] || gls -A --color=auto
+}

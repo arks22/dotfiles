@@ -1,0 +1,13 @@
+#!/bin/sh
+
+google() {
+  local str opt
+  if [ $# != 0 ]; then
+    for i in $*; do
+      str="$str${str:++}$i"
+    done
+    opt="search?q=${str}"
+  fi
+  open -a Google\ Chrome http://www.google.co.jp/$opt
+}
+
