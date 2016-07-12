@@ -4,11 +4,11 @@ if [ ! -e ~/.zplug ]; then
   git clone https://github.com/b4b4r07/zplug ~/.zplug
 fi
 
+source ~/.zplug/init.zsh
+
 autoload -Uz compinit
 compinit
 
-
-source ~/.zplug/init.zsh
 
 zplug "mollifier/anyframe"
 
