@@ -9,6 +9,7 @@ source ~/.zplug/init.zsh
 autoload -Uz compinit
 compinit
 
+zplug "arks22/tmuximum", as:command
 
 zplug "mollifier/anyframe"
 

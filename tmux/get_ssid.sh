@@ -6,7 +6,7 @@ ssid=`/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Re
   | sed "s/ //"`
 
 if [ -n "$ssid" ]; then
-  echo "#[fg=colour245]$ssid#[default]"
+  echo "#[fg=white]$ssid#[default]"
 else
   echo "#[fg=red]✘#[default]"
 fi
