@@ -17,6 +17,8 @@ zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
 
 zplug "mrowa44/emojify", as:command 
 
+zplug "b4b4r07/zsh-gomi", if:"which fzf"
+
 zplug "mollifier/anyframe"
 
 zplug "b4b4r07/enhancd", use:init.sh
