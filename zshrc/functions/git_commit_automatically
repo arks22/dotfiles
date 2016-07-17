@@ -20,7 +20,7 @@ git_commit_automatically() {
     | sed '1,/Changes to be committed/ d' \
     | sed '1,/^$/ d' \
     | sed '/^$/,$ d' \
-    | loop
+    | git_commit_automatically_loop
   )
   git commit -m "$commit_message $*"
 }
