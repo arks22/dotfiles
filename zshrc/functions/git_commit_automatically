@@ -1,6 +1,6 @@
 #!/bin/sh
 
-loop() {
+git_commit_automatically_loop() {
   local action message
   while read line; do
     action=$(echo $line | awk '{print $1}' | sed "s/://")
@@ -24,6 +24,5 @@ git_commit_automatically() {
   )
   git commit -m "$commit_message $*"
 }
-
 
 git_commit_automatically $*
