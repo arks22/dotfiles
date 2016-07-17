@@ -5,11 +5,18 @@ for file in ${source_files[@]}; do
   source ~/dotfiles/zshrc/$file.zsh
 done
 
-#copy functions to ~/bin and give permission
-ls -1 ~/dotfiles/zshrc/functions > /dev/null 2>&1 | while read line; do 
-  ln -f ~/dotfiles/zshrc/functions/$line ~/bin/$line
-  chmod a+x ~/bin/$line
-done
+#put symbolic links to ~/bin and grant permissions
+link_functions() {
+  if [ ! -e ~/bin ]; then
+    mkdir ~/bin
+  fi
+  ls -1 ~/dotfiles/zshrc/functions > /dev/null 2>&1 | while read line; do 
+    ln -f ~/dotfiles/zshrc/functions/$line ~/bin/$line
+    chmod a+x ~/bin/$line
+  done
+}
+
+link_functions
 
 
 if [ ! -z $TMUX ]; then

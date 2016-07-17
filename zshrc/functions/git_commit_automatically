@@ -1,6 +1,7 @@
 #!/bin/sh
 
 loop() {
+  local action message
   while read line; do
     action=$(echo $line | awk '{print $1}' | sed "s/://")
     case $action in
@@ -9,24 +10,19 @@ loop() {
       "renamed" ) added_changes="[rename] $(echo $line | awk '{print $2 $3 $4}')" ;;
       "modified" ) added_changes="[improve] $(echo $line | awk '{print $2}')" ;;
     esac
-    commit_message="$commit_message $added_changes"
+    message="$message $added_changes"
   done
-  echo $commit_message
+  echo $message
 }
 
 git_commit_automatically() {
-  if [ $# != 0 ]; then
-    for i in $*; do
-      str="$str${str:++}$i"
-    done
-  fi
   commit_message=$( git status \
     | sed '1,/Changes to be committed/ d' \
     | sed '1,/^$/ d' \
     | sed '/^$/,$ d' \
     | loop
   )
-  git commit -m "$commit_message $str"
+  git commit -m "$commit_message $*"
 }
 
 

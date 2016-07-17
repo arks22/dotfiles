@@ -9,13 +9,13 @@ source ~/.zplug/init.zsh
 autoload -Uz compinit
 compinit
 
-zplug "arks22/tmuximum", as:command
-
 zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
 
 zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
 
 zplug "mrowa44/emojify", as:command 
+
+zplug "arks22/tmuximum", as:command
 
 zplug "b4b4r07/zsh-gomi", if:"which fzf"
 
