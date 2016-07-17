@@ -26,4 +26,4 @@ git_commit_automatically() {
 }
 
 
-git_commit_automatically
+git_commit_automatically $*
