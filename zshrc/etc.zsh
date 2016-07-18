@@ -1,14 +1,12 @@
-#some settings
-
 autoload -Uz add-zsh-hook
 autoload -U colors
 
-eval $(gdircolors ~/dircolors)
+eval $(gdircolors ~/dotfiles/zshrc/colors/dircolors)
 
-#補完候補でもLS_COLORSを使う
+#use LS_COLORS in completion
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
-#補完候補をハイライト
+#highlight completions
 zstyle ':completion:*:default' menu select=2
 zstyle ':completion:*' list-separator '-->'
 
@@ -48,7 +46,6 @@ setopt auto_list
 setopt prompt_subst
 
 
-#auto_cdでもcdでも実行後にhomeにいなければls
 function chpwd() {
   echo "=================== ${fg[blue]}$PWD${reset_color} ==================="
   [ $PWD = $HOME ] || gls -A --color=auto

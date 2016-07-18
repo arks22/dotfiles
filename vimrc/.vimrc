@@ -1,7 +1,8 @@
-"dein.vimの設定
+"dein.vim
 if &compatible
   set nocompatible
 endif
+
 set runtimepath^=$HOME/.vim/repos/github.com/Shougo/dein.vim
 
 call dein#begin(expand('~/.cache/dein'))
@@ -21,7 +22,7 @@ call dein#end()
 
 
 
-"neocompleteの設定
+"neocomplete.vim
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#enable_smart_case = 1
 let g:neocomplete#sources#syntax#min_keyword_length = 1
@@ -33,11 +34,11 @@ if !exists('g:neocomplete#keyword_patterns')
   let g:neocomplete#keyword_patterns = {}
 endi
 
-inoremap <expr><C-g>     neocomplete#undo_completion()
-inoremap <expr><C-l>     neocomplete#complete_common_string()
+inoremap <expr><C-g> neocomplete#undo_completion()
+inoremap <expr><C-l> neocomplete#complete_common_string()
 inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
 inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
 inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 
@@ -45,10 +46,6 @@ inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 
 noremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>".
-
-function! s:my_cr_function()
-  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-endfunction
 
 function! s:my_cr_function()
   return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
@@ -68,10 +65,24 @@ let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
 
 
+"vim-easymotion
+map  <Leader>f <Plug>(easymotion-bd-f)
+map <Leader>f <Plug>(easymotion-overwin-f)
+
+map s <Plug>(easymotion-overwin-f2)
+vmap s <Plug>(easymotion-bd-f2)
+
+map <Leader>L <Plug>(easymotion-bd-jk)
+map <Leader>L <Plug>(easymotion-overwin-line)
+
+map  <Leader>w <Plug>(easymotion-bd-w)
+
+
+
+
 "etc
 let g:user_emmet_leader_key='<C-m>'
 let g:indentLine_faster=1 
-
 
 let &t_ti.="\e[1 q"
 let &t_SI.="\e[5 q"
@@ -98,13 +109,13 @@ set showcmd
 set wildmenu
 set vb t_vb=
 
-
-map <C-l> gt
-map <C-h> gT
+noremap <S-h>   ^
+noremap <S-j>   }
+noremap <S-k>   {
+noremap <S-l>   $
 nnoremap j gj
 nnoremap j gj
 nnoremap Y y$
-nnoremap s <Nop>
 nnoremap <silent><C-e> :NERDTree<CR>
 nnoremap s <Nop>
 nnoremap sj <C-w>j
