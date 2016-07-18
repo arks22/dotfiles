@@ -1,5 +1,5 @@
 #source separated files
-source_files=( zplug etc aliases functions prompt )
+source_files=( zplug etc aliases prompt )
 
 for file in ${source_files[@]}; do
   source ~/dotfiles/zshrc/$file.zsh

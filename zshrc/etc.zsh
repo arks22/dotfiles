@@ -1,3 +1,5 @@
+#etc
+
 autoload -Uz add-zsh-hook
 autoload -U colors
 
@@ -47,6 +49,6 @@ setopt prompt_subst
 
 
 function chpwd() {
-  echo "=================== ${fg[blue]}$PWD${reset_color} ==================="
-  [ $PWD = $HOME ] || gls -A --color=auto
+  echo "–––––––––––––––––––––– ${fg[blue]}$PWD${reset_color} ––––––––––––––––––––––"
+  [ $PWD = $HOME ] || gls -AX --color=auto
 }

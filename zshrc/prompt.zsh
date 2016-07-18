@@ -1,3 +1,4 @@
+#prompt
 
 function git_info() {
   git_status=$(git status 2>&1)

@@ -1,8 +1,8 @@
 #aliases
 
 alias vi="vim"
-alias l="gls -A --color=auto"
-alias ls="gls --color=auto"
+alias l="gls -AX --color=auto"
+alias ls="gls -X --color=auto"
 alias q="exit"
 alias t="tmuximum"
 alias tls="tmux list-sessions"

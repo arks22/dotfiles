@@ -23,7 +23,7 @@ git_commit_automatically() {
     | git_commit_automatically_loop
   )
   [ $# = 0 ] || str=" | $*"
-  git commit -m "$commit_message $str"
+  git commit -m "${commit_message}${str}"
 }
 
 git_commit_automatically $*
