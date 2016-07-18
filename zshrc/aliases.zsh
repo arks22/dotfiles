@@ -1,6 +1,5 @@
 #aliases
 
-
 alias vi="vim"
 alias l="gls -A --color=auto"
 alias ls="gls --color=auto"
