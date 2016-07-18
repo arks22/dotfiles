@@ -5,6 +5,7 @@ for file in ${source_files[@]}; do
   source ~/dotfiles/zshrc/$file.zsh
 done
 
+
 #put symbolic links to ~/bin and grant permissions
 link_functions() {
   if [ ! -e ~/bin ]; then

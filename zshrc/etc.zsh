@@ -17,7 +17,7 @@ export LANG=en_US.UTF-8
 
 bindkey -v 
 
-#履歴を10000件保存
+#save 10000 historys
 HISTFILE=$HOME/.zsh-history
 HISTSIZE=10000
 SAVEHIST=10000

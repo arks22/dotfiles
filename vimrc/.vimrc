@@ -28,7 +28,6 @@ let g:neocomplete#enable_smart_case = 1
 let g:neocomplete#sources#syntax#min_keyword_length = 1
 let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
 let g:neocomplete#sources#dictionary#dictionaries = { 'default' : '', 'scheme' : $HOME.'/.gosh_completions' }
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
 if !exists('g:neocomplete#keyword_patterns')
   let g:neocomplete#keyword_patterns = {}
@@ -69,8 +68,8 @@ let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 map  <Leader>f <Plug>(easymotion-bd-f)
 map <Leader>f <Plug>(easymotion-overwin-f)
 
-map s <Plug>(easymotion-overwin-f2)
-vmap s <Plug>(easymotion-bd-f2)
+map , <Plug>(easymotion-overwin-f2)
+vmap , <Plug>(easymotion-bd-f2)
 
 map <Leader>L <Plug>(easymotion-bd-jk)
 map <Leader>L <Plug>(easymotion-overwin-line)
@@ -92,9 +91,9 @@ let &t_te.="\e[0 q"
 
 syntax enable
 colorscheme solarized
+
+
 set background=dark
-
-
 set cursorline
 set cursorcolumn
 set number 
@@ -109,14 +108,19 @@ set showcmd
 set wildmenu
 set vb t_vb=
 
-noremap <S-h>   ^
-noremap <S-j>   }
-noremap <S-k>   {
-noremap <S-l>   $
-nnoremap j gj
-nnoremap j gj
-nnoremap Y y$
+
+cnoremap rl source ~/.vimrc
+cnoremap nh noh
+nnoremap ; :
+nnoremap : ;
 nnoremap <silent><C-e> :NERDTree<CR>
+noremap <S-h> ^
+noremap <S-j> }
+noremap <S-k> {
+noremap <S-l> $
+nnoremap j gj
+nnoremap k gk
+nnoremap Y y$
 nnoremap s <Nop>
 nnoremap sj <C-w>j
 nnoremap sk <C-w>k
@@ -126,3 +130,6 @@ nnoremap s< <C-w><
 nnoremap s> <C-w>>
 nnoremap s+ <C-w>+
 nnoremap s- <C-w>-
+
+"avoid highlight after source
+nohlsearch
