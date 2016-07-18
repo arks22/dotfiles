@@ -23,9 +23,7 @@ zplug "mollifier/anyframe"
 
 zplug "b4b4r07/enhancd", use:init.sh
 
-zplug "b4b4r07/emoji-cli", \
-  if:'(( $+commands[jq] ))', \
-  on:"junegunn/fzf-bin"
+zplug "b4b4r07/emoji-cli"
 
 zplug "zsh-users/zsh-history-substring-search"
 
