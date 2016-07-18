@@ -27,4 +27,3 @@ alias -g G='| grep'
 alias -s rb="ruby"
 alias -s py='python'
 alias -s html='google-chrome'
-

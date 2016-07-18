@@ -11,4 +11,4 @@ google() {
   open -a Google\ Chrome http://www.google.co.jp/$opt
 }
 
-google
+google $*
