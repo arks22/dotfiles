@@ -9,6 +9,7 @@ alias tls="tmux list-sessions"
 alias tnw="tmux new-window"
 alias fzf="fzf-tmux"
 alias r="source ~/.zshrc"
+alias rm="gomi"
 alias rl="rails"
 alias cl="clear"
 alias v="vagrant"
@@ -20,6 +21,9 @@ alias gdc="git reset --hard HEAD^"
 alias c="open -a Google\ Chrome"
 alias gg="google"
 alias electron="reattach-to-user-namespace electron"
+
+alias -g G="| grep"
+alias -g F="| fzf"
 
 alias -s rb="ruby"
 alias -s py='python'
