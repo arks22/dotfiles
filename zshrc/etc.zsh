@@ -15,6 +15,8 @@ zstyle ':completion:*' list-separator '-->'
 export EDITOR=vim
 export LANG=en_US.UTF-8
 
+export EMOJI_CLI_KEYBIND='^n'
+
 bindkey -v 
 
 #save 10000 historys
