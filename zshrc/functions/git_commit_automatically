@@ -22,7 +22,7 @@ git_commit_automatically() {
     | sed '/^$/,$ d' \
     | git_commit_automatically_loop
   )
-  [ $# = 0] || str=" | $*"
+  [ $# = 0 ] || str=" | $*"
   git commit -m "$commit_message $str"
 }
 
