@@ -36,7 +36,7 @@ endi
 inoremap <expr><C-g> neocomplete#undo_completion()
 inoremap <expr><C-l> neocomplete#complete_common_string()
 inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS>  neocomplete#smart_close_popup()."\<C-h>"
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
@@ -88,13 +88,13 @@ set number
 set noswapfile
 set expandtab
 set tabstop=2
+set showtabline=2
 set softtabstop=2
 set shiftwidth=2
 set backspace=indent,eol,start 
 set showcmd
 set wildmenu
 set vb t_vb=
-
 
 
 let mapleader = "\<Space>"
@@ -105,6 +105,7 @@ let g:indentLine_faster=1
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
 nnoremap <Leader>n :noh<CR>
+nnoremap <Leader>t :tabnew 
 nnoremap <Leader>s :%s/
 cnoremap rl source ~/.vimrc
 nnoremap ; :
@@ -114,6 +115,8 @@ noremap <S-h> ^
 noremap <S-j> }
 noremap <S-k> {
 noremap <S-l> $
+nnoremap <C-l> gt
+nnoremap <C-h> gT
 nnoremap j gj
 nnoremap k gk
 nnoremap Y y$
@@ -123,5 +126,5 @@ nnoremap <Leader>l <C-w>l
 nnoremap <Leader>h <C-w>h
 nnoremap <Leader>< <C-w><<C-w><<C-w><
 nnoremap <Leader>> <C-w>><C-w>><C-w>>
-nnoremap <Leader>+ <C-w>+
-nnoremap <Leader>- <C-w>-
+nnoremap <Leader>+ <C-w>+<C-w>+<C-w>+
+nnoremap <Leader>- <C-w>-<C-w>-<C-w>-
