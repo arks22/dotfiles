@@ -1,22 +1,21 @@
 #source separated files
-source_files=( zplug etc aliases prompt )
 
-for file in ${source_files[@]}; do
-  source ~/dotfiles/zshrc/$file.zsh
+for file in $(ls ~/dotfiles/zsh/zshrc); do
+  source ~/dotfiles/zsh/zshrc/$file
 done
 
+#ls -1 ~/dotfiles/zsh/zshrc | while read file; do 
+#  source ~/dotfiles/zsh/zshrc/$file
+#done
 
 #put symbolic links to ~/bin and grant permissions
 link_functions() {
-  if [ ! -e ~/bin ]; then
-    mkdir ~/bin
-  fi
-  ls -1 ~/dotfiles/zshrc/functions > /dev/null 2>&1 | while read line; do 
-    ln -f ~/dotfiles/zshrc/functions/$line ~/bin/$line
-    chmod a+x ~/bin/$line
+  [ -e ~/bin ] || mkdir ~/bin
+  for file in $(ls ~/dotfiles/zsh/functions); do
+    ln -f ~/dotfiles/zsh/functions/$file ~/bin/$file
+    chmod a+x ~/bin/$file
   done
 }
-
 link_functions
 
 

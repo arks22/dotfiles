@@ -3,7 +3,7 @@
 autoload -Uz add-zsh-hook
 autoload -U colors
 
-eval $(gdircolors ~/dotfiles/zshrc/colors/dircolors)
+eval $(gdircolors ~/dotfiles/zsh/colors/dircolors)
 
 #use LS_COLORS in completion
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
