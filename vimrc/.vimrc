@@ -63,27 +63,19 @@ let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
 
 "vim-easymotion
+let g:EasyMotion_do_mapping = 0
+
 map  <Leader>f <Plug>(easymotion-bd-f)
-map <Leader>f <Plug>(easymotion-overwin-f)
-
-map , <Plug>(easymotion-overwin-f2)
-vmap , <Plug>(easymotion-bd-f2)
-
-map <Leader>L <Plug>(easymotion-bd-jk)
-map <Leader>L <Plug>(easymotion-overwin-line)
-
-map  <Leader>w <Plug>(easymotion-bd-w)
-
-
+nmap <Leader>f <Plug>(easymotion-overwin-f)
+nmap s <Plug>(easymotion-overwin-f2)
+vmap s <Plug>(easymotion-bd-f2)
 
 
 "etc
-
 let &t_ti.="\e[1 q"
 let &t_SI.="\e[5 q"
 let &t_EI.="\e[1 q"
 let &t_te.="\e[0 q"
-
 
 syntax enable
 colorscheme solarized
@@ -104,12 +96,14 @@ set wildmenu
 set vb t_vb=
 
 
+
 let mapleader = "\<Space>"
 
 let g:user_emmet_leader_key='<C-m>'
 let g:indentLine_faster=1 
 
 nnoremap <Leader>w :w<CR>
+nnoremap <Leader>q :q<CR>
 nnoremap <Leader>n :noh<CR>
 nnoremap <Leader>s :%s/
 cnoremap rl source ~/.vimrc
@@ -123,12 +117,11 @@ noremap <S-l> $
 nnoremap j gj
 nnoremap k gk
 nnoremap Y y$
-nnoremap s <Nop>
-nnoremap sj <C-w>j
-nnoremap sk <C-w>k
-nnoremap sl <C-w>l
-nnoremap sh <C-w>h
-nnoremap s< <C-w><<C-w><<C-w><
-nnoremap s> <C-w>><C-w>><C-w>>
-nnoremap s+ <C-w>+
-nnoremap s- <C-w>-
+nnoremap <Leader>j <C-w>j
+nnoremap <Leader>k <C-w>k
+nnoremap <Leader>l <C-w>l
+nnoremap <Leader>h <C-w>h
+nnoremap <Leader>< <C-w><<C-w><<C-w><
+nnoremap <Leader>> <C-w>><C-w>><C-w>>
+nnoremap <Leader>+ <C-w>+
+nnoremap <Leader>- <C-w>-
