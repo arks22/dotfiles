@@ -38,8 +38,6 @@ inoremap <expr><C-l> neocomplete#complete_common_string()
 inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
 inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
@@ -80,8 +78,6 @@ map  <Leader>w <Plug>(easymotion-bd-w)
 
 
 "etc
-let g:user_emmet_leader_key='<C-m>'
-let g:indentLine_faster=1 
 
 let &t_ti.="\e[1 q"
 let &t_SI.="\e[5 q"
@@ -102,15 +98,21 @@ set expandtab
 set tabstop=2
 set softtabstop=2
 set shiftwidth=2
-set hlsearch 
 set backspace=indent,eol,start 
 set showcmd
 set wildmenu
 set vb t_vb=
 
 
+let mapleader = "\<Space>"
+
+let g:user_emmet_leader_key='<C-m>'
+let g:indentLine_faster=1 
+
+nnoremap <Leader>w :w<CR>
+nnoremap <Leader>n :noh<CR>
+nnoremap <Leader>s :%s/
 cnoremap rl source ~/.vimrc
-cnoremap nh noh
 nnoremap ; :
 nnoremap : ;
 nnoremap <silent><C-e> :NERDTree<CR>
@@ -126,10 +128,7 @@ nnoremap sj <C-w>j
 nnoremap sk <C-w>k
 nnoremap sl <C-w>l
 nnoremap sh <C-w>h
-nnoremap s< <C-w><
-nnoremap s> <C-w>>
+nnoremap s< <C-w><<C-w><<C-w><
+nnoremap s> <C-w>><C-w>><C-w>>
 nnoremap s+ <C-w>+
 nnoremap s- <C-w>-
-
-"avoid highlight after source
-nohlsearch
