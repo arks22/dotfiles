@@ -1,12 +1,7 @@
 #source separated files
-
 for file in $(ls ~/dotfiles/zsh/zshrc); do
   source ~/dotfiles/zsh/zshrc/$file
 done
-
-#ls -1 ~/dotfiles/zsh/zshrc | while read file; do 
-#  source ~/dotfiles/zsh/zshrc/$file
-#done
 
 #put symbolic links to ~/bin and grant permissions
 link_functions() {
