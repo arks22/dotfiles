@@ -3,10 +3,16 @@ if &compatible
   set nocompatible
 endif
 
+let s:dein_dir = expand('~/.cache/dein')
+let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 
-set runtimepath^=$HOME/.vim/repos/github.com/Shougo/dein.vim
+if !isdirectory(s:dein_repo_dir)
+  execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
+endif
 
-call dein#begin(expand('~/.cache/dein'))
+execute 'set runtimepath^=' . s:dein_repo_dir
+
+call dein#begin(s:dein_dir)
 
 call dein#add('~/.vim/repos/github.com/Shougo/dein.vim')
 call dein#add('Shougo/neocomplete.vim')
@@ -82,8 +88,7 @@ let &t_te.="\e[0 q"
 syntax enable
 colorscheme solarized
 
-
-set background=dark
+set hlsearch
 set cursorline
 set cursorcolumn
 set number 
@@ -98,11 +103,13 @@ set showcmd
 set wildmenu
 set vb t_vb=
 
+let g:indentLine_faster=1 
 
-let mapleader = "\<Space>"
 
 let g:user_emmet_leader_key='<C-m>'
-let g:indentLine_faster=1 
+
+"maps
+let mapleader = "\<Space>"
 
 noremap <S-h> ^
 noremap <S-j> }
