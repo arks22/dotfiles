@@ -19,6 +19,7 @@ call dein#add('easymotion/vim-easymotion')
 
 call dein#end()
 
+filetype plugin indent on
 
 
 

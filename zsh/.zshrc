@@ -4,14 +4,11 @@ for file in $(ls ~/dotfiles/zsh/zshrc); do
 done
 
 #put symbolic links to ~/bin and grant permissions
-link_functions() {
-  [ -e ~/bin ] || mkdir ~/bin
-  for file in $(ls ~/dotfiles/zsh/functions); do
-    ln -f ~/dotfiles/zsh/functions/$file ~/bin/$file
-    chmod a+x ~/bin/$file
-  done
-}
-link_functions
+[ -e ~/bin ] || mkdir ~/bin
+for file in $(ls ~/dotfiles/zsh/functions); do
+  ln -f ~/dotfiles/zsh/functions/$file ~/bin/$file
+  chmod a+x ~/bin/$file
+done
 
 
 if [ ! -z $TMUX ]; then
