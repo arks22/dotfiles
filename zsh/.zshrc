@@ -1,8 +1,3 @@
-#source separated files
-for file in $(ls ~/dotfiles/zsh/zshrc); do
-  source ~/dotfiles/zsh/zshrc/$file
-done
-
 #put symbolic links to ~/bin and grant permissions
 [ -e ~/bin ] || mkdir ~/bin
 for file in $(ls ~/dotfiles/zsh/functions); do
@@ -10,6 +5,10 @@ for file in $(ls ~/dotfiles/zsh/functions); do
   chmod a+x ~/bin/$file
 done
 
+#source separated files
+for file in $(ls ~/dotfiles/zsh/zshrc); do
+  source ~/dotfiles/zsh/zshrc/$file
+done
 
 if [ ! -z $TMUX ]; then
   echo "–––––––––––––––––– ${fg[blue]}tmux windows${reset_color} ––––––––––––––––––"

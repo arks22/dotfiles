@@ -3,6 +3,7 @@ if &compatible
   set nocompatible
 endif
 
+
 set runtimepath^=$HOME/.vim/repos/github.com/Shougo/dein.vim
 
 call dein#begin(expand('~/.cache/dein'))
@@ -103,6 +104,10 @@ let mapleader = "\<Space>"
 let g:user_emmet_leader_key='<C-m>'
 let g:indentLine_faster=1 
 
+noremap <S-h> ^
+noremap <S-j> }
+noremap <S-k> {
+noremap <S-l> $
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
 nnoremap <Leader>n :noh<CR>
@@ -112,10 +117,6 @@ cnoremap rl source ~/.vimrc
 nnoremap ; :
 nnoremap : ;
 nnoremap <silent><C-e> :NERDTree<CR>
-noremap <S-h> ^
-noremap <S-j> }
-noremap <S-k> {
-noremap <S-l> $
 nnoremap <C-l> gt
 nnoremap <C-h> gT
 nnoremap j gj
@@ -125,7 +126,7 @@ nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
 nnoremap <Leader>l <C-w>l
 nnoremap <Leader>h <C-w>h
-nnoremap <Leader>< <C-w><<C-w><<C-w><
-nnoremap <Leader>> <C-w>><C-w>><C-w>>
+nnoremap <Leader>, <C-w><<C-w><<C-w><
+nnoremap <Leader>. <C-w>><C-w>><C-w>>
 nnoremap <Leader>+ <C-w>+<C-w>+<C-w>+
 nnoremap <Leader>- <C-w>-<C-w>-<C-w>-
