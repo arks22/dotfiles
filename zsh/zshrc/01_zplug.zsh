@@ -17,15 +17,13 @@ zplug "mrowa44/emojify", as:command
 
 zplug "arks22/tmuximum", as:command
 
-zplug "b4b4r07/zsh-gomi", as:command, use:bin/gomi
+zplug "arks22/zsh-gomi", as:command, use:bin/gomi
 
 zplug 'stedolan/jq', from:gh-r, as:command, rename-to:jq
 
 zplug "b4b4r07/emoji-cli"
 
 zplug "mollifier/anyframe"
-
-zplug "b4b4r07/enhancd", use:init.sh
 
 zplug "zsh-users/zsh-history-substring-search"
 

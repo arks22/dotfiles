@@ -5,8 +5,9 @@ autoload -U colors
 
 eval $(gdircolors ~/dotfiles/zsh/colors/dircolors)
 
-#use LS_COLORS in completion
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+#highlight dir in completion
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
 #highlight completions
 zstyle ':completion:*:default' menu select=2
@@ -48,9 +49,3 @@ setopt auto_param_keys
 setopt auto_list
 
 setopt prompt_subst
-
-
-function chpwd() {
-  echo "–––––––––––––––––––––– ${fg[blue]}$PWD${reset_color} ––––––––––––––––––––––"
-  [ $PWD = $HOME ] || gls -AX --color=auto
-}

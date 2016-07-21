@@ -16,6 +16,7 @@ brew tap homebrew/brewdler
 brew brewdle
 cd ~
 
+fpath=(~/bin(N-/) $fpath)
 
 source ~/dotfiles/etc/install.sh
 
