@@ -3,36 +3,32 @@
 function chpwd() {
   echo "––––––––––––––––––– ${fg[blue]}$PWD${reset_color} –––––––––––––––––––"
   [ $PWD = $HOME ] || gls -AX --color=auto
-  add_cd_log
+  powered_cd_add_log
 }
 
-function add_cd_log() {
-  is_log_already_existing=0
-  cat ~/.cd.log | while read line; do
-    if [ "$PWD" = "$line" ]; then 
-      is_log_already_existing=1
-    fi
+function powered_cd_add_log() {
+  local i=0
+  cat ~/.powered_cd.log | while read line; do
+    (( i++ ))
+    [ "$line" = "$PWD" ] && sed -i -e "${i},${i}d" ~/.powered_cd.log 
   done
-  if [ $is_log_already_existing = 0 ]; then 
-    echo "$PWD" >> ~/.cd.log
-  fi
+  echo "$PWD" >> ~/.powered_cd.log
 }
 
 function powered_cd() {
   if [ $# = 0 ]; then
-    dir=$(cat ~/.cd.log | fzf)
-    cd $dir
+    cd $(gtac ~/.powered_cd.log | fzf)
   elif [ $# = 1 ]; then
     cd $1
   else
-    echo "cd: too many arguments"
+    echo "powered_cd: too many arguments"
   fi
 }
 
-_unko() {
+_powered_cd() {
   _files -/
 }
 
-compdef _unko powered_cd
+compdef _powered_cd powered_cd
 
-[ -e ~/.cd.log ] || touch ~/.cd.log
+[ -e ~/.powered_cd.log ] || touch ~/.powered_cd.log
