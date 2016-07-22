@@ -10,7 +10,11 @@ function powered_cd_add_log() {
   local i=0
   cat ~/.powered_cd.log | while read line; do
     (( i++ ))
-    [ "$line" = "$PWD" ] && sed -i -e "${i},${i}d" ~/.powered_cd.log 
+    if [ i = 30 ]; then
+      sed -i -e "30,30d" ~/.powered_cd.log
+    elif [ "$line" = "$PWD" ]; then
+      sed -i -e "${i},${i}d" ~/.powered_cd.log 
+    fi
   done
   echo "$PWD" >> ~/.powered_cd.log
 }
