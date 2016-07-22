@@ -23,12 +23,17 @@ call dein#add('scrooloose/nerdtree')
 call dein#add('mattn/emmet-vim')
 call dein#add('Yggdroot/indentLine')
 call dein#add('easymotion/vim-easymotion')
+call dein#add('itchyny/lightline.vim')
 
 call dein#end()
 
 filetype plugin indent on
 
 
+"lightline.vim
+let g:lightline = {
+  \ 'colorscheme': 'solarized',
+  \ }
 
 "neocomplete.vim
 let g:neocomplete#enable_at_startup = 1
@@ -80,6 +85,10 @@ vmap s <Plug>(easymotion-bd-f2)
 
 
 "etc
+if !has('gui_running')
+  set t_Co=256
+endif
+
 let &t_ti.="\e[1 q"
 let &t_SI.="\e[5 q"
 let &t_EI.="\e[1 q"
@@ -88,13 +97,16 @@ let &t_te.="\e[0 q"
 syntax enable
 colorscheme solarized
 
+set wrapscan
 set hlsearch
 set cursorline
 set cursorcolumn
 set number 
+set ruler
 set noswapfile
 set expandtab
 set tabstop=2
+set laststatus=2
 set showtabline=2
 set softtabstop=2
 set shiftwidth=2
@@ -102,6 +114,9 @@ set backspace=indent,eol,start
 set showcmd
 set wildmenu
 set vb t_vb=
+set autoindent
+set autoindent
+
 
 let g:indentLine_faster=1 
 

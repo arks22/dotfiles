@@ -19,13 +19,7 @@ zplug "arks22/tmuximum", as:command
 
 zplug "arks22/zsh-gomi", as:command, use:bin/gomi
 
-zplug 'stedolan/jq', from:gh-r, as:command, rename-to:jq
-
-zplug "b4b4r07/emoji-cli"
-
 zplug "mollifier/anyframe"
-
-zplug "zsh-users/zsh-history-substring-search"
 
 zplug "zsh-users/zsh-completions"
 
