@@ -120,8 +120,8 @@ set autoindent
 
 let g:indentLine_faster=1 
 
-
 let g:user_emmet_leader_key='<C-m>'
+
 
 "maps
 let mapleader = "\<Space>"

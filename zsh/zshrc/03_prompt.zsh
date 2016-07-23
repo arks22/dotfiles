@@ -22,7 +22,7 @@ function git_info() {
     else
       git_uncommited=0
     fi
-    git_info="%K{blue}%F{black} $git_branch ±$git_unstaged c$git_uncommited %k%f"
+    git_info="%K{green}%F{black} $git_branch %K{blue} ±$git_unstaged c$git_uncommited %k%f"
   else
     git_info=""
   fi
@@ -38,5 +38,5 @@ fi
 
 
 PROMPT='%F{cyan}%C %(?,%F{blue}»,%F{red}») %f' #左側
-RPROMPT='${git_info}%K{green}%F{black} %T %f%k' #右側
+RPROMPT='${git_info}' #右側
 PROMPT2='%F{blue}» %f' #2行以上
