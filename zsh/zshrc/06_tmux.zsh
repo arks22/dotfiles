@@ -1,4 +1,4 @@
-#!/bin/sh
+#tmux
 
 tmux_new_sesssion() {
   if [ ! -z $TMUX ]; then
@@ -37,15 +37,15 @@ tmux_operation_interactively() {
 tmux_operation_interactively_choices() {
   if $(tmux has-session); then
     tmux list-sessions | while read line; do
-      [[ ! "$line" =~ "attached" ]] || line="${GREEN}$line${C_END}"
-      echo "${GREEN}attach${C_END} ==> [ "$line" ]"
+      [[ ! "$line" =~ "attached" ]] || line="${fg[green]}$line${reset_color}"
+      echo "${fg[green]}attach${reset_color} ==> [ "$line" ]"
     done
-    echo "${GREEN}create${C_END} ==> [ ${BOLD}new session${C_END} ]"
+    echo "${fg[green]}create${reset_color} ==> [ ${fg_bold[default]}new session${reset_color} ]"
     echo "kill session"
   else
-    echo "${GREEN}create${C_END} ==> [ ${BOLD}new session${C_END} ]"
+    echo "${fg[green]}create${reset_color} ==> [ ${fg_bold[default]}new session${reset_color} ]"
   fi
-  echo "${BLUE}cancel${C_END}"
+  echo "${fg[blue]}cancel${reset_color}"
 }
 
 
@@ -58,14 +58,14 @@ tmux_operation_interactively_in_tmux_choices() {
     echo "$list_windows" | while read line; do
       if [[ ! $line =~ "active" ]]; then
         line=$(echo "$line" | awk '{print $1 " " $2 " " $3 " " $4 " " $5}')
-        echo  "${CYAN}switch${C_END} ==> [ $line ]"
+        echo  "${fg[cyan]}switch${reset_color} ==> [ $line ]"
       fi
     done
   fi
-  echo  "${CYAN}switch${C_END} ==> [ ${BOLD}new window${C_END} ]"
+  echo  "${fg[cyan]}switch${reset_color} ==> [ ${fg_bold[default]}new window${reset_color} ]"
   echo "kill session"
   echo "kill window"
-  echo "${BLUE}cancel${C_END}"
+  echo "${fg[blue]}cancel${reset_color}"
 }
 
 
@@ -90,18 +90,18 @@ tmux_kill_session_interactively() {
 tmux_kill_session_interactively_choices() {
   list_sessions=$(tmux list-sessions);
   echo "$list_sessions" | while read line; do
-    [[ "$line" =~ "attached" ]] && line="${GREEN}"$line"${C_END}"
-    echo  "${RED}kill${C_END} ==> [ "$line" ]"
+    [[ "$line" =~ "attached" ]] && line="${fg[green]}"$line"${reset_color}"
+    echo  "${fg[red]}kill${reset_color} ==> [ "$line" ]"
   done
-  [ $(echo "$list_sessions" | grep -c '')  = 1 ] || echo "${RED}kill${C_END} ==> [ ${RED}Server${C_END} ]"
-  echo "${BLUE}cancel${C_END}"
+  [ $(echo "$list_sessions" | grep -c '')  = 1 ] || echo "${fg[red]}kill${reset_color} ==> [ ${fg[red]}Server${reset_color} ]"
+  echo "${fg[blue]}cancel${reset_color}"
 }
 
 
 tmux_kill_window_interactively() {
   answer=$(tmux_kill_window_interactively_choices | fzf-tmux --ansi --prompt="Tmux >")
   if [ "$answer" = "cancel" ]; then
-    tmux_operations_interactively_in_tmux
+    tmux_operation_interactively_in_tmux
   else
     tmux kill-window -t $(echo "$answer" | awk '{print $4}' | sed "s/://g")
     tmux_kill_window_interactively
@@ -112,31 +112,10 @@ tmux_kill_window_interactively() {
 tmux_kill_window_interactively_choices() {
   tmux list-windows | while read line; do
     if [[ $line =~ "active" ]]; then
-      echo " ${RED}kill${C_END} ==> ${GREEN}[ $(echo $line | awk '{print $1 " " $2 " " $3 " " $4 " " $5}') (active) ${C_END}]"
+      echo " ${fg[red]}kill${reset_color} ==> ${fg[green]}[ $(echo $line | awk '{print $1 " " $2 " " $3 " " $4 " " $5}') (active) ${reset_color}]"
     else
-      echo " ${RED}kill${C_END} ==> [ $(echo $line | awk '{print $1 " " $2 " " $3 " " $4 " " $5}') ]"
+      echo " ${fg[red]}kill${reset_color} ==> [ $(echo $line | awk '{print $1 " " $2 " " $3 " " $4 " " $5}') ]"
     fi
   done
-  echo "${BLUE}cancel${C_END}"
+  echo "${fg[blue]}cancel${reset_color}"
 }
-
-
-
-set_color() {
-  readonly BLACK="\033[30m"
-  readonly RED="\033[31m"
-  readonly GREEN="\033[32m"
-  readonly YELLOW="\033[33m"
-  readonly BLUE="\033[34m"
-  readonly MAGENTA="\033[35m"
-  readonly CYAN="\033[36m"
-  readonly WHITE="\033[37m"
-
-  readonly BOLD="\033[1m"
-
-  readonly C_END="\033[m"
-}
-
-set_color
-
-tmux_operation_interactively

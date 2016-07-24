@@ -25,7 +25,6 @@ HISTFILE=$HOME/.zsh-history
 HISTSIZE=10000
 SAVEHIST=10000
 
-
 #set options
 
 setopt auto_cd
