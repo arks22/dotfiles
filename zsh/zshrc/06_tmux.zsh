@@ -1,4 +1,4 @@
-#tmux
+#tmux config
 
 tmux_new_sesssion() {
   if [ ! -z $TMUX ]; then
@@ -11,11 +11,7 @@ tmux_new_sesssion() {
 }
 
 tmux_operation() {
-  if [ -z $TMUX ]; then
-    answer=$(tmux_operation_choices | fzf-tmux --ansi --prompt="Tmux >")
-  else
-    answer=$(tmux_operation_in_tmux_choices | fzf-tmux --ansi --prompt="Tmux >")
-  fi
+  answer=$(tmux_operation_choices | fzf-tmux --ansi --prompt="Tmux >")
   if [ ! "$answer" = "cancel" ]; then
     if [[ "$answer" =~ "new session" ]]; then
       tmux_new_sesssion
@@ -35,34 +31,21 @@ tmux_operation() {
 
 
 tmux_operation_choices() {
-  if $(tmux has-session); then
-    tmux list-sessions | while read line; do
+  if [ -z $TMUX ]; then
+    tmux list-sessions | sed "/no server/d" | while read line; do
       [[ ! "$line" =~ "attached" ]] || line="${fg[green]}$line${reset_color}"
       echo "${fg[green]}attach${reset_color} ==> [ "$line" ]"
     done
     echo "${fg[green]}create${reset_color} ==> [ ${fg_bold[default]}new session${reset_color} ]"
-    echo "kill session"
   else
-    echo "${fg[green]}create${reset_color} ==> [ ${fg_bold[default]}new session${reset_color} ]"
-  fi
-  echo "${fg[blue]}cancel${reset_color}"
-}
-
-
-tmux_operation_in_tmux_choices() {
-  local list_sessions list_windows
-  list_windows=$(tmux list-windows)
-  if [ ! $(echo "$list_windows" | grep -c '') = 1 ]; then
-    echo "$list_windows" | while read line; do
-      if [[ ! $line =~ "active" ]]; then
-        line=$(echo "$line" | awk '{print $1 " " $2 " " $3 " " $4 " " $5}')
-        echo  "${fg[cyan]}switch${reset_color} ==> [ $line ]"
-      fi
+    tmux list-windows | sed "/active/d" | while read line; do
+      line=$(echo "$line" | awk '{print $1 " " $2 " " $3 " " $4 " " $5}')
+      echo  "${fg[cyan]}switch${reset_color} ==> [ $line ]"
     done
+    echo  "${fg[cyan]}switch${reset_color} ==> [ ${fg_bold[default]}new window${reset_color} ]"
+    echo "kill window"
   fi
-  echo  "${fg[cyan]}switch${reset_color} ==> [ ${fg_bold[default]}new window${reset_color} ]"
   echo "kill session"
-  echo "kill window"
   echo "${fg[blue]}cancel${reset_color}"
 }
 
@@ -99,7 +82,7 @@ tmux_kill_session_choices() {
 tmux_kill_window() {
   answer=$(tmux_kill_window_choices | fzf-tmux --ansi --prompt="Tmux >")
   if [ "$answer" = "cancel" ]; then
-    tmux_operation_in_tmux
+    tmux_operation
   else
     tmux kill-window -t $(echo "$answer" | awk '{print $4}' | sed "s/://g")
     tmux_kill_window
