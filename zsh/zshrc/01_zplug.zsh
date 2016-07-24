@@ -11,8 +11,6 @@ compinit
 
 zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
 
-zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
-
 zplug "mrowa44/emojify", as:command 
 
 zplug "arks22/zsh-gomi", as:command, use:bin/gomi
@@ -21,7 +19,7 @@ zplug "mollifier/anyframe"
 
 zplug "zsh-users/zsh-completions"
 
-zplug "zsh-users/zsh-syntax-highlighting"
+zplug "zsh-users/zsh-syntax-highlighting", nice:10
 
 
 #未インストールの項目をインストール

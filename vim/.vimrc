@@ -85,9 +85,6 @@ vmap s <Plug>(easymotion-bd-f2)
 
 
 "etc
-if !has('gui_running')
-  set t_Co=256
-endif
 
 let &t_ti.="\e[1 q"
 let &t_SI.="\e[5 q"
@@ -100,7 +97,6 @@ colorscheme solarized
 set wrapscan
 set hlsearch
 set cursorline
-set cursorcolumn
 set number 
 set ruler
 set noswapfile
@@ -117,6 +113,7 @@ set vb t_vb=
 set autoindent
 set autoindent
 
+highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 
 let g:indentLine_faster=1 
 
