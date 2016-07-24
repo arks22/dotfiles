@@ -13,9 +13,9 @@ tmux_operation() {
       tmux_new_sesssion
     elif [[ "$answer" =~ "new window" ]]; then
       tmux new-window
-    elif [ "$answer" = "kill session" ]; then
+    elif [ "$answer" = "kill sessions" ]; then
       tmux_kill_session
-    elif [ "$answer" = "kill window" ]; then
+    elif [ "$answer" = "kill windows" ]; then
       tmux_kill_window
     elif [[ "$answer" =~ "switch" ]] && [[ ! "$answer" =~ "new window" ]]; then
       tmux select-window -t $(echo "$answer" | awk '{print $4}' | sed "s/://g")
@@ -39,9 +39,9 @@ tmux_operation_choices() {
       echo  "${fg[cyan]}switch${reset_color} ==> [ $line ]"
     done
     echo  "${fg[cyan]}switch${reset_color} ==> [ ${fg_bold[default]}new window${reset_color} ]"
-    echo "kill window"
+    echo "kill windows"
   fi
-  echo "kill session"
+  [[ "$(tmux list-sessions)" =~ "no server" ]] || echo "kill sessions"
   echo "${fg[blue]}cancel${reset_color}"
 }
 

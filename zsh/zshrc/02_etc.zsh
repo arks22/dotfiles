@@ -34,7 +34,6 @@ HISTSIZE=10000
 SAVEHIST=10000
 
 #set options
-
 setopt auto_cd
 setopt correct
 setopt no_beep

@@ -29,7 +29,7 @@ function git_info() {
 }
 
 
-#prompt表示前に実行
+#excute before display prompt
 if [ $(which git) ]; then
   add-zsh-hook precmd git_info
 else
@@ -37,6 +37,6 @@ else
 fi
 
 
-PROMPT='%F{cyan}%C %(?,%F{blue}»,%F{red}») %f' #左側
-RPROMPT='${git_info}' #右側
-PROMPT2='%F{blue}» %f' #2行以上
+PROMPT='%F{cyan}%C %(?,%F{blue}»,%F{red}») %f' #left side
+RPROMPT='${git_info}' #right side
+PROMPT2='%F{blue}» %f' #second prompt

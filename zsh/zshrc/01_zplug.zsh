@@ -22,7 +22,7 @@ zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting", nice:10
 
 
-#未インストールの項目をインストール
+#install plugins not installed
 if ! zplug check --verbose; then
   printf "Install? [y/N]: "
   if read -q; then
