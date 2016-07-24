@@ -15,8 +15,6 @@ zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
 
 zplug "mrowa44/emojify", as:command 
 
-zplug "arks22/tmuximum", as:command
-
 zplug "arks22/zsh-gomi", as:command, use:bin/gomi
 
 zplug "mollifier/anyframe"
