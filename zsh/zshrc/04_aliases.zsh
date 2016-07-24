@@ -29,3 +29,4 @@ alias -g F="| fzf"
 alias -s rb="ruby"
 alias -s py='python'
 alias -s html='google-chrome'
+

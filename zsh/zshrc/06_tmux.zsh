@@ -1,14 +1,10 @@
 #tmux config
 
 tmux_new_sesssion() {
-  if [ ! -z $TMUX ]; then
-    NEST_TMUX="1"
-  fi
   tmux new-session \; split-window -vp 23 \; select-pane -t 1 \; split-window -h \
-    \; send-keys -t 0 "vim" C-m \
-    \; send-keys -t 1 "ls" C-m \
-    \; send-keys -t 2 "ls" C-m
+    \; send-keys -t 0 "vim" C-m \; send-keys -t 1 "ls" C-m \; send-keys -t 2 "ls" C-m
 }
+
 
 tmux_operation() {
   answer=$(tmux_operation_choices | fzf-tmux --ansi --prompt="Tmux >")
@@ -100,3 +96,20 @@ tmux_kill_window_choices() {
   done
   echo "${fg[blue]}cancel${reset_color}"
 }
+
+
+
+if [ ! -z $TMUX ]; then
+  echo "–––––––––––––––––– ${fg[blue]}tmux windows${reset_color} ––––––––––––––––––"
+  tmux list-windows | while read line; do
+    if [[ $line =~ "active" ]]; then
+      echo "${fg[yellow]}*${reset_color} $(echo $line | awk '{print $1 " " $2 " " $3 " " $4 " " $5}')"
+    else
+      echo "  $(echo $line | awk '{print $1 " " $2 " " $3 " " $4 " " $5}')"
+    fi
+  done
+  echo "––––––––––––––––––––––––––––––––––––––––––––––––––"
+  echo "– – – – – – – – – – – ${fg_bold[red]}TMUX${reset_color} – – – – – – – – – – – –"
+else
+  tmux_operation
+fi
