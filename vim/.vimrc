@@ -24,6 +24,7 @@ call dein#add('mattn/emmet-vim')
 call dein#add('Yggdroot/indentLine')
 call dein#add('easymotion/vim-easymotion')
 call dein#add('itchyny/lightline.vim')
+call dein#add('dag/vim-fish')
 
 call dein#end()
 

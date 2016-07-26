@@ -15,8 +15,6 @@ zplug "mrowa44/emojify", as:command
 
 zplug "arks22/zsh-gomi", as:command, use:bin/gomi
 
-zplug "mollifier/anyframe"
-
 zplug "zsh-users/zsh-completions"
 
 zplug "zsh-users/zsh-syntax-highlighting", nice:10
