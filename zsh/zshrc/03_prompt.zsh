@@ -9,19 +9,38 @@ function git_info() {
     [ ! -z $git_unstaged ] && git_unstaged=" ± " || git_unstaged=""
     [[ $git_status =~ "Changes to be" ]] && git_uncommited=" ● " || git_uncommited=""
 
-    git_edit_info="%K{blue}%F{black}${git_unstaged}${git_uncommited}%k%f"
-    git_branch="%K{white}%F{black} ${git_branch} %{[0m%}"
+    git_edit_info="%{[30;48;5;011m%}%F{black}${git_unstaged}${git_uncommited}%k%f"
+    git_branch="%{[30;48;5;014m%}%F{black} ${git_branch} %{[0m%}"
 
     git_info="${git_branch}${git_edit_info}"
-  else
-    git_info=""
   fi
+}
+
+dir_info="%K{cyan}%F{black} %~ %k%f"
+
+re-prompt() {
+  status_line=""
+  dir_info="%K{cyan}%F{black} %~ %k%f"
+  zle .reset-prompt
+  zle .accept-line
+}
+
+zle -N accept-line re-prompt
+
+function set_dir_info() {
+  dir_info="%K{magenta}%F{white} %~ %k%f"
+}
+
+function set-status-line() {
+  status_line="%K{blue}%F{black} %n %k%f${dir_info}%f%k${git_info}
+"    
 }
 
 #excute before display prompt
 add-zsh-hook precmd git_info
+add-zsh-hook precmd set-status-line
 
 
-PROMPT='%F{cyan}%C %(?,%F{blue}»,%F{red}») %f' #left side
-RPROMPT='${git_info}' #right side
+PROMPT='${status_line}%(?,%F{blue}»,%F{red}») %f' #left side
+RPROMPT='%K{green}%F{black} %T %k%f'
 PROMPT2='%F{blue}» %f' #second prompt

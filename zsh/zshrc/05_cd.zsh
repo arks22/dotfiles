@@ -1,9 +1,9 @@
 #cd config
 
 function chpwd() {
-  echo "${fg_bold[default]}––––––––––––––––––${reset_color}${fg[blue]} $PWD ${fg_bold[default]}––––––––––––––––"
   [ $PWD = $HOME ] || gls -AX --color=auto
   powered_cd_add_log
+  set_dir_info
 }
 
 function powered_cd_add_log() {
