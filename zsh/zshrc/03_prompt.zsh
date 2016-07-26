@@ -6,13 +6,15 @@ function git_info() {
     git_branch=$(echo $git_status | awk 'NR==1 {print $3}')
     git_unstaged=$(echo $git_status | sed -e '1,/Changes not staged/ d' -e '/\(untracked content\)/ d' | sed '1,/^$/ d' | sed '/^$/,$ d' )
 
-    [ ! -z $git_unstaged ] && git_unstaged=" ± " || git_unstaged=""
+    [ -z $git_unstaged ] || git_unstaged=" ± " || git_unstaged=""
     [[ $git_status =~ "Changes to be" ]] && git_uncommited=" ● " || git_uncommited=""
 
     git_edit_info="%{[30;48;5;011m%}%F{black}${git_unstaged}${git_uncommited}%k%f"
     git_branch="%{[30;48;5;014m%}%F{black} ${git_branch} %{[0m%}"
 
     git_info="${git_branch}${git_edit_info}"
+  else
+    git_info=""
   fi
 }
 
