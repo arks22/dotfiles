@@ -9,7 +9,10 @@ function git_info() {
     [ ! -z $git_unstaged ] && git_unstaged=" ± " || git_unstaged=""
     [[ $git_status =~ "Changes to be" ]] && git_uncommited=" ● " || git_uncommited=""
 
-    git_info="%K{green}%F{black} $git_branch %K{blue}${git_unstaged}${git_uncommited}%k%f"
+    git_edit_info="%K{blue}%F{black}${git_unstaged}${git_uncommited}%k%f"
+    git_branch="%K{white}%F{black} ${git_branch} %{[0m%}"
+
+    git_info="${git_branch}${git_edit_info}"
   else
     git_info=""
   fi
