@@ -8,7 +8,7 @@ function prompt() {
 
     git_branch="%{[30;48;5;014m%} $(echo $git_info | awk 'NR==1 {print $3}') %f"
 
-    git_info="%F{black}${git_branch}%{[30;48;5;011m%}${git_unstaged}${git_uncommited}${git_clean} %f%k"
+    git_info="%F{black}${git_branch}%{[30;48;5;011m%}${git_unstaged}${git_uncommited}${git_clean}%f%k"
   fi
   status_line="%K{black}%F{blue} %n %k%f${dir_info}${git_info}
 "    
