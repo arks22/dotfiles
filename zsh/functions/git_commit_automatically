@@ -12,9 +12,9 @@ git_commit_automatically() {
           "modified" ) modified_files+=("$(echo $line | awk '{print $2}')") ;;
         esac
       done
-  [ -z $new_files[@] ] || message+="add:[${new_files[@]}]"
-  [ -z $deleted_files[@] ] || message+="remove:[${deleted_files[@]}]"
-  [ -z $renamed_files[@] ] || message+="rename:[${renamed_files[@]}]"
+  [ -z $new_files[@] ] || message+="add:[${new_files[@]}] "
+  [ -z $deleted_files[@] ] || message+="remove:[${deleted_files[@]}] "
+  [ -z $renamed_files[@] ] || message+="rename:[${renamed_files[@]}] "
   [ -z $modified_files[@] ] || message+="improve:[${modified_files[@]}]"
   [ $# = 0 ] || str="$* | "
   git commit -m "${str}${message}"
