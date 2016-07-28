@@ -18,6 +18,6 @@ function precmd() {
 
 dir="%F{cyan}%K{black} %~ %k%f"
 
-PROMPT='%(?,,%K{red}%F{white} ✘ %k%f)${root}${dir_info}' #left side»
+PROMPT='%(?,,%K{red}%F{white} ✘ %k%f)${root}${dir_info} ' #left side»
 RPROMPT='${git_info}'
 PROMPT2='%F{blue}» %f' #second prompt
