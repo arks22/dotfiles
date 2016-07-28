@@ -1,3 +1,3 @@
-#!/bin/sh
+#!/bin/zsh
 
 /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep " SSID" | awk '{$1="";print}' | sed "s/ //"
