@@ -9,7 +9,7 @@ git_commit_automatically() {
           "new" ) new_files+=("$(echo $line | awk '{print $3}')") ;;
           "deleted" ) deleted_files+=("$(echo $line | awk '{print $2}')") ;;
           "renamed" ) renamed_files+=("$(echo $line | awk '{print $2 " " $3 " " $4}')") ;;
-          "modified" ) modified_files+=("$(echo $line | awk '{print $2}')") ;;
+          "modified" ) modified_files+=("$(echo $line | awk '{print $2}' | awk -F '/' '{print $NF}')") ;;
         esac
       done
   [ -z $new_files[@] ] || message+="add:[${new_files[@]} ] "
