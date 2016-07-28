@@ -2,11 +2,6 @@
 
 function chpwd() {
   [ $PWD = $HOME ] || gls -AX --color=auto
-  powered_cd_add_log
-  dir="%K{magenta}%F{white} %~ %k%f"
-}
-
-function powered_cd_add_log() {
   local i=0
   cat ~/.powered_cd.log | while read line; do
     (( i++ ))
@@ -17,6 +12,7 @@ function powered_cd_add_log() {
     fi
   done
   echo "$PWD" >> ~/.powered_cd.log
+  dir="%K{magenta}%F{white} %~ %k%f"
 }
 
 function powered_cd() {
