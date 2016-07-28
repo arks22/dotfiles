@@ -3,7 +3,7 @@
 function chpwd() {
   [ $PWD = $HOME ] || gls -AX --color=auto
   powered_cd_add_log
-  dir_info="%K{magenta}%F{white} %~ %k%f"
+  dir="%K{magenta}%F{white} %~ %k%f"
 }
 
 function powered_cd_add_log() {

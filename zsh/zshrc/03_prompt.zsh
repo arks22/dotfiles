@@ -1,35 +1,22 @@
 #prompt config
 
-function prompt() {
+#excute before display prompt
+function precmd() {
   if git_info=$(git status 2>/dev/null ); then
     [[ $git_info =~ "Changes not staged" ]] &&  git_unstaged=" ±" || git_unstaged=""
     [[ $git_info =~ "Changes to be committed" ]] && git_uncommited=" ●" || git_uncommited=""
     [ -z "${git_unstaged}${git_uncommited}" ] && git_clean=" ✔ " || git_clean=""
 
-    git_branch="%{[30;48;5;014m%} $(echo $git_info | awk 'NR==1 {print $3}') %f"
-
-    git_info="%F{black}${git_branch}%{[30;48;5;011m%}${git_unstaged}${git_uncommited}${git_clean}%f%k"
+    git_branch="$(echo $git_info | awk 'NR==1 {print $3}')"
+    git_info="%K{black} ${git_branch} %K{blue}%F{black}${git_unstaged}${git_uncommited} %k%K{green}${git_clean}%f%k"
   fi
-  status_line="%K{black}%F{blue} %n %k%f${dir_info}${git_info}
-"    
+  [ $(whoami) = "root" ] && root="%K{black}%F{yellow} ⚡ %{[38;5;010m%}│%f%k"
+  dir_info=$dir
+  dir="%F{cyan}%K{black} %~ %k%f"
 }
 
+dir="%F{cyan}%K{black} %~ %k%f"
 
-dir_info="%K{cyan}%F{black} %~ %k%f"
-
-re-prompt() {
-  status_line=""
-  dir_info="%K{cyan}%F{black} %~ %k%f"
-  zle .reset-prompt
-  zle .accept-line
-}
-
-zle -N accept-line re-prompt
-
-#excute before display prompt
-add-zsh-hook precmd prompt
-
-
-PROMPT='${status_line}%(?,%F{blue}»,%F{red}») %f' #left side
-RPROMPT='%K{blue}%F{black} %T %k%f'
+PROMPT='%(?,,%K{red}%F{white} ✘ %k%f)${root}${dir_info}' #left side»
+RPROMPT='${git_info}'
 PROMPT2='%F{blue}» %f' #second prompt
