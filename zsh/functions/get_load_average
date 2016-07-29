@@ -1,0 +1,4 @@
+#!/bin/zsh
+
+echo "load-ave(#[fg=yellow]$(uptime | awk '{print $10}')#[default])"
+
