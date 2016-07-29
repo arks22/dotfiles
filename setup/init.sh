@@ -11,6 +11,8 @@ else
   echo "Already Installed brew."
 fi
 
+[ -e ~/bin ] || mkdir ~/bin
+
 cd ~/dotfiles/etc
 brew tap homebrew/brewdler
 brew brewdle

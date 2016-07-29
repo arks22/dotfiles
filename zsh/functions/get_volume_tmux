@@ -1,0 +1,21 @@
+#!/bin/zsh
+sound_info=$(osascript -e 'get volume settings')
+
+if [ $(echo $sound_info | awk '{print $8}') = "muted:false" ]; then
+  volume=$(expr $(echo $sound_info | awk '{print $2}' | sed "s/[^0-9]//g") / 6 )
+  echo -n "["
+  local i=0
+  while [ $i -lt $volume ]; do
+    (( i++ ))
+    echo -n "="
+  done
+  while [ $i -lt 16 ]; do
+    (( i++ ))
+    echo -n " "
+  done
+  echo -n "] "
+else
+  echo "[ mute ] "
+fi
+
+
