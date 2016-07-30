@@ -1,7 +1,7 @@
 #!/bin/zsh
 sound_info=$(osascript -e 'get volume settings')
 
-echo -n "["
+echo -n "#[bold]["
 
 if [ "$(echo $sound_info | awk '{print $8}')" = "muted:false" ]; then
   sound_volume=$(expr $(echo $sound_info | awk '{print $2}' | sed "s/[^0-9]//g") / 6 )
@@ -18,4 +18,4 @@ else
   echo -n "      #[fg=white]mute#[default]      "
 fi
 
-echo -n "] "
+echo -n "]#[default] "

@@ -1,5 +1,6 @@
 #aliases
 
+alias v="vim"
 alias vi="vim"
 alias l="gls -AX --color=auto"
 alias ls="gls -X --color=auto"
@@ -13,7 +14,7 @@ alias rm="gomi"
 alias c="powered_cd"
 alias rl="rails"
 alias cl="clear"
-alias v="vagrant"
+alias vag="vagrant"
 alias g="git"
 alias glog="git_log_fzf"
 alias gcmt="git_commit_automatically"
