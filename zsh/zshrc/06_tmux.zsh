@@ -28,7 +28,7 @@ tmux_operation() {
 
 tmux_operation_choices() {
   if [ -z $TMUX ]; then
-    tmux list-sessions | sed "/no server/d" | while read line; do
+    tmux list-sessions 2>/dev/null | while read line; do
       [[ ! "$line" =~ "attached" ]] || line="${fg[green]}$line${reset_color}"
       echo "${fg[green]}attach${reset_color} ==> [ "$line" ]"
     done
@@ -41,7 +41,7 @@ tmux_operation_choices() {
     echo  "${fg[cyan]}switch${reset_color} ==> [ ${fg_bold[default]}new window${reset_color} ]"
     echo "kill windows"
   fi
-  [[ "$(tmux list-sessions)" =~ "no server" ]] || echo "kill sessions"
+  tmux has-session && echo "kill sessions"
   echo "${fg[blue]}cancel${reset_color}"
 }
 
@@ -65,7 +65,7 @@ tmux_kill_session() {
 
 
 tmux_kill_session_choices() {
-  list_sessions=$(tmux list-sessions);
+  list_sessions=$(tmux list-sessions 2>/dev/null);
   echo "$list_sessions" | while read line; do
     [[ "$line" =~ "attached" ]] && line="${fg[green]}"$line"${reset_color}"
     echo  "${fg[red]}kill${reset_color} ==> [ "$line" ]"
