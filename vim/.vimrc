@@ -136,7 +136,7 @@ nnoremap <Leader>s :%s/
 cnoremap rl source ~/.vimrc
 nnoremap ; :
 nnoremap : ;
-nnoremap <silent><C-e> :NERDTree<CR>
+nnoremap <Leader>e :NERDTree<CR>
 nnoremap <C-l> gt
 nnoremap <C-h> gT
 nnoremap j gj
