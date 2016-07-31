@@ -5,6 +5,9 @@ autoload -U colors
 
 eval $(gdircolors ~/dotfiles/zsh/colors/dircolors)
 
+autoload -Uz compinit
+compinit
+
 
 #highlight dir in completion
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"

@@ -6,9 +6,6 @@ fi
 
 source ~/.zplug/init.zsh
 
-autoload -Uz compinit
-compinit
-
 zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
 
 zplug "mrowa44/emojify", as:command 
