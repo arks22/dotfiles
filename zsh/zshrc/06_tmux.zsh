@@ -7,7 +7,7 @@ tmux_new_sesssion() {
 
 
 tmux_operation() {
-  answer=$(tmux_operation_choices | fzf-tmux --ansi --prompt="Tmux >")
+  answer=$(tmux_operation_choices | fzf --ansi --prompt="Tmux >")
   if [ ! "$answer" = "cancel" ]; then
     if [[ "$answer" =~ "new session" ]]; then
       tmux_new_sesssion
@@ -47,7 +47,7 @@ tmux_operation_choices() {
 
 
 tmux_kill_session() {
-  answer=$(tmux_kill_session_choices | fzf-tmux --ansi --prompt="Tmux >")
+  answer=$(tmux_kill_session_choices | fzf --ansi --prompt="Tmux >")
   if [ "$answer" = "cancel" ]; then
     tmux_operation
   elif [[ "$answer" =~ "Server" ]]; then
@@ -76,7 +76,7 @@ tmux_kill_session_choices() {
 
 
 tmux_kill_window() {
-  answer=$(tmux_kill_window_choices | fzf-tmux --ansi --prompt="Tmux >")
+  answer=$(tmux_kill_window_choices | fzf --ansi --prompt="Tmux >")
   if [ "$answer" = "cancel" ]; then
     tmux_operation
   else
