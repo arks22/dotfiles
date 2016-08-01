@@ -12,17 +12,15 @@ function chpwd() {
     fi
   done
   echo "$PWD" >> ~/.powered_cd.log
-  dir="%K{magenta}%F{white} %~ %k%f"
+  dir="%K{black}%F{magenta} %~ %k%f"
 }
 
 function powered_cd() {
-  if [ $# = 0 ]; then
-    cd $(gtac ~/.powered_cd.log | fzf)
-  elif [ $# = 1 ]; then
-    cd $1
-  else
-    echo "powered_cd: too many arguments"
-  fi
+  case $# in 
+    0 ) cd $(gtac ~/.powered_cd.log | fzf) ;;
+    1 ) cd $1 ;;
+    * ) echo "powered_cd: too many arguments" ;;
+  esac
 }
 
 _powered_cd() {
