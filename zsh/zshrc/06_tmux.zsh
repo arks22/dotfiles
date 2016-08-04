@@ -9,19 +9,14 @@ tmux_new_sesssion() {
 tmux_operation() {
   answer=$(tmux_operation_choices | fzf --ansi --prompt="Tmux >")
   if [ ! "$answer" = "cancel" ]; then
-    if [[ "$answer" =~ "new session" ]]; then
-      tmux_new_sesssion
-    elif [[ "$answer" =~ "new window" ]]; then
-      tmux new-window
-    elif [ "$answer" = "kill sessions" ]; then
-      tmux_kill_session
-    elif [ "$answer" = "kill windows" ]; then
-      tmux_kill_window
-    elif [[ "$answer" =~ "switch" ]] && [[ ! "$answer" =~ "new window" ]]; then
-      tmux select-window -t $(echo "$answer" | awk '{print $4}' | sed "s/://g")
-    else
-      tmux attach -t $(echo "$answer" | awk '{print $4}' | sed 's/://')
-    fi
+    case $answer in
+      *new*session* ) tmux_new_sesssion ;;
+      *new*window* ) tmux new-window ;;
+      "kill sessions" ) tmux_kill_session ;;
+      "kill windows" ) tmux_kill_window ;;
+      *switch* ) tmux select-window -t $(echo "$answer" | awk '{print $4}' | sed "s/://g") ;;
+      * ) tmux attach -t $(echo "$answer" | awk '{print $4}' | sed 's/://') ;;
+    esac
   fi
 }
 
