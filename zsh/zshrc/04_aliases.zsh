@@ -1,7 +1,5 @@
 #aliases
 
-alias v="vim"
-alias vi="vim"
 alias l="gls -AX --color=auto"
 alias ls="gls -X --color=auto"
 alias q="exit"
