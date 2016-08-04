@@ -10,8 +10,8 @@ tmux_operation() {
   answer=$(tmux_operation_choices | fzf --ansi --prompt="Tmux >")
   if [ ! "$answer" = "cancel" ]; then
     case $answer in
-      *new*session* ) tmux_new_sesssion ;;
-      *new*window* ) tmux new-window ;;
+      *new\ session* ) tmux_new_sesssion ;;
+      *new\ window* ) tmux new-window ;;
       "kill sessions" ) tmux_kill_session ;;
       "kill windows" ) tmux_kill_window ;;
       *switch* ) tmux select-window -t $(echo "$answer" | awk '{print $4}' | sed "s/://g") ;;
