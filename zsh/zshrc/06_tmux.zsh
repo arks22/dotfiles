@@ -41,7 +41,7 @@ tmux_operation_choices() {
     echo  "${fg[cyan]}switch${reset_color} ==> [ ${fg_bold[default]}new window${reset_color} ]"
     echo "kill windows"
   fi
-  tmux has-session && echo "kill sessions"
+  tmux has-session 2>/dev/null && echo "kill sessions"
   echo "${fg[blue]}cancel${reset_color}"
 }
 
@@ -55,7 +55,7 @@ tmux_kill_session() {
     tmux_operation
   else
     tmux kill-session -t $(echo "$answer" | awk '{print $4}' | sed "s/://g")
-    if $(tmux has-session); then
+    if $(tmux has-session 2>/dev/null); then
       tmux_kill_session
     else
       tmux_operation
