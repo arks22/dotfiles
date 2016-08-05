@@ -1,7 +1,9 @@
 #etc
 
-autoload -Uz add-zsh-hook
 autoload -U colors
+autoload -Uz compinit
+
+compinit
 
 eval $(gdircolors ~/dotfiles/zsh/colors/dircolors)
 

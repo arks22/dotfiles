@@ -1,8 +1,5 @@
 #zplug config
 
-autoload -Uz compinit
-compinit
-
 if [ ! -e ~/.zplug ]; then
   git clone https://github.com/b4b4r07/zplug ~/.zplug
 fi
