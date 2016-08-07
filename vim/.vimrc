@@ -132,7 +132,7 @@ cnoremap rl source ~/.vimrc
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
 nnoremap <Leader>n :noh<CR>
-nnoremap <Leader>t :tabnew 
+nnoremap <Leader>t :tabnew<CR>
 nnoremap <Leader>s :%s/
 nnoremap <Leader>e :NERDTree<CR>
 nnoremap <Leader>j <C-w>j
