@@ -72,11 +72,9 @@ tmux_kill_window() {
 
 tmux_kill_window_choices() {
   tmux list-windows | while read line; do
-    if [[ $line =~ "active" ]]; then
-      echo " ${fg[red]}kill${reset_color} ==> ${fg[green]}[ $(echo $line | awk '{print $1 " " $2 " " $3 " " $4 " " $5}') (active) ${reset_color}]"
-    else
-      echo " ${fg[red]}kill${reset_color} ==> [ $(echo $line | awk '{print $1 " " $2 " " $3 " " $4 " " $5}') ]"
-    fi
+    line="$(echo $line | awk '{print $1 " " $2 " " $3 " " $4 " " $5 " " $9}')"
+    [[ $line =~ "active" ]] && line="${fg[green]}$line${reset_color}"
+    echo " ${fg[red]}kill${reset_color} ==> [ $line ]"
   done
 }
 
