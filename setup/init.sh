@@ -13,7 +13,7 @@ fi
 
 [ -e ~/bin ] || mkdir ~/bin
 
-cd ~/dotfiles/etc
+cd ~/dotfiles/setup
 brew tap homebrew/brewdler
 brew brewdle
 cd ~

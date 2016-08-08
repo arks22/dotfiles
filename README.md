@@ -1,9 +1,9 @@
 # dotfiles
 
-## Usage
+## Install
 
 ```
-git clone https://github.com/arks22/dotfiles.git
-sh ~/dotfiles/etc/setup.sh
+git clone https://github.com/arks22/dotfiles.git ~/dotfiles
+sh ~/dotfiles/setup/init.sh
 ```
 
