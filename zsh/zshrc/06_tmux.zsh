@@ -5,7 +5,6 @@ tmux_new_sesssion() {
     \; send-keys -t 0 "vim" C-m \; send-keys -t 1 "ls" C-m \; send-keys -t 2 "ls" C-m
 }
 
-
 tmux_operation() {
   answer=$(tmux_operation_choices | fzf --ansi --select-1 --prompt="Tmux >")
   case $answer in
@@ -18,7 +17,6 @@ tmux_operation() {
   esac
 }
 
-
 tmux_operation_choices() {
   if [ -z $TMUX ]; then
     tmux list-sessions 2>/dev/null | while read line; do
@@ -28,15 +26,13 @@ tmux_operation_choices() {
     echo "${fg[green]}create${reset_color} ==> [ ${fg_bold[default]}new session${reset_color} ]"
   else
     tmux list-windows | sed "/active/d" | while read line; do
-      line=$(echo "$line" | awk '{print $1 " " $2 " " $3 " " $4 " " $5}')
-      echo  "${fg[cyan]}switch${reset_color} ==> [ $line ]"
+      echo  "${fg[cyan]}switch${reset_color} ==> [ $(echo $line | awk '{print $1 " " $2 " " $3 " " $4 " " $5}') ]"
     done
     echo  "${fg[cyan]}switch${reset_color} ==> [ ${fg_bold[default]}new window${reset_color} ]"
     echo "${fg[red]}kill${reset_color} windows"
   fi
   tmux has-session 2>/dev/null && echo "${fg[red]}kill${reset_color} sessions"
 }
-
 
 tmux_kill_session() {
   answer=$(tmux_kill_session_choices | fzf --ansi --prompt="Tmux >")
@@ -50,7 +46,6 @@ tmux_kill_session() {
   esac
 }
 
-
 tmux_kill_session_choices() {
   list_sessions=$(tmux list-sessions 2>/dev/null);
   echo "$list_sessions" | while read line; do
@@ -60,7 +55,6 @@ tmux_kill_session_choices() {
   [ $(echo "$list_sessions" | grep -c '')  = 1 ] || echo "${fg[red]}kill${reset_color} ==> [ ${fg[red]}Server${reset_color} ]"
 }
 
-
 tmux_kill_window() {
   answer=$(tmux_kill_window_choices | fzf --ansi --prompt="Tmux >")
   if [[ "$answer" =~ "kill" ]]; then
@@ -69,7 +63,6 @@ tmux_kill_window() {
   fi
 }
 
-
 tmux_kill_window_choices() {
   tmux list-windows | while read line; do
     line="$(echo $line | awk '{print $1 " " $2 " " $3 " " $4 " " $5 " " $9}')"
@@ -77,7 +70,6 @@ tmux_kill_window_choices() {
     echo " ${fg[red]}kill${reset_color} ==> [ $line ]"
   done
 }
-
 
 
 if [ ! -z $TMUX ]; then
