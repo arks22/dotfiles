@@ -1,14 +1,10 @@
 #tmux config
 
-tmux_new_sesssion() {
-  tmux new-session \; split-window -vp 23 \; select-pane -t 1 \; split-window -h \
-    \; send-keys -t 0 "vim" C-m \; send-keys -t 1 "ls" C-m \; send-keys -t 2 "ls" C-m
-}
-
+  
 tmux_operation() {
   answer=$(tmux_operation_choices | fzf --ansi --select-1 --prompt="Tmux >")
   case $answer in
-    *new\ session* ) tmux_new_sesssion ;;
+    *new\ session* ) tmux new-session \; split-window -vp 23 \; select-pane -t 1 ;;
     *new\ window* ) tmux new-window ;;
     "kill sessions" ) tmux_kill_session ;;
     "kill windows" ) tmux_kill_window ;;
