@@ -19,6 +19,7 @@ call dein#add('Shougo/neocomplete.vim')
 call dein#add('junegunn/fzf')
 call dein#add('Shougo/unite.vim')
 call dein#add('Shougo/vimfiler')
+call dein#add('ctrlpvim/ctrlp.vim')
 call dein#add('scrooloose/nerdtree')
 call dein#add('mattn/emmet-vim')
 call dein#add('Yggdroot/indentLine')
@@ -128,7 +129,6 @@ noremap <S-h> ^
 noremap <S-j> }
 noremap <S-k> {
 noremap <S-l> $
-cnoremap rl source ~/.vimrc
 nnoremap <Leader>s :%s/
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
@@ -136,6 +136,7 @@ nnoremap <Leader>n :noh<CR>
 nnoremap <Leader>t :tabnew<CR>
 nnoremap <Leader>e :NERDTree<CR>
 nnoremap <Leader>u :Unite<CR>
+nnoremap <Leader>f :VimFiler -split -simple -winwidth=32 -no-quit<CR>
 nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
 nnoremap <Leader>l <C-w>l
