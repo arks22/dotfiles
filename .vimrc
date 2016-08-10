@@ -3,6 +3,7 @@ if &compatible
   set nocompatible
 endif
 
+
 let s:dein_dir = expand('~/.cache/dein')
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 
@@ -91,9 +92,11 @@ let g:vimfiler_readonly_file_icon = "⭤"
 autocmd FileType vimfiler nmap <buffer> <Space> <NOP>
 autocmd FileType vimfiler nmap <buffer> <C-l> <NOP>
 autocmd FileType vimfiler nmap <buffer> <C-h> <NOP>
+autocmd FileType vimfiler nmap <buffer> <C> <NOP>
 autocmd FileType vimfiler nmap <buffer> , <Plug>(vimfiler_toggle_mark_current_line)
-autocmd FileType vimfiler nnoremap <silent><buffer><expr> S vimfiler#do_switch_action('split')
-autocmd FileType vimfiler nnoremap <silent><buffer><expr> <Tab> vimfiler#do_switch_action('tabopen'):VimFilerExplorer -winwidth=32<CR>
+autocmd FileType vimfiler nmap <buffer> <C-v> <Plug>(vimfiler_split_edit_file)
+autocmd FileType vimfiler nnoremap <silent><buffer><expr> <C-s> vimfiler#do_switch_action('split')
+autocmd FileType vimfiler nnoremap <silent><buffer><expr> <C-t> vimfiler#do_switch_action('tabopen')
 
 
 "ctrlp.vim
@@ -159,7 +162,7 @@ nnoremap <Leader>q :q<CR>
 nnoremap <Leader>n :noh<CR>
 nnoremap <Leader>t :tabnew<CR>
 nnoremap <Leader>u :Unite<CR>
-nnoremap <Leader>e :VimFilerExplorer -winwidth=32<CR>
+nnoremap <Leader>e :VimFilerExplorer -winwidth=30<CR>
 nnoremap <Leader>f :VimFiler -horizontal<CR>
 nnoremap <Leader>p :CtrlPRoot<CR>
 nnoremap <Leader>j <C-w>j

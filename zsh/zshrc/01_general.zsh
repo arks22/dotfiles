@@ -7,6 +7,9 @@ compinit
 
 eval $(gdircolors $ZPLUG_HOME/repos/seebi/dircolors-solarized/dircolors.ansi-universal)
 
+stty stop undef
+stty start undef
+
 #highlight dir in completion
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 

@@ -1,7 +1,7 @@
 #aliases
 
 alias vi="vim"
-alias vif="vim +VimFiler"
+alias vimf="vim +VimFilerExplorer"
 alias l="gls -AX --color=auto"
 alias ls="gls -X --color=auto"
 alias q="exit"
