@@ -1,5 +1,7 @@
 #aliases
 
+alias vi="vim"
+alias vif="vim +VimFiler"
 alias l="gls -AX --color=auto"
 alias ls="gls -X --color=auto"
 alias q="exit"
@@ -17,7 +19,7 @@ alias glog="git_log_fzf"
 alias gcmt="git_commit_automatically"
 alias gac="git add -A && git_commit_automatically"
 alias gdc="git reset --hard HEAD^"
-alias gs="git status -sb"
+alias gs="git status"
 alias ch="open -a Google\ Chrome"
 alias gg="google"
 alias electron="reattach-to-user-namespace electron"

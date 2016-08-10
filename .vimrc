@@ -93,7 +93,7 @@ autocmd FileType vimfiler nmap <buffer> <C-l> <NOP>
 autocmd FileType vimfiler nmap <buffer> <C-h> <NOP>
 autocmd FileType vimfiler nmap <buffer> , <Plug>(vimfiler_toggle_mark_current_line)
 autocmd FileType vimfiler nnoremap <silent><buffer><expr> S vimfiler#do_switch_action('split')
-autocmd FileType vimfiler nnoremap <silent><buffer><expr> <Tab> vimfiler#do_switch_action('tabopen')
+autocmd FileType vimfiler nnoremap <silent><buffer><expr> <Tab> vimfiler#do_switch_action('tabopen'):VimFilerExplorer -winwidth=32<CR>
 
 
 "ctrlp.vim
