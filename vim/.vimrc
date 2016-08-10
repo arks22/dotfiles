@@ -37,11 +37,6 @@ endif
 filetype plugin indent on
 
 
-"lightline.vim
-let g:lightline = {
-  \ 'colorscheme': 'solarized',
-  \ }
-
 "neocomplete.vim
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#enable_smart_case = 1
@@ -78,6 +73,11 @@ endif
 
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
+"lightline.vim
+let g:lightline = {
+  \ 'colorscheme': 'solarized',
+  \ }
+
 
 "VimFiler
 let g:vimfiler_as_default_explorer = 1
@@ -90,6 +90,11 @@ let g:vimfiler_readonly_file_icon = "⭤"
 autocmd FileType vimfiler nmap <buffer> <Space> <NOP>
 autocmd FileType vimfiler nmap <buffer> , <Plug>(vimfiler_toggle_mark_current_line_up)
 
+"ctrlp.vim
+let g:ctrlp_max_files  = 10000
+let g:ctrlp_show_hidden = 1
+let g:ctrlp_custom_ignore = { 'dir':  '\v[\/]\.git$', 'file': '\v\.DS_Store' }
+
 
 "vim-easymotion
 let g:EasyMotion_do_mapping = 0
@@ -100,8 +105,16 @@ nmap s <Plug>(easymotion-overwin-f2)
 vmap s <Plug>(easymotion-bd-f2)
 
 
-"etc
+"indentLine
+let g:indentLine_faster = 1
+let g:indentLine_char = "│"
 
+
+"emmet
+let g:user_emmet_leader_key = '<C-m>'
+
+
+"etc
 let &t_ti.="\e[1 q"
 let &t_SI.="\e[5 q"
 let &t_EI.="\e[1 q"
@@ -131,12 +144,6 @@ set autoindent
 
 highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 
-let g:indentLine_faster = 1
-let g:indentLine_char = "│"
-
-let g:user_emmet_leader_key = '<C-m>'
-
-
 "maps
 let mapleader = "\<Space>"
 
@@ -152,6 +159,7 @@ nnoremap <Leader>t :tabnew<CR>
 nnoremap <Leader>u :Unite<CR>
 nnoremap <Leader>e :VimFilerExplorer -winwidth=32<CR>
 nnoremap <Leader>f :VimFiler -horizontal<CR>
+nnoremap <Leader>p :CtrlPRoot<CR>
 nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
 nnoremap <Leader>l <C-w>l
