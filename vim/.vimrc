@@ -81,7 +81,7 @@ let g:lightline = {
 
 "VimFiler
 let g:vimfiler_as_default_explorer = 1
-let g:vimfiler_ignore_pattern ='^\%(\.\|\..\|\.git\|\.DS_Store\||\.tmp\)$'
+let g:vimfiler_ignore_pattern ='^\%(\.\|\..\|\.git\|\.DS_Store\|\.tmp\)$'
 let g:vimfiler_tree_closed_icon = "▸"
 let g:vimfiler_tree_opened_icon = "▾"
 let g:vimfiler_tree_leaf_icon = "│"
@@ -93,7 +93,7 @@ autocmd FileType vimfiler nmap <buffer> , <Plug>(vimfiler_toggle_mark_current_li
 "ctrlp.vim
 let g:ctrlp_max_files  = 10000
 let g:ctrlp_show_hidden = 1
-let g:ctrlp_custom_ignore = { 'dir':  '\v[\/]\.git$', 'file': '\v\.DS_Store' }
+let g:ctrlp_custom_ignore = { 'dir': '\(\.git\|\tmp\|\log\)', 'file': '\(\.DS_Store\|\.log\)' }
 
 
 "vim-easymotion
