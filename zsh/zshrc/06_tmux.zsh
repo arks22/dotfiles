@@ -4,7 +4,7 @@
 tmux_operation() {
   answer=$(tmux_operation_choices | fzf --ansi --select-1 --prompt="Tmux >")
   case $answer in
-    *new\ session* ) tmux new-session \; split-window -vp 23 \; select-pane -t 1 ;;
+    *new\ session* ) tmux new-session \; split-window -vp 23 \; send-keys -t 0 'vim' C-m ;;
     *new\ window* ) tmux new-window ;;
     "kill sessions" ) tmux_kill_session ;;
     "kill windows" ) tmux_kill_window ;;
