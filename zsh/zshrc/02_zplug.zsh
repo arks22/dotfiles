@@ -8,6 +8,8 @@ source ~/.zplug/init.zsh
 
 zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
 
+zplug 'seebi/dircolors-solarized'
+
 zplug "mrowa44/emojify", as:command 
 
 zplug "arks22/zsh-gomi", as:command, use:bin/gomi

@@ -15,11 +15,10 @@ execute 'set runtimepath^=' . s:dein_repo_dir
 if dein#load_state(s:dein_dir)
   call dein#begin(s:dein_dir)
   call dein#add(s:dein_repo_dir)
-  call dein#add('Shougo/vimproc', {'build': 'make'})
-  call dein#add('Shougo/vimshell')
   call dein#add('Shougo/neocomplete.vim')
   call dein#add('Shougo/unite.vim')
   call dein#add('Shougo/vimfiler')
+  call dein#add('altercation/vim-colors-solarized')
   call dein#add('ctrlpvim/ctrlp.vim')
   call dein#add('mattn/emmet-vim')
   call dein#add('Yggdroot/indentLine')
@@ -73,6 +72,7 @@ endif
 
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
+
 "lightline.vim
 let g:lightline = {
   \ 'colorscheme': 'solarized',
@@ -81,6 +81,7 @@ let g:lightline = {
 
 "VimFiler
 let g:vimfiler_as_default_explorer = 1
+let g:vimfiler_enable_auto_cd = 1
 let g:vimfiler_ignore_pattern ='^\%(\.\|\..\|\.git\|\.DS_Store\|\.tmp\)$'
 let g:vimfiler_tree_closed_icon = "▸"
 let g:vimfiler_tree_opened_icon = "▾"
@@ -88,7 +89,12 @@ let g:vimfiler_tree_leaf_icon = "│"
 let g:vimfiler_file_icon = " "
 let g:vimfiler_readonly_file_icon = "⭤"
 autocmd FileType vimfiler nmap <buffer> <Space> <NOP>
-autocmd FileType vimfiler nmap <buffer> , <Plug>(vimfiler_toggle_mark_current_line_up)
+autocmd FileType vimfiler nmap <buffer> <C-l> <NOP>
+autocmd FileType vimfiler nmap <buffer> <C-h> <NOP>
+autocmd FileType vimfiler nmap <buffer> , <Plug>(vimfiler_toggle_mark_current_line)
+autocmd FileType vimfiler nnoremap <silent><buffer><expr> S vimfiler#do_switch_action('split')
+autocmd FileType vimfiler nnoremap <silent><buffer><expr> <Tab> vimfiler#do_switch_action('tabopen')
+
 
 "ctrlp.vim
 let g:ctrlp_max_files  = 10000
@@ -98,11 +104,6 @@ let g:ctrlp_custom_ignore = { 'dir': '\(\.git\|\tmp\|\log\)', 'file': '\(\.DS_St
 
 "vim-easymotion
 let g:EasyMotion_do_mapping = 0
-
-map  <Leader>f <Plug>(easymotion-bd-f)
-nmap <Leader>f <Plug>(easymotion-overwin-f)
-nmap s <Plug>(easymotion-overwin-f2)
-vmap s <Plug>(easymotion-bd-f2)
 
 
 "indentLine
@@ -122,6 +123,7 @@ let &t_te.="\e[0 q"
 
 syntax enable
 colorscheme solarized
+highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 
 set wrapscan
 set hlsearch
@@ -142,11 +144,11 @@ set vb t_vb=
 set autoindent
 set autoindent
 
-highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
-
 "maps
 let mapleader = "\<Space>"
 
+nmap s <Plug>(easymotion-overwin-f2)
+vmap s <Plug>(easymotion-bd-f2)
 noremap <S-h> ^
 noremap <S-j> }
 noremap <S-k> {
@@ -170,8 +172,6 @@ nnoremap <Leader>+ <C-w>+<C-w>+<C-w>+
 nnoremap <Leader>- <C-w>-<C-w>-<C-w>-
 nnoremap <Leader>d "_d
 nnoremap <Leader>D "_D
-nnoremap <C-l> gt
-nnoremap <C-h> gT
 nnoremap <C-l> gt
 nnoremap <C-h> gT
 nnoremap x "_x

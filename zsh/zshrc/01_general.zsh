@@ -5,8 +5,7 @@ autoload -Uz compinit
 
 compinit
 
-eval $(gdircolors ~/dotfiles/zsh/colors/dircolors)
-
+eval $(gdircolors $ZPLUG_HOME/repos/seebi/dircolors-solarized/dircolors.ansi-universal)
 
 #highlight dir in completion
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
