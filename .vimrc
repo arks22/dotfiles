@@ -16,15 +16,17 @@ execute 'set runtimepath^=' . s:dein_repo_dir
 if dein#load_state(s:dein_dir)
   call dein#begin(s:dein_dir)
   call dein#add(s:dein_repo_dir)
-  call dein#add('Shougo/neocomplete.vim')
+  call dein#add('Shougo/vimproc.vim', {'build': 'make'})
+  call dein#add('Shougo/neocomplete.vim',{'if' : has('lua')})
   call dein#add('Shougo/unite.vim')
-  call dein#add('Shougo/vimfiler')
+  call dein#add('Shougo/vimfiler.vim')
   call dein#add('altercation/vim-colors-solarized')
   call dein#add('ctrlpvim/ctrlp.vim')
   call dein#add('mattn/emmet-vim')
   call dein#add('Yggdroot/indentLine')
   call dein#add('easymotion/vim-easymotion')
   call dein#add('itchyny/lightline.vim')
+  call dein#add('vim-jp/vital.vim')
   call dein#add('dag/vim-fish')
   call dein#end()
   call dein#save_state()
@@ -78,6 +80,34 @@ let g:lightline = {
   \ }
 
 
+"Unite
+call unite#custom#source(
+  \ 'file_rec/async', 
+  \ 'ignore_pattern',
+  \ '\(.DS_Store\|repos\|tmp\|gems\|vendor\|bundle\|log\|node_modules\|.png\|.svg\|.jpg\|.jpeg\|.gif\|.mv\|.mp3\|.mp4\|.sqlite3\|.map\|.min\)'
+  \ )
+
+function! GetProjectDir() abort 
+  if exists('b:vimfiler.current_dir')
+    let l:buffer_dir = b:vimfiler.current_dir
+  else
+    let l:buffer_dir = expand('%:p:h')
+  endif
+  let l:project_dir = vital#of('vital').import('Prelude').path2project_directory(l:buffer_dir, 1)
+  if empty(l:project_dir)
+    return l:buffer_dir
+  else
+    return l:project_dir
+  endif
+endfunction
+
+function! s:unite_file_project()
+  let l:project_dir = GetProjectDir()
+  execute 'Unite -start-insert file_rec/async:'.l:project_dir
+endfunction
+
+
+
 "VimFiler
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_enable_auto_cd = 1
@@ -87,12 +117,13 @@ let g:vimfiler_tree_opened_icon = "▾"
 let g:vimfiler_tree_leaf_icon = "│"
 let g:vimfiler_file_icon = " "
 let g:vimfiler_readonly_file_icon = "⭤"
+let g:vimfiler_safe_mode_by_default = 0
 
 autocmd FileType vimfiler nmap <buffer> <Space> <NOP>
 autocmd FileType vimfiler nmap <buffer> <C-l> gt
 autocmd FileType vimfiler nmap <buffer> <C-h> gT
 autocmd FileType vimfiler nmap <buffer> , <Plug>(vimfiler_toggle_mark_current_line)
-autocmd FileType vimfiler nmap <buffer> <C-v> <Plug>(vimfiler_split_edit_file)
+autocmd FileType vimfiler nnoremap <buffer> <C-v> <Plug>(vimfiler_split_edit_file)
 autocmd FileType vimfiler nnoremap <silent><buffer><expr> <C-s> vimfiler#do_switch_action('split')
 autocmd FileType vimfiler nnoremap <silent><buffer><expr> <C-t> vimfiler#do_switch_action('tabopen')
 
@@ -100,9 +131,10 @@ autocmd FileType vimfiler nnoremap <silent><buffer><expr> <C-t> vimfiler#do_swit
 "ctrlp.vim
 let g:ctrlp_max_files  = 10000
 let g:ctrlp_show_hidden = 1
+let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:15,results:15'
 let g:ctrlp_custom_ignore = { 
-  \ 'dir': '\(\.git\|\tmp\|\log\|\node_modules\)', 
-  \ 'file': '\(\.DS_Store\|\.log\|\.png\|\.jpg\|\.jpeg\|\.gif\|\.mv\|\.mp3\|\.mp4\|\.sqlite3\)' 
+  \ 'dir': '\(\.git\|\tmp\|\log\|\node_modules\|\repos\|\vendor\|\gems\|\bundle\|)', 
+  \ 'file': '\(\.DS_Store\|\.log\|\.png\|\.jpg\|\.map\|\.min\|\.svg\|\.jpeg\|\.gif\|\.mv\|\.mp3\|\.mp4\|\.sqlite3\)' 
   \ }
 
 
@@ -163,9 +195,9 @@ nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
 nnoremap <Leader>n :noh<CR>
 nnoremap <Leader>t :tabnew<CR>
-nnoremap <Leader>u :Unite<CR>
 nnoremap <Leader>e :VimFilerExplorer -winwidth=30<CR>
 nnoremap <Leader>f :VimFiler -horizontal<CR>
+"nnoremap <Leader>p :<C-u>call <SID>unite_file_project()<CR>
 nnoremap <Leader>p :CtrlPRoot<CR>
 nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
