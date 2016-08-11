@@ -49,8 +49,6 @@ if !exists('g:neocomplete#keyword_patterns')
 endi
 
 inoremap <expr><C-g> neocomplete#undo_completion()
-inoremap <expr><C-l> neocomplete#complete_common_string()
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
 inoremap <expr><BS>  neocomplete#smart_close_popup()."\<C-h>"
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
@@ -89,10 +87,10 @@ let g:vimfiler_tree_opened_icon = "▾"
 let g:vimfiler_tree_leaf_icon = "│"
 let g:vimfiler_file_icon = " "
 let g:vimfiler_readonly_file_icon = "⭤"
+
 autocmd FileType vimfiler nmap <buffer> <Space> <NOP>
-autocmd FileType vimfiler nmap <buffer> <C-l> <NOP>
-autocmd FileType vimfiler nmap <buffer> <C-h> <NOP>
-autocmd FileType vimfiler nmap <buffer> <C> <NOP>
+autocmd FileType vimfiler nmap <buffer> <C-l> gt
+autocmd FileType vimfiler nmap <buffer> <C-h> gT
 autocmd FileType vimfiler nmap <buffer> , <Plug>(vimfiler_toggle_mark_current_line)
 autocmd FileType vimfiler nmap <buffer> <C-v> <Plug>(vimfiler_split_edit_file)
 autocmd FileType vimfiler nnoremap <silent><buffer><expr> <C-s> vimfiler#do_switch_action('split')
@@ -102,7 +100,10 @@ autocmd FileType vimfiler nnoremap <silent><buffer><expr> <C-t> vimfiler#do_swit
 "ctrlp.vim
 let g:ctrlp_max_files  = 10000
 let g:ctrlp_show_hidden = 1
-let g:ctrlp_custom_ignore = { 'dir': '\(\.git\|\tmp\|\log\)', 'file': '\(\.DS_Store\|\.log\)' }
+let g:ctrlp_custom_ignore = { 
+  \ 'dir': '\(\.git\|\tmp\|\log\|\node_modules\)', 
+  \ 'file': '\(\.DS_Store\|\.log\|\.png\|\.jpg\|\.jpeg\|\.gif\|\.mv\|\.mp3\|\.mp4\|\.sqlite3\)' 
+  \ }
 
 
 "vim-easymotion
@@ -146,6 +147,7 @@ set wildmenu
 set vb t_vb=
 set autoindent
 set autoindent
+
 
 "maps
 let mapleader = "\<Space>"
