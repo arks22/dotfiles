@@ -191,6 +191,7 @@ noremap <S-j> }
 noremap <S-k> {
 noremap <S-l> $
 nnoremap <Leader>s :%s/
+cnoremap 16x :%!xxd<CR>
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
 nnoremap <Leader>n :noh<CR>
