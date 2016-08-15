@@ -1,9 +1,6 @@
 #etc
 
 autoload -U colors
-autoload -Uz compinit
-
-compinit
 
 eval $(gdircolors $ZPLUG_HOME/repos/seebi/dircolors-solarized/dircolors.ansi-universal)
 
