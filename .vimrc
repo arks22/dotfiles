@@ -102,6 +102,8 @@ autocmd FileType vimfiler nmap <buffer> , <Plug>(vimfiler_toggle_mark_current_li
 autocmd FileType vimfiler nmap <buffer> <C-l> gt
 autocmd FileType vimfiler nmap <buffer> <C-h> gT
 autocmd FileType vimfiler nmap <buffer> t <Nop>
+autocmd FileType vimfiler nmap <buffer> S <Plug>(easymotion-bd-f2)
+autocmd FileType vimfiler nmap <buffer> S <Plug>(easymotion-overwin-f2)
 autocmd FileType vimfiler nmap <buffer> v E
 autocmd FileType vimfiler nnoremap <silent><buffer><expr> s vimfiler#do_switch_action('split')
 autocmd FileType vimfiler nnoremap <silent><buffer><expr> t vimfiler#do_switch_action('tabopen')
@@ -174,7 +176,6 @@ noremap <S-j> }
 noremap <S-k> {
 noremap <S-l> $
 nnoremap <Leader>s :%s/
-cnoremap 16x :%!xxd<CR>
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
 nnoremap <Leader>n :noh<CR>
