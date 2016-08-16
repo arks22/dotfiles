@@ -79,14 +79,15 @@ let g:lightline = {
   \ }
 
 
-"Unite
+"unite
 call unite#custom#source(
   \ 'file_rec/async', 
   \ 'ignore_pattern',
   \ '\(.DS_Store\|repos\|tmp\|gems\|vendor\|bundle\|log\|node_modules\|.png\|.svg\|.jpg\|.jpeg\|.gif\|.mv\|.mp3\|.mp4\|.sqlite3\|.map\|.min\)'
   \ )
 
-"VimFiler
+"vimfiler
+let g:vimfiler_no_default_key_mappings = 1
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_enable_auto_cd = 1
 let g:vimfiler_ignore_pattern ='^\%(\.\|\..\|\.git\|\.DS_Store\|\.tmp\)$'
@@ -97,26 +98,30 @@ let g:vimfiler_file_icon = " "
 let g:vimfiler_readonly_file_icon = "⭤"
 let g:vimfiler_safe_mode_by_default = 0
 
-autocmd FileType vimfiler nmap <buffer> <Space> <NOP>
+autocmd FileType vimfiler nmap <buffer> j <Plug>(vimfiler_loop_cursor_down)
+autocmd FileType vimfiler nmap <buffer> k <Plug>(vimfiler_loop_cursor_up)
+autocmd FileType vimfiler nmap <buffer> g <Plug>(vimfiler_cursor_top)
+autocmd FileType vimfiler nmap <buffer> R <Plug>(vimfiler_redraw_screen)
+autocmd FileType vimfiler nmap <buffer> * <Plug>(vimfiler_toggle_mark_all_lines)
+autocmd FileType vimfiler nmap <buffer> c <Plug>(vimfiler_copy_file)
+autocmd FileType vimfiler nmap <buffer> m <Plug>(vimfiler_move_file)
+autocmd FileType vimfiler nmap <buffer> d <Plug>(vimfiler_delete_file)
+autocmd FileType vimfiler nmap <buffer> r <Plug>(vimfiler_rename_file)
+autocmd FileType vimfiler nmap <buffer> K <Plug>(vimfiler_make_directory)
+autocmd FileType vimfiler nmap <buffer> N <Plug>(vimfiler_new_file)
+autocmd FileType vimfiler nmap <buffer> o <Plug>(vimfiler_cd_or_edit)
+autocmd FileType vimfiler nmap <buffer> l <Plug>(vimfiler_smart_l)
+autocmd FileType vimfiler nmap <buffer> h <Plug>(vimfiler_smart_h)
+autocmd FileType vimfiler nmap <buffer> q <Plug>(vimfiler_hide)
+autocmd FileType vimfiler nmap <buffer> Q <Plug>(vimfiler_exit)
 autocmd FileType vimfiler nmap <buffer> , <Plug>(vimfiler_toggle_mark_current_line)
-autocmd FileType vimfiler nmap <buffer> <C-l> gt
-autocmd FileType vimfiler nmap <buffer> <C-h> gT
-autocmd FileType vimfiler nmap <buffer> t <Nop>
-autocmd FileType vimfiler nmap <buffer> S <Plug>(easymotion-bd-f2)
-autocmd FileType vimfiler nmap <buffer> S <Plug>(easymotion-overwin-f2)
-autocmd FileType vimfiler nmap <buffer> v E
+autocmd FileType vimfiler nmap <buffer> v <Plug>(vimfiler_split_edit_file)
+
 autocmd FileType vimfiler nnoremap <silent><buffer><expr> s vimfiler#do_switch_action('split')
 autocmd FileType vimfiler nnoremap <silent><buffer><expr> t vimfiler#do_switch_action('tabopen')
 
-
-"ctrlp.vim
-let g:ctrlp_max_files  = 10000
-let g:ctrlp_show_hidden = 1
-let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:15,results:15'
-let g:ctrlp_custom_ignore = { 
-  \ 'dir': '\(\.git\|\tmp\|\log\|\node_modules\|\repos\|\vendor\|\gems\|\bundle\|)', 
-  \ 'file': '\(\.DS_Store\|\.log\|\.png\|\.jpg\|\.map\|\.min\|\.svg\|\.jpeg\|\.gif\|\.mv\|\.mp3\|\.mp4\|\.sqlite3\)' 
-  \ }
+autocmd FileType vimfiler nmap <buffer> S <Plug>(easymotion-bd-f2)
+autocmd FileType vimfiler nmap <buffer> S <Plug>(easymotion-overwin-f2)
 
 
 "vim-easymotion
@@ -182,7 +187,6 @@ nnoremap <Leader>n :noh<CR>
 nnoremap <Leader>t :tabnew<CR>
 nnoremap <Leader>e :VimFilerExplorer -winwidth=30<CR>
 nnoremap <Leader>f :VimFiler -horizontal<CR>
-nnoremap <Leader>p :CtrlPRoot<CR>
 nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
 nnoremap <Leader>l <C-w>l
