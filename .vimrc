@@ -181,9 +181,8 @@ noremap <S-h> ^
 noremap <S-j> }
 noremap <S-k> {
 noremap <S-l> $
+nnoremap q :q<CR>
 nnoremap <Leader>s :%s/
-nnoremap <Leader>w :w<CR>
-nnoremap <Leader>q :q<CR>
 nnoremap <Leader>n :noh<CR>
 nnoremap <Leader>t :tabnew<CR>
 nnoremap <Leader>e :VimFilerExplorer -winwidth=30<CR>

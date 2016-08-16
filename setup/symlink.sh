@@ -1,6 +1,6 @@
 #!/bin/sh
 
-files=( .vimrc .tmux.conf zsh/.zshrc)
+files=( .vimrc .tmux.conf zsh/.zshrc Brewfile)
 
 for file in ${files[@]}; do
   ln -s -f ~/dotfiles/$file ~
