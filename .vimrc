@@ -86,6 +86,7 @@ call unite#custom#source(
   \ '\(.DS_Store\|repos\|tmp\|gems\|vendor\|bundle\|log\|node_modules\|.png\|.svg\|.jpg\|.jpeg\|.gif\|.mv\|.mp3\|.mp4\|.sqlite3\|.map\|.min\)'
   \ )
 
+
 "vimfiler
 let g:vimfiler_no_default_key_mappings = 1
 let g:vimfiler_as_default_explorer = 1

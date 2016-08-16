@@ -5,8 +5,6 @@ ssid=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/R
   | awk '{$1="";print}' \
   | sed "s/ //")
 
-if [ -n "$ssid" ]; then
-  echo "#[bg=default,fg=colour014,bold] $ssid #[default]"
-else
-  echo "#[bg=default,fg=red] ✘ #[default]"
-fi
+[[ -n "$ssid" ]] && str="#[fg=colour014]$ssid" || str="#[fg=red]✘"
+
+echo "#[bold][ $str #[bold,fg=default]]#[default] "
