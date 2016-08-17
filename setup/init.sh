@@ -8,8 +8,6 @@ if [ ! `which brew` ]; then
   fi
 fi
 
-[ -e ~/bin ] || mkdir ~/bin
-
 brew tap homebrew/brewdler
 brew brewdle
 
