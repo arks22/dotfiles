@@ -8,13 +8,12 @@ if [ ! `which brew` ]; then
   fi
 fi
 
-brew tap homebrew/brewdler
-brew brewdle
-
-fpath=(~/bin(N-/) $fpath)
+fpath=(~/dotfiles/bin(N-/) $fpath)
 
 source ~/dotfiles/setup/symlink.sh
 
-[ $SHELL = "/bin/zsh" ] || chsh -s /bin/zsh
+brew tap homebrew/brewdler
+brew brewdle
 
-zsh
+#[ $SHELL = "/bin/zsh" ] || chsh -s /bin/zsh
+#zsh
