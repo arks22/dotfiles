@@ -1,3 +1,4 @@
+#!bin/sh
 if has "git"; then
   git clone https://github.com/arks22/dotfiles.git ~/dotfiles
 elif has "curl" || has "wget"; then
@@ -12,4 +13,4 @@ else
   echo "curl or wget required"
 fi
 
-sh ~/dotfiles/setup/init.sh
+#sh ~/dotfiles/setup/init.sh

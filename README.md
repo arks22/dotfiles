@@ -3,7 +3,6 @@
 ## Install
 
 ```
-git clone https://github.com/arks22/dotfiles.git ~/dotfiles
-sh ~/dotfiles/setup/init.sh
+curl -L raw.github.com/arks22/dotfiles/master/setup/install.sh | sh
 ```
 
