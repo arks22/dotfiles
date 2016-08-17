@@ -14,4 +14,4 @@ else
   echo "curl or wget required"
 fi
 
-#sh ~/dotfiles/setup/init.sh
+sh ~/dotfiles/setup/init.sh
