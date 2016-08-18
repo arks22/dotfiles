@@ -8,15 +8,10 @@ fi
 source ~/.zplug/init.zsh
 
 zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
-
 zplug 'seebi/dircolors-solarized'
-
 zplug "mrowa44/emojify", as:command 
-
 zplug "arks22/zsh-gomi", as:command, use:bin/gomi
-
 zplug "zsh-users/zsh-completions"
-
 zplug "zsh-users/zsh-syntax-highlighting", nice:10
 
 #install plugins not installed
@@ -70,10 +65,13 @@ setopt auto_param_keys
 setopt auto_list
 setopt prompt_subst
 
+PATH=$PATH:$HOME/dotfiles/bin
+
 #grant permission
 for file in $(ls ~/dotfiles/bin); do
-  chmod a+x ~/bin/$file
+  chmod a+x ~/dotfiles/bin/$file
 done
+
 
 
 ############ aliases ############
@@ -94,8 +92,8 @@ alias cl="clear"
 alias vag="vagrant"
 alias g="git"
 alias glog="git_log_fzf"
-alias gcmt="git_commit_automatically"
-alias gac="git add -A && git_commit_automatically"
+alias gac="git add -A && git-commit-automatically"
+alias gacp="git add -A && git-commit-automatically && git push origin master"
 alias gdc="git reset --hard HEAD^"
 alias gs="git status"
 alias ch="open -a Google\ Chrome"

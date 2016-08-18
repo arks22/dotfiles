@@ -20,4 +20,8 @@ git_commit_automatically() {
   git commit -m "${str}${message}"
 }
 
-git_commit_automatically $*
+if [[ $SHELL =~ "zsh" ]]; then
+  git_commit_automatically $*
+else
+  echo "git-commit-automatically: Work on only zsh"
+fi

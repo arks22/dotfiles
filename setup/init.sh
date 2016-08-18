@@ -12,7 +12,5 @@ if ! which brew; then
   fi
 fi
 
-fpath=(~/dotfiles/bin(N-/) $fpath)
-
 [ $SHELL = "/bin/zsh" ] || chsh -s /bin/zsh
 zsh

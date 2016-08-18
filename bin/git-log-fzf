@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 
 git_log_fzf() {
   local out shas sha q k
