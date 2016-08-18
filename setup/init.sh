@@ -36,7 +36,6 @@ if ! which brew ; then
     brew tap Homebrew/bundle
     brew bundle
   elif [ $(uname -s) = "Linux" ]; then
-    echo "Install packages with apt-get, please put your password"
     apt-get install curl git ruby zsh
     install-vim
   else
