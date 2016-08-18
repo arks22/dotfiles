@@ -2,12 +2,10 @@
 
 bash ~/dotfiles/setup/symlink.sh
 
-sudo -s
-
 install-vim() {
-  read -k 1 answer"?Do you want to install newest \"vim with lua\" ? [y/n]:"
+  read answer"?Do you want to install newest \"vim with lua\" ? [y/n]:"
   if [ $answer = "y" ]; then
-    apt-get install mercurial ncurses-dev lua5.2 lua5.2-dev luajit python-dev python3-dev
+    sudo apt-get install mercurial ncurses-dev lua5.2 lua5.2-dev luajit python-dev python3-dev
     wget ftp://ftp.vim.org/pub/vim/unix/vim-7.4.tar.bz2
     tar xjf vim-7.4.tar.bz2
     cd vim74
@@ -22,7 +20,7 @@ install-vim() {
       --prefix=/usr/local
     make && make install
   else
-    apt-get install vim
+    sudo apt-get install vim
   fi
 }
 
@@ -36,7 +34,7 @@ if ! which brew ; then
     brew tap Homebrew/bundle
     brew bundle
   elif [ $(uname -s) = "Linux" ]; then
-    apt-get install curl git ruby zsh
+    sudo apt-get install curl git ruby zsh
     install-vim
   else
     echo "Not support your OS"
