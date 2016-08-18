@@ -76,10 +76,16 @@ done
 
 ############ aliases ############
 
+if [[ $(uname -s) = "Darwin" ]]; then
+  alias l="gls -X --color=auto"
+  alias ls="gls -AX --color=auto"
+elif [[ $(uname -s) = "Linux" ]]; then
+  alias l="ls"
+  alias ls="ls -a"
+fi
+
 alias vi="vim"
 alias vimf="vim +VimFilerExplorer"
-alias l="gls -AX --color=auto"
-alias ls="gls -X --color=auto"
 alias q="exit"
 alias t="tmux_operation"
 alias tls="tmux list-sessions"
@@ -131,7 +137,7 @@ PROMPT2='%F{blue}» %f'
 ############ cd ############
 
 function chpwd() {
-  [ $PWD = $HOME ] || gls -AX --color=auto
+  [ $PWD = $HOME ] || ls
   local i=0
   cat ~/.powered_cd.log | while read line; do
     (( i++ ))
