@@ -129,6 +129,7 @@ PROMPT2='%F{blue}» %f'
 
 
 ############ cd ############
+
 function chpwd() {
   [ $PWD = $HOME ] || gls -AX --color=auto
   local i=0
@@ -161,6 +162,7 @@ compdef _powered_cd powered_cd
 
 
 ############ tmux ############
+
 tmux_operation() {
   answer=$(tmux_operation_choices | fzf --ansi --select-1 --prompt="Tmux >")
   case $answer in
