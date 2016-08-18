@@ -15,8 +15,4 @@ else
   mv -f dotfiles-master ~/dotfiles
 fi
 
-if [[ which source >/dev/null 2>&1 ]] ; then
-  source ~/dotfiles/setup/init.sh
-else
-  . ~/dotfiles/setup/init.sh
-fi
+. ~/dotfiles/setup/init.sh
