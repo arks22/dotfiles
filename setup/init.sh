@@ -15,5 +15,5 @@ source ~/dotfiles/setup/symlink.sh
 brew tap homebrew/brewdler
 brew brewdle
 
-#[ $SHELL = "/bin/zsh" ] || chsh -s /bin/zsh
-#zsh
+[ $SHELL = "/bin/zsh" ] || chsh -s /bin/zsh
+zsh

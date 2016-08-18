@@ -41,7 +41,6 @@ stty start undef
 
 #highlight dir in completion
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-
 #highlight completions
 zstyle ':completion:*:default' menu select=2
 zstyle ':completion:*' list-separator '-->'
@@ -102,10 +101,8 @@ alias gs="git status"
 alias ch="open -a Google\ Chrome"
 alias gg="google"
 alias electron="reattach-to-user-namespace electron"
-
 alias -g G="| grep"
 alias -g F="| fzf"
-
 alias -s rb="ruby"
 alias -s py='python'
 

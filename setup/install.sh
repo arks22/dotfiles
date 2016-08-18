@@ -1,17 +1,15 @@
 #!bin/sh
 
-if which git ; then
+if which git >/dev/null 2>&1; then
   git clone https://github.com/arks22/dotfiles.git ~/dotfiles
-elif which curl || which wget; then
+else
   tarball="https://github.com/arks22/dotfiles/archive/master.tar.gz"
-  if which curl; then
+  if which curl >/dev/null 2>&1; then
     curl -L "$tarball"
-  elif which curl; then
+  elif which wget >/dev/null 2>&1; then
     wget -O - "$tarball"
   fi | tar xv -
   mv -f dotfiles-master ~/dotfiles
-else
-  echo "curl or wget required"
 fi
 
 sh ~/dotfiles/setup/init.sh
