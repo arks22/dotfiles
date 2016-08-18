@@ -237,7 +237,14 @@ tmux_kill_window_choices() {
 
 
 if [ ! -z $TMUX ]; then
-  echo "– – – – – – – – – – – ${fg_bold[red]}TMUX${reset_color} – – – – – – – – – – – –"
+  i=0
+  n=$(expr $(tput cols) / 4 - 1)
+  while [ $i -lt $n ] ; do
+    (( i++ ))
+    str="${str}- "
+  done
+  echo "${str}${fg_bold[red]}TMUX ${reset_color}${str}"
+  i=0
 else
   tmux_operation
 fi
