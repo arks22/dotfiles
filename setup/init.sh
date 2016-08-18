@@ -11,10 +11,12 @@ if ! which brew ; then
     brew doctor
     brew tap Homebrew/bundle
     brew bundle
-  else [ $(uname -s) = "Linux" ]; then
+  elif [ $(uname -s) = "Linux" ]; then
     echo "Install packages with apt-get, please put your password"
     packages=(curl git ruby zsh vim)
     sudo apt-get install $packages
+  else
+    echo "Not support your OS"
   fi
 fi
 
