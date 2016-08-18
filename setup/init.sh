@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-. ~/dotfiles/setup/symlink.sh
+bash ~/dotfiles/setup/symlink.sh
 
 #install brew
 if ! which brew; then
