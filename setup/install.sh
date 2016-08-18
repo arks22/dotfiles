@@ -7,10 +7,10 @@ else
   tarball="https://github.com/arks22/dotfiles/archive/master.tar.gz"
   if which curl >/dev/null 2>&1; then
     echo "Downloading dotfiles with curl..."
-    curl -L "$tarball" | tar xv -
+    curl -L "$tarball" | tar zx
   elif which wget >/dev/null 2>&1; then
     echo "Downloading dotfiles with wget..."
-    wget -O - "$tarball" | tar xv -
+    wget -O - "$tarball" | tar zx
   fi
   mv -f dotfiles-master ~/dotfiles
 fi
