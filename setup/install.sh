@@ -15,4 +15,4 @@ else
   mv -f dotfiles-master ~/dotfiles
 fi
 
-#sh ~/dotfiles/setup/init.sh
+sh ~/dotfiles/setup/init.sh
