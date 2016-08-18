@@ -1,10 +1,6 @@
-tap 'caskroom/cask'
-tap 'homebrew/bundle'
-
 brew 'git'
 brew 'lua'
 brew 'mongodb'
-brew 'peco'
 brew 'readline'
 brew 'ruby-build'
 brew 'rbenv'
@@ -15,6 +11,9 @@ brew 'vim', args: ['with-lua']
 brew 'zsh'
 brew 'coreutils'
 brew 'homebrew/dupes/libiconv'
+
+tap 'caskroom/cask'
+brew 'brew-cask'
 
 cask 'iterm2'
 cask 'google-chrome'
