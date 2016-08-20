@@ -3,7 +3,7 @@
 bash ~/dotfiles/setup/symlink.sh
 
 #install brew
-if ! which brew ; then
+if ! type brew >/dev/null 2>&1 ; then
   if [ $(uname -s) = "Darwin" ]; then
     ln -s -f ~/dotfiles/setup/Brewfile ~
     echo "Installing Homebrew ..."
@@ -38,6 +38,12 @@ if ! which brew ; then
   fi
 fi
 
-echo "Change shell to zsh, please put ypur password"
-[ $SHELL = "/bin/zsh" ] || chsh -s /bin/zsh
-exit
+#grant permission to shell command
+for file in $(ls ~/dotfiles/bin); do
+  chmod a+x ~/dotfiles/bin/$file
+done
+
+if [ ! $SHELL == "/bin/zsh" ] ; then
+  echo "Change shell to zsh, please put ypur password"
+  chsh -s /bin/zsh
+fi
