@@ -28,6 +28,7 @@ zplug load --verbose
 ############ general ############
 
 autoload -U colors
+colors
 
 eval $(gdircolors $ZPLUG_HOME/repos/seebi/dircolors-solarized/dircolors.ansi-universal)
 
@@ -105,6 +106,7 @@ alias tls="tmux list-sessions"
 alias tnw="tmux new-window"
 alias reload="exec $SHELL -l"
 alias d="gomi"
+alias t="tmuximum"
 alias c="powered_cd"
 alias rl="rails"
 alias cl="clear"
