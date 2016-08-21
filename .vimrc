@@ -121,7 +121,6 @@ autocmd FileType vimfiler nmap <buffer> v <Plug>(vimfiler_split_edit_file)
 autocmd FileType vimfiler nnoremap <silent><buffer><expr> s vimfiler#do_switch_action('split')
 autocmd FileType vimfiler nnoremap <silent><buffer><expr> t vimfiler#do_switch_action('tabopen')
 
-autocmd FileType vimfiler nmap <buffer> S <Plug>(easymotion-bd-f2)
 autocmd FileType vimfiler nmap <buffer> S <Plug>(easymotion-overwin-f2)
 
 
@@ -175,8 +174,6 @@ let mapleader = "\<Space>"
 
 nmap s <Plug>(easymotion-overwin-f2)
 nmap S <Plug>(easymotion-overwin-f2)
-vmap s <Plug>(easymotion-bd-f2)
-vmap S <Plug>(easymotion-bd-f2)
 noremap <S-h> ^
 noremap <S-j> }
 noremap <S-k> {

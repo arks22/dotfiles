@@ -11,7 +11,7 @@ zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
 zplug "junegunn/fzf", as:command, use:"bin/fzf-tmux"
 zplug "mrowa44/emojify", as:command 
 zplug "arks22/zsh-gomi", as:command, use:bin/gomi
-zplug 'seebi/dircolors-solarized'
+zplug "seebi/dircolors-solarized"
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting", nice:10
 
@@ -49,6 +49,15 @@ export TERM=xterm-256color
 
 bindkey -v 
 
+
+function _tmuximum() {
+  tmuximum
+  zle reset-prompt
+}
+zle -N __tmuximum _tmuximum
+bindkey '^s' __tmuximum
+
+
 #save 10000 historys
 HISTFILE=$HOME/.zsh-history
 HISTSIZE=10000
@@ -84,7 +93,6 @@ fi
 alias vi="vim"
 alias vimf="vim +VimFilerExplorer"
 alias q="exit"
-alias t="tmuximum"
 alias tls="tmux list-sessions"
 alias tnw="tmux new-window"
 alias reload="exec $SHELL -l"
@@ -164,7 +172,6 @@ _powered_cd() {
 compdef _powered_cd powered_cd
 
 
-#############################
 
 if [ ! -z $TMUX ]; then
   i=0
@@ -176,5 +183,5 @@ if [ ! -z $TMUX ]; then
   echo "${str}${fg_bold[red]}TMUX ${reset_color}${str}"
   i=0
 elif [[ ! $(whoami) = "root" ]]; then
-  tmux_operation
+  tmuximum
 fi
