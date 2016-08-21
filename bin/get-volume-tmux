@@ -6,16 +6,18 @@ echo "#[bold][\c"
 if [ "$(echo $sound_info | awk '{print $8}')" = "muted:false" ]; then
   sound_volume=$(expr $(echo $sound_info | awk '{print $2}' | sed "s/[^0-9]//g") / 6 )
   i=0
+  str=""
   while [ $i -lt $sound_volume ]; do
     i=$(( i + 1 ))
-    echo "=\c"
+    str="${str}="
   done
   while [ $i -lt 16 ]; do
     i=$(( i + 1 ))
-    echo " \c"
+    str="${str} "
   done
+  echo "$str\c"
 else
   echo "      mute      \c"
 fi
 
-echo "] \c"
+echo "] "
