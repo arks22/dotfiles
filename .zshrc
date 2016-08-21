@@ -49,13 +49,23 @@ export TERM=xterm-256color
 
 bindkey -v 
 
+function set_end_status() {
+  if [ -n "$BUFFER" ]; then
+    zle accept-line
+    return 0
+  fi
+}
 
 function _tmuximum() {
   tmuximum
   zle reset-prompt
 }
+
 zle -N __tmuximum _tmuximum
+zle -N _set_end_status set_end_status
+
 bindkey '^s' __tmuximum
+bindkey '^m' _set_end_status
 
 
 #save 10000 historys
@@ -134,7 +144,7 @@ function precmd() {
 
 dir="%F{cyan}%K{black} %~ %k%f"
 
-PROMPT='%(?,,%K{red}%F{white} ✘ %k%f)${root}${dir_info} '
+PROMPT='%(?,,%F{red}%K{black} ✘%f %{[38;5;010m%}│%f%k)${root}${dir_info} '
 RPROMPT='${git_info}'
 PROMPT2='%F{blue}» %f'
 
@@ -143,7 +153,10 @@ PROMPT2='%F{blue}» %f'
 ############ cd ############
 
 function chpwd() {
-  [ $PWD = $HOME ] || ls
+  if [[ ! $PWD = $HOME ]] ; then
+    echo -n "${fg[yellow]}[list] : ${reset_color}"
+    ls
+  fi
   local i=0
   cat ~/.powered_cd.log | while read line; do
     (( i++ ))
@@ -154,7 +167,6 @@ function chpwd() {
     fi
   done
   echo "$PWD" >> ~/.powered_cd.log
-  dir="%K{black}%F{magenta} %~ %k%f"
 }
 
 function powered_cd() {

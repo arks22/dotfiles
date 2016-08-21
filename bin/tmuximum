@@ -30,7 +30,7 @@ tmux_operation_choices() {
 }
 
 tmux_kill_session() {
-  answer=$(tmux_kill_session_choices | fzf-tmux -l -ansi --prompt="Tmux >")
+  answer=$(tmux_kill_session_choices | fzf-tmux -l --ansi --prompt="Tmux >")
   case $answer in
     *kill*Server* ) tmux kill-server ; tmux_operation ;;
     *kill*windows* ) tmux kill-session -t $(echo "$answer" | awk '{print $4}' | sed "s/://g")
