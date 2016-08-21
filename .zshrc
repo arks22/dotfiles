@@ -1,4 +1,3 @@
-
 ############ zplug ############
 
 if [ ! -e ~/.zplug ]; then
@@ -9,7 +8,6 @@ source ~/.zplug/init.zsh
 
 zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
 zplug "junegunn/fzf", as:command, use:"bin/fzf-tmux"
-zplug "mrowa44/emojify", as:command 
 zplug "arks22/zsh-gomi", as:command, use:bin/gomi
 zplug "seebi/dircolors-solarized"
 zplug "zsh-users/zsh-completions"
