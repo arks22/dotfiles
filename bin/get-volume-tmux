@@ -1,8 +1,6 @@
 #!/bin/sh
 sound_info=$(osascript -e 'get volume settings')
 
-echo "#[bold][\c"
-
 if [ "$(echo $sound_info | awk '{print $8}')" = "muted:false" ]; then
   sound_volume=$(expr $(echo $sound_info | awk '{print $2}' | sed "s/[^0-9]//g") / 6 )
   i=0
@@ -15,9 +13,7 @@ if [ "$(echo $sound_info | awk '{print $8}')" = "muted:false" ]; then
     i=$(( i + 1 ))
     str="${str} "
   done
-  echo "$str\c"
+  echo "#[bold][$str]#[bold]"
 else
-  echo "      mute      \c"
+  echo "#[bold][      mute      ]#[default]"
 fi
-
-echo "] "

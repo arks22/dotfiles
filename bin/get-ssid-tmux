@@ -1,10 +1,11 @@
 #!/bin/sh
 
-ssid=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I \
-  | grep " SSID" \
-  | awk '{$1="";print}' \
-  | sed "s/ //")
+ssid=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep " SSID" | awk '{$1="";print}' | sed "s/ //")
 
-[[ -n "$ssid" ]] && str="#[fg=colour014]$ssid" || str="#[fg=red]✘"
+if [ -n "$ssid" ] ; then 
+  str="#[fg=colour014]$ssid#[default]"
+else
+  str="#[fg=red]✘#[default]"
+fi
 
-echo "#[bold][ $str #[bold,fg=default]]#[default] "
+echo "#[bold][#[default] $str #[bold]]#[default] "
