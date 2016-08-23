@@ -38,11 +38,6 @@ if ! type brew >/dev/null 2>&1 ; then
   fi
 fi
 
-#grant permission to shell command
-for file in $(ls ~/dotfiles/bin); do
-  chmod a+x ~/dotfiles/bin/$file
-done
-
 if [ ! $SHELL == "/bin/zsh" ] ; then
   echo "Change shell to zsh, please put ypur password"
   chsh -s /bin/zsh
