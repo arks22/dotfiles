@@ -46,19 +46,7 @@ export LANG=en_US.UTF-8
 
 export TERM=xterm-256color
 
-
 bindkey -v 
-
-function set_end_status() {
-  if [ -n "$BUFFER" ]; then
-    zle accept-line
-    return 0
-  fi
-}
-zle -N _set_end_status set_end_status
-
-bindkey '^m' _set_end_status
-
 
 #save 10000 historys
 HISTFILE=$HOME/.zsh-history
