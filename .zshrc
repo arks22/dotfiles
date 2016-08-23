@@ -1,4 +1,4 @@
-############ zplug ############
+######################## zplug ########################
 
 if [ ! -e ~/.zplug ]; then
   git clone https://github.com/b4b4r07/zplug ~/.zplug
@@ -25,7 +25,7 @@ zplug load --verbose
 
 
 
-############ general ############
+######################## general ########################
 
 autoload -U colors
 colors
@@ -46,6 +46,7 @@ export LANG=en_US.UTF-8
 
 export TERM=xterm-256color
 
+
 bindkey -v 
 
 function set_end_status() {
@@ -54,16 +55,8 @@ function set_end_status() {
     return 0
   fi
 }
-
-function _tmuximum() {
-  tmuximum
-  zle reset-prompt
-}
-
-zle -N __tmuximum _tmuximum
 zle -N _set_end_status set_end_status
 
-bindkey '^s' __tmuximum
 bindkey '^m' _set_end_status
 
 
@@ -89,7 +82,7 @@ PATH=$PATH:$HOME/dotfiles/bin
 
 
 
-############ aliases ############
+######################## aliases ########################
 
 if [[ $(uname -s) = "Darwin" ]]; then
   alias l="gls -X --color=auto"
@@ -127,7 +120,8 @@ alias -s py='python'
 
 
 
-############ prompt ############
+######################## prompt ########################
+
 #excute before display prompt
 function precmd() {
   if git_info=$(git status 2>/dev/null ); then
@@ -145,12 +139,17 @@ function precmd() {
 dir="%F{cyan}%K{black} %~ %k%f"
 
 PROMPT='%(?,,%F{red}%K{black} ✘%f %{[38;5;010m%}│%f%k)${root}${dir_info} '
+SPROMPT='zsh: correct? %F{red}%R%f --> %F{green}%r%f [nyae]: '
 RPROMPT='${git_info}'
 PROMPT2='%F{blue}» %f'
 
+function command_not_found_handler() {
+  echo "zsh: command not found: ${fg[red]}$0${reset_color}"
+}
 
 
-############ cd ############
+
+######################## cd ########################
 
 function chpwd() {
   if [[ ! $PWD = $HOME ]] ; then
@@ -173,6 +172,7 @@ function powered_cd() {
   case $# in 
     0 ) cd $(gtac ~/.powered_cd.log | fzf-tmux) ;;
     1 ) cd $1 ;;
+    2 ) mv $1 $2 ;;
     * ) echo "powered_cd: too many arguments" ;;
   esac
 }

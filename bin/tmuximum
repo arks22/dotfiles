@@ -21,12 +21,12 @@ tmux_operation_choices() {
       [[ ! "$line" =~ "attached" ]] || line="${fg[green]}$line${reset_color}"
       echo "${fg[green]}attach${reset_color} ==> [ "$line" ]"
     done
-    echo "${fg[green]}create${reset_color} ==> [ ${fg_bold[default]}new session${reset_color} ]"
+    echo "${fg[green]}create${reset_color} ==> [ ${fg[blue]}new session${reset_color} ]"
   else
     tmux list-windows | sed "/active/d" | while read line; do
       echo  "${fg[cyan]}switch${reset_color} ==> [ $(echo $line | awk '{print $1 " " $2 " " $3 " " $4 " " $5}') ]"
     done
-    echo  "${fg[cyan]}switch${reset_color} ==> [ ${fg_bold[default]}new window${reset_color} ]"
+    echo  "${fg[cyan]}switch${reset_color} ==> [ ${fg[blue]}new window${reset_color} ]"
     echo "${fg[red]}kill${reset_color} windows"
   fi
   tmux has-session 2>/dev/null && echo "${fg[red]}kill${reset_color} sessions"
@@ -72,5 +72,5 @@ tmux_kill_window_choices() {
 if type fzf-tmux >/dev/null 2>&1 ; then
   tmux_operation
 else
-  echo "Required \"fzf-tmux\""
+  echo "tmuximum: Required \"fzf-tmux\""
 fi
