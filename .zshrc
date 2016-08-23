@@ -35,9 +35,13 @@ eval $(gdircolors $ZPLUG_HOME/repos/seebi/dircolors-solarized/dircolors.ansi-uni
 stty stop undef
 stty start undef
 
-#highlight dir in completion
+zstyle ':completion:*:messages' format $'\e[01;35m -- %d -- \e[00;00m'
+zstyle ':completion:*:warnings' format $'\e[01;31m -- No Matches Found -- \e[00;00m'
+zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d -- \e[00;00m'
+zstyle ':completion:*:corrections' format $'\e[01;33m -- %d -- \e[00;00m'
+
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-#highlight completions
+zstyle ':completion:*' completer _complete _prefix _approximate _history
 zstyle ':completion:*:default' menu select=2
 zstyle ':completion:*' list-separator '-->'
 
