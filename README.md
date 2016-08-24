@@ -21,7 +21,7 @@ dot [argument]
 |initial|install packeges<sup>[1](#note1)</sup>|
 
 
-<small id="note1">this command excuted when you install dotfiles so you dont have to excute this command yourself</small>
+<small id="note1">1:this command excuted when you install dotfiles so you dont have to excute this command yourself</small>
 
 
 
