@@ -15,5 +15,7 @@ else
   mv -f dotfiles-master ~/dotfiles
 fi
 
+chmod +x ~/dotfiles/bin/dot
 
-bash ~/dotfiles/setup/init.sh
+dot deploy
+dot initial

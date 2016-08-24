@@ -5,14 +5,9 @@
 ```
 curl -L raw.github.com/arks22/dotfiles/master/setup/install.sh | sh
 ```
-
-## ScreenShot
-
-![ScreenShot] (https://raw.githubusercontent.com/arks22/dotfiles/screen_shot/screen_shot.png)
-
 ## Manage
 
-Use ([dot](https://github.com/arks22/dotfiles/blob/master/bin/dot)) command. 
+Use [dot](https://github.com/arks22/dotfiles/blob/master/bin/dot) command. 
 
 ```
 dot [argument]
@@ -21,5 +16,15 @@ dot [argument]
 |argument|how work|
 |:------:|:------:|
 |update|update dotfiles (git pull)|
-|deploy|put symlinks of dotfiles and grant permissions to commands in "deploy/bin"|
+|deploy|be able to use dotfiles|
 |clean|remove dotfiles|
+|initial|install packeges[^1]|
+
+
+[^1]: this command excuted when you install dotfiles so you dont have to excute this command yourself
+
+
+## ScreenShot
+
+![ScreenShot] (https://raw.githubusercontent.com/arks22/dotfiles/screen_shot/screen_shot.png)
+

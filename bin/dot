@@ -5,15 +5,18 @@ dotfiles=( ".vimrc" ".zshrc" ".tmux.conf" "Brewfile" )
 function dot_help() {
   echo "usage: dot [argument]"
   echo
-  echo "  argument is \"update\" or \"clean\" or \"deploy\""
+  echo "  argument is \"update\" or \"clean\" or \"deploy\" \"init\""
   echo "  update --> update dotfiles (git pull)"
-  echo "  deploy --> put symlinks of dotfiles and grant permissions to commands in \"deploy/bin\""
+  echo "  deploy --> be able to use dotfiles"
   echo "  clean  --> remove dotfiles"
+  echo "  init   --> install packeges (this command excuted when you install dotfiles"
+  echo "             so you dont have to excute this command yourself)"
   exit 1
 }
 
 if [[ $# = 1 ]] ; then
   case $1 in
+
     "update" ) 
       cd ~/dotfiles
       msg=(git pull)
@@ -24,6 +27,7 @@ if [[ $# = 1 ]] ; then
         echo "dot: dotfiles were updated."
       fi
     ;;
+
     "deploy" )
       for file in ${dotfiles[@]}; do
         ln -s -f ~/dotfiles/$file ~
@@ -32,6 +36,7 @@ if [[ $# = 1 ]] ; then
         chmod a+x ~/dotfiles/bin/$file
       done
     ;;
+
     "clean" )
       echo "dot: remove dotfiles? [n/y]: "
       read -k 1 answer
@@ -43,7 +48,30 @@ if [[ $# = 1 ]] ; then
       fi 
       echo "dot: dotfiles were removed."
     ;;
+
+    "init" )
+      if ! type brew >/dev/null 2>&1 ; then
+        if [ $(uname -s) = "Darwin" ]; then
+          cp ~/dotfiles/setup/Brewfile ~
+          echo "dot: installing Homebrew ..."
+          /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+          brew tap Homebrew/bundle
+          brew bundle
+          rm ~/Brewfile
+        elif [ $(uname -s) = "Linux" ]; then
+          sudo apt-get install curl git ruby zsh
+        else
+          echo "dot: not support your OS"
+        fi
+      fi
+      if [ ! $SHELL == "/bin/zsh" ] ; then
+        echo "dot: change shell to zsh, please put ypur password"
+        chsh -s /bin/zsh
+      fi
+    ;;
+
     * ) dot_help ;;
+
   esac
 else
   dot_help
