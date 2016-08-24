@@ -1,0 +1,49 @@
+#!/bin/sh
+
+dotfiles=( ".vimrc" ".zshrc" ".tmux.conf" "Brewfile" )
+
+function dot_help() {
+  echo "usage: dot [argument]"
+  echo
+  echo "  argument is \"update\" or \"clean\" or \"deploy\""
+  echo "  update --> update dotfiles (git pull)"
+  echo "  deploy --> put symlinks of dotfiles and grant permissions to commands in \"deploy/bin\""
+  echo "  clean  --> remove dotfiles"
+}
+
+if [[ $# = 1 ]] ; then
+  case $1 in
+    "update" ) 
+      cd ~/dotfiles
+      msg=(git pull)
+      cd -
+      if [[ $msg =~ "Already up-to-date." ]] ; then
+        echo "dot: dotfiles are already up-to-date."
+      else
+        echo "dot: dotfiles were updated."
+      fi
+    ;;
+    "deploy" )
+      for file in ${dotfiles[@]}; do
+        ln -s -f ~/dotfiles/$file ~
+      done
+      for file in $(ls ~/dotfiles/bin); do
+        chmod a+x ~/dotfiles/bin/$file
+      done
+    ;;
+    "clean" )
+      echo "dot: remove dotfiles? [n/y]: "
+      read -k 1 answer
+      if [[ "$answer" = "y" ]] ; then
+        for file in ${dotfiles[@]}; do
+          rm ~/$file
+        done
+        rm -rf ~/dotfiles
+      fi 
+      echo "dot: dotfiles were removed."
+    ;;
+    * ) dot_help ;;
+  esac
+else
+  dot_help
+fi

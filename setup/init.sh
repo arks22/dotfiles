@@ -5,12 +5,13 @@ bash ~/dotfiles/setup/symlink.sh
 #install brew
 if ! type brew >/dev/null 2>&1 ; then
   if [ $(uname -s) = "Darwin" ]; then
-    ln -s -f ~/dotfiles/setup/Brewfile ~
+    cp ~/dotfiles/setup/Brewfile ~
     echo "Installing Homebrew ..."
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     brew doctor
     brew tap Homebrew/bundle
     brew bundle
+    rm ~/Brewfile
   elif [ $(uname -s) = "Linux" ]; then
     sudo apt-get install curl git ruby zsh
     echo "Do you want to install newest \"vim with lua\" ? [y/n]:"

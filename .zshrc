@@ -41,6 +41,7 @@ zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d -- \e[00;00m'
 zstyle ':completion:*:corrections' format $'\e[01;33m -- %d -- \e[00;00m'
 
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' group-name ''
 zstyle ':completion:*' completer _complete _prefix _approximate _history
 zstyle ':completion:*:default' menu select=2
 zstyle ':completion:*' list-separator '-->'
@@ -131,7 +132,7 @@ function precmd() {
 dir="%F{cyan}%K{black} %~ %k%f"
 
 PROMPT='%(?,,%F{red}%K{black} ✘%f %{[38;5;010m%}│%f%k)${root}${dir_info} '
-SPROMPT='zsh: correct? %F{red}%R%f --> %F{green}%r%f [nyae]: '
+SPROMPT='zsh: correct? %F{red}%R%f --> %F{green}%r%f [n/y/a/e]: '
 RPROMPT='${git_info}'
 PROMPT2='%F{blue}» %f'
 
