@@ -18,11 +18,10 @@ dot [argument]
 |update|update dotfiles (git pull)|
 |deploy|be able to use dotfiles|
 |clean|remove dotfiles|
-|initial|install packeges<sup>[1](#note1)</sup>|
+|init|install packeges<sup>[1](#note1)</sup>|
 
 
-<small id="note1">1:this command excuted when you install dotfiles so you dont have to excute this command yourself</small>
-
+<small id="note1">1:This command is excuted when you install dotfiles so you dont have to excute this command by yourself.</small>
 
 
 ## ScreenShot
