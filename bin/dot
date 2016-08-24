@@ -9,6 +9,7 @@ function dot_help() {
   echo "  update --> update dotfiles (git pull)"
   echo "  deploy --> put symlinks of dotfiles and grant permissions to commands in \"deploy/bin\""
   echo "  clean  --> remove dotfiles"
+  exit 1
 }
 
 if [[ $# = 1 ]] ; then
