@@ -25,7 +25,7 @@ function dot() {
 
       "update" ) 
         cd ~/dotfiles >/dev/null 2>&1
-        msg=(git pull)
+        msg=$(git pull)
         cd - >/dev/null 2>&1
         if [[ $msg =~ "Already up-to-date." ]] ; then
           echo "dot: dotfiles are already up-to-date."
