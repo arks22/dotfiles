@@ -1,7 +1,9 @@
 #!/bin/zsh
 
-autoload -Uz colors
-colors
+if [[ $SHELL =~ "zsh" ]] ; then
+  autoload -Uz colors
+  colors
+fi
 
 tmux_operation() {
   answer=$(tmux_operation_choices | fzf-tmux -r --ansi --select-1 --prompt="Tmux >")

@@ -14,12 +14,12 @@ dot [COMMANDS] [OPTIONS]
 ```
 
 |Option|Description|
-|:------:|:------:|
+|:------|:------|
 |``--help``|Display the help messages|
 
 
 |Command|Description|
-|:------:|:------:|
+|:------|:------|
 |``update``|Update dotfiles (git pull)|
 |``deploy``|Be able to use dotfiles|
 |``clean``|Remove dotfiles|
