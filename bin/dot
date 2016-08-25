@@ -3,76 +3,77 @@
 dotfiles=( ".vimrc" ".zshrc" ".tmux.conf" "Brewfile" )
 
 function dot_help() {
-  echo "usage: dot [argument]"
+  echo "usage: dot [OPTION]"
   echo
-  echo "  argument is \"update\" or \"clean\" or \"deploy\" \"init\""
-  echo "  update --> update dotfiles (git pull)"
-  echo "  deploy --> be able to use dotfiles"
-  echo "  clean  --> remove dotfiles"
-  echo "  init   --> install packeges (this command excuted when you install dotfiles"
-  echo "             so you dont have to excute this command yourself)"
-  exit 1
+  echo "  u --> update dotfiles (git pull)"
+  echo "  d --> be able to use dotfiles"
+  echo "  c --> remove dotfiles"
+  echo "  i --> install packeges (this command excuted when you install dotfiles"
+  echo "        so you dont have to excute this command yourself)"
 }
 
-if [[ $# = 1 ]] ; then
-  case $1 in
+getopts "udci" opts
 
-    "update" ) 
-      cd ~/dotfiles
-      msg=(git pull)
-      cd -
-      if [[ $msg =~ "Already up-to-date." ]] ; then
-        echo "dot: dotfiles are already up-to-date."
-      else
-        echo "dot: dotfiles were updated."
-      fi
-    ;;
+case $opts in
 
-    "deploy" )
+  "u" ) 
+    cd ~/dotfiles
+    msg=(git pull)
+    cd -
+    if [[ $msg =~ "Already up-to-date." ]] ; then
+      echo "dot: dotfiles are already up-to-date."
+    else
+      echo "dot: dotfiles were updated."
+    fi
+  ;;
+
+  "d" )
+    for file in ${dotfiles[@]}; do
+      ln -s -f ~/dotfiles/$file ~
+    done
+    for file in $(ls ~/dotfiles/bin); do
+      chmod a+x ~/dotfiles/bin/$file
+    done
+  ;;
+
+  "c" )
+    echo "dot: remove dotfiles? [n/y]: "
+    read -k 1 answer
+    if [[ "$answer" = "y" ]] ; then
       for file in ${dotfiles[@]}; do
-        ln -s -f ~/dotfiles/$file ~
+        rm ~/$file
       done
-      for file in $(ls ~/dotfiles/bin); do
-        chmod a+x ~/dotfiles/bin/$file
-      done
-    ;;
+      rm -rf ~/dotfiles
+    fi 
+    echo "dot: dotfiles were removed."
+  ;;
 
-    "clean" )
-      echo "dot: remove dotfiles? [n/y]: "
-      read -k 1 answer
-      if [[ "$answer" = "y" ]] ; then
-        for file in ${dotfiles[@]}; do
-          rm ~/$file
-        done
-        rm -rf ~/dotfiles
-      fi 
-      echo "dot: dotfiles were removed."
-    ;;
-
-    "init" )
-      if ! type brew >/dev/null 2>&1 ; then
-        if [ $(uname -s) = "Darwin" ]; then
-          cp ~/dotfiles/setup/Brewfile ~
-          echo "dot: installing Homebrew ..."
-          /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-          brew tap Homebrew/bundle
-          brew bundle
-          rm ~/Brewfile
-        elif [ $(uname -s) = "Linux" ]; then
-          sudo apt-get install curl git ruby zsh
-        else
-          echo "dot: not support your OS"
-        fi
+  "i" )
+    if ! type brew >/dev/null 2>&1 ; then
+      if [ $(uname -s) = "Darwin" ]; then
+        cp ~/dotfiles/setup/Brewfile ~
+        echo "dot: installing Homebrew ..."
+        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+        brew tap Homebrew/bundle
+        brew bundle
+        rm ~/Brewfile
+      elif [ $(uname -s) = "Linux" ]; then
+        sudo apt-get install curl git ruby zsh
+      else
+        echo "dot: not support your OS"
       fi
-      if [ ! $SHELL == "/bin/zsh" ] ; then
-        echo "dot: change shell to zsh, please put ypur password"
-        chsh -s /bin/zsh
-      fi
-    ;;
+    fi
+    if [ ! $SHELL == "/bin/zsh" ] ; then
+      echo "dot: change shell to zsh, please put ypur password"
+      chsh -s /bin/zsh
+    fi
+  ;;
 
-    * ) dot_help ;;
+  "h" ) dot_help ;;
 
-  esac
-else
-  dot_help
-fi
+  * )
+    dot_help 
+    exit 1
+  ;;
+
+esac
