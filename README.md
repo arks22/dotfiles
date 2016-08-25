@@ -13,7 +13,7 @@ Use [dot](https://github.com/arks22/dotfiles/blob/master/bin/dot) command.
 dot [COMMANDS] [OPTIONS]
 ```
 
-|Options|Description|
+|Option|Description|
 |:------:|:------:|
 |``--help``|Display the help messages|
 
