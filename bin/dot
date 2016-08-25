@@ -22,9 +22,9 @@ if [[ $# = 1 ]] ; then
     "--help" ) dot_help ;;
 
     "update" ) 
-      cd ~/dotfiles
+      cd ~/dotfiles >/dev/null 2>&1
       msg=(git pull)
-      cd -
+      cd - >/dev/null 2>&1
       if [[ $msg =~ "Already up-to-date." ]] ; then
         echo "dot: dotfiles are already up-to-date."
       else
@@ -42,15 +42,15 @@ if [[ $# = 1 ]] ; then
     ;;
 
     "clean" )
-      echo "dot: remove dotfiles? [n/y]: "
-      read -k 1 answer
+      echo "dot: remove dotfiles? [n/y]:\c "
+      read  answer
       if [[ "$answer" = "y" ]] ; then
         for file in ${dotfiles[@]}; do
           rm ~/$file
         done
         rm -rf ~/dotfiles
+        echo "dot: dotfiles were removed."
       fi 
-      echo "dot: dotfiles were removed."
     ;;
 
     "init" )
