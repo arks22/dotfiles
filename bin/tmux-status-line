@@ -5,47 +5,47 @@ line="${line}#[bold][#[default]#[fg=blue] $(uptime | awk '{print $(NF-2)}') #[de
 
 
 #ssid
-ssid=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep " SSID" | awk '{$1="";print}' | sed "s/ //")
-
-if [ -n "$ssid" ] ; then 
-  str="#[fg=colour014]$ssid#[default]"
-else
-  str="#[fg=red]✘#[default]"
+if ssid=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep " SSID" | awk '{$1="";print}' | sed "s/ //") ; then
+  if [ -n "$ssid" ] ; then 
+    str="#[fg=colour014]$ssid#[default]"
+  else
+    str="#[fg=red]✘#[default]"
+  fi
+  line="${line}#[bold][#[default] $str #[bold]]#[default]"
 fi
-
-line="${line}#[bold][#[default] $str #[bold]]#[default]"
 
 
 #sound-volume
-sound_info=$(osascript -e 'get volume settings')
-
-if [ "$(echo $sound_info | awk '{print $8}')" = "muted:false" ]; then
-  sound_volume=$(expr $(echo $sound_info | awk '{print $2}' | sed "s/[^0-9]//g") / 6 )
-  i=0
-  str=""
-  while [ $i -lt $sound_volume ]; do
-    i=$(( i + 1 ))
-    str="${str}="
-  done
-  while [ $i -lt 16 ]; do
-    i=$(( i + 1 ))
-    str="${str} "
-  done
-  line="${line}#[bold][$str]#[default] "
-else
-  line="${line}#[bold][      mute      ]#[default] "
+if sound_info=$(osascript -e 'get volume settings') ; then
+  if [ "$(echo $sound_info | awk '{print $8}')" = "muted:false" ]; then
+    sound_volume=$(expr $(echo $sound_info | awk '{print $2}' | sed "s/[^0-9]//g") / 6 )
+    i=0
+    str=""
+    while [ $i -lt $sound_volume ]; do
+      i=$(( i + 1 ))
+      str="${str}="
+    done
+    while [ $i -lt 16 ]; do
+      i=$(( i + 1 ))
+      str="${str} "
+    done
+    line="${line}#[bold][$str]#[default] "
+  else
+    line="${line}#[bold][      mute      ]#[default] "
+  fi
 fi
 
 
 #battery
-battery=$(/usr/bin/pmset -g ps | awk '{ if (NR == 2) print $2 " " $3 }' | sed -e "s/;//g" -e "s/%//")
-battery_quantity=$(echo $battery | awk '{print $1}')
-if [[ ! $battery =~ "discharging" ]]; then
-  line="${line}#[bg=cyan,fg=black] ⚡ $battery_quantity% #[default]"
-elif [ $battery_quantity -le 15 ]; then
-  line="${line}#[bg=red,fg=white] $battery_quantity% #[default]"
-else
-  line="${line}#[bg=cyan,fg=black] $battery_quantity% #[default]"
+if battery=$(/usr/bin/pmset -g ps | awk '{ if (NR == 2) print $2 " " $3 }' | sed -e "s/;//g" -e "s/%//") ; then
+  battery_quantity=$(echo $battery | awk '{print $1}')
+  if [[ ! $battery =~ "discharging" ]]; then
+    line="${line}#[bg=cyan,fg=black] ⚡ $battery_quantity% #[default]"
+  elif [ $battery_quantity -le 15 ]; then
+    line="${line}#[bg=red,fg=white] $battery_quantity% #[default]"
+  else
+    line="${line}#[bg=cyan,fg=black] $battery_quantity% #[default]"
+  fi
 fi
 
 echo "$line"

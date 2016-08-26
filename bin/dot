@@ -45,7 +45,7 @@ function dot() {
 
       "clean" )
         echo "dot: remove dotfiles? [n/y]:\c "
-        read -k 1 answer
+        read answer
         if [[ "$answer" = "y" ]] ; then
           for file in ${dotfiles[@]}; do
             rm ~/$file
