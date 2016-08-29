@@ -60,7 +60,7 @@ SAVEHIST=10000
 
 #set options
 setopt auto_cd
-setopt correct
+#setopt correct
 setopt no_beep
 setopt share_history
 setopt mark_dirs 
@@ -86,7 +86,6 @@ elif [[ $(uname -s) = "Linux" ]]; then
 fi
 
 alias vi="vim"
-alias vimf="vim +VimFilerExplorer"
 alias q="exit"
 alias tls="tmux list-sessions"
 alias tnw="tmux new-window"
@@ -118,10 +117,10 @@ alias -s py='python'
 #excute before display prompt
 function precmd() {
   if git_info=$(git status 2>/dev/null ); then
-    [[ $git_info =~ "Changes not staged" ]] &&  git_unstaged="%K{blue}%F{black} ± %f%k" || git_unstaged=""
-    [[ $git_info =~ "Changes to be committed" ]] && git_uncommited="%{[30;48;5;013m%}%F{black} + %k%f" || git_uncommited=""
+    [[ $git_info =~ "Changes not staged" ]] &&  git_unstaged="%{[30;48;5;013m%}%F{black} ± %f%k" || git_unstaged=""
+    [[ $git_info =~ "Changes to be committed" ]] && git_uncommited="%K{blue}%F{black} + %k%f" || git_uncommited=""
     [ -z "${git_unstaged}${git_uncommited}" ] && git_clean="%K{green}%F{black} ✔ %f%k" || git_clean=""
-    git_branch="$(echo $git_info | awk 'NR==1 {print $3}')"
+    git_branch="⭠ $(echo $git_info | awk 'NR==1 {print $3}')"
     git_info="%K{black} ${git_branch} ${git_unstaged}${git_uncommited}${git_clean}"
   fi
   [ $(whoami) = "root" ] && root="%K{black}%F{yellow} ⚡ %{[38;5;010m%}│%f%k"
@@ -132,12 +131,21 @@ function precmd() {
 dir="%F{cyan}%K{black} %~ %k%f"
 
 PROMPT='%(?,,%F{red}%K{black} ✘%f %{[38;5;010m%}│%f%k)${root}${dir_info} '
-SPROMPT='zsh: correct? %F{red}%R%f --> %F{green}%r%f [n/y/a/e]: '
 RPROMPT='${git_info}'
 PROMPT2='%F{blue}» %f'
 
 function command_not_found_handler() {
   echo "zsh: command not found: ${fg[red]}$0${reset_color}"
+  local answer
+  echo -n "${fg[blue]}edit?${reset_color} [y/n]:"
+  read -k 1 answer 
+  echo
+  if [[ $answer = "y" ]] ; then
+
+    exit 0
+  else
+    exit 1
+  fi
 }
 
 
