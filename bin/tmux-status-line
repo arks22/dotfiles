@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #load-average
 line="${line}#[bold][#[default]#[fg=blue] $(uptime | awk '{print $(NF-2)}') #[default]#[bold]]#[default]"
@@ -6,28 +6,41 @@ line="${line}#[bold][#[default]#[fg=blue] $(uptime | awk '{print $(NF-2)}') #[de
 
 #ssid
 airport_path="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
-if air_info=($(eval "$airport_path" -I | grep -E "^ *(state|SSID):" | awk '{print $2}')) ; then
-  case "${air_info[0]}" in
-    "running" ) str="#[fg=colour014]${air_info[1]}#[default]" ;; 
+
+if air_info=($(eval "$airport_path" -I | grep -E "^ *(agrCtlRSSI|state|SSID):" | awk '{print $2}')) ; then
+
+  rssi=${air_info[0]}
+  state=${air_info[1]}
+  ssid=${air_info[2]}
+
+  case "$state" in
+    "running" )
+      signals=(▇ ▅ ▃ ▂ ▁)
+      signal=""
+      rssi_=$(expr ${rssi} / -20)
+      for ((i=$rssi_; i < 5; i++ )); do
+        signal="${signals[$i]}${signal}"
+      done
+      str="#[fg=colour014]${ssid} ${signal}#[default]"
+    ;;
     "init"    ) str="#[fg=yellow]...#[default]" ;;
     *         ) str="#[fg=red]✘#[default]" ;;
   esac  
+
   line="${line}#[bold][#[default] $str #[bold]]#[default]"
 fi
+
 
 
 #sound-volume
 if sound_info=$(osascript -e 'get volume settings') ; then
   if [ "$(echo $sound_info | awk '{print $8}')" = "muted:false" ]; then
     sound_volume=$(expr $(echo $sound_info | awk '{print $2}' | sed "s/[^0-9]//g") / 6 )
-    i=0
     str=""
-    while [ $i -lt $sound_volume ]; do
-      i=$(( i + 1 ))
+    for ((i=0; i < $sound_volume; i++ )); do
       str="${str}="
     done
-    while [ $i -lt 16 ]; do
-      i=$(( i + 1 ))
+    for ((i=$sound_volume; i < 16; i++ )); do
       str="${str} "
     done
     line="${line}#[bold][$str]#[default] "
@@ -42,7 +55,7 @@ if battery=$(/usr/bin/pmset -g ps | awk '{ if (NR == 2) print $2 " " $3 }' | sed
   battery_quantity=$(echo $battery | awk '{print $1}')
   if [[ ! $battery =~ "discharging" ]]; then
     line="${line}#[bg=cyan,fg=black] ⚡ $battery_quantity% #[default]"
-  elif [ $battery_quantity -le 15 ]; then
+  elif (( $battery_quantity < 16 )); then
     line="${line}#[bg=red,fg=white] $battery_quantity% #[default]"
   else
     line="${line}#[bg=cyan,fg=black] $battery_quantity% #[default]"

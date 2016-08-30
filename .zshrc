@@ -117,9 +117,6 @@ alias -s py='python'
 
 #excute before display prompt
 function precmd() {
-  if [[ $? = 2 ]] ; then
-    print -z $(history -1 | awk '{print $2}')
-  fi
   if git_info=$(git status 2>/dev/null ); then
     [[ $git_info =~ "Changes not staged" ]] &&  git_unstaged="%{[30;48;5;013m%}%F{black} ± %f%k" || git_unstaged=""
     [[ $git_info =~ "Changes to be committed" ]] && git_uncommited="%K{blue}%F{black} + %k%f" || git_uncommited=""
