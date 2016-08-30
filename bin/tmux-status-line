@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #load-average
-line="${line}#[bold][#[default]#[fg=blue] $(uptime | awk '{print $(NF-2)}') #[default]#[bold]]#[default]"
+load_avg="#[bold][#[default]#[fg=blue] $(uptime | awk '{print $(NF-2)}') #[default]#[bold]]#[default]"
 
 
-#ssid
+#airport
 airport_path="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
 
 if air_info=($(eval "$airport_path" -I | grep -E "^ *(agrCtlRSSI|state|SSID):" | awk '{print $2}')) ; then
@@ -15,19 +15,17 @@ if air_info=($(eval "$airport_path" -I | grep -E "^ *(agrCtlRSSI|state|SSID):" |
 
   case "$state" in
     "running" )
-      signals=(▇ ▅ ▃ ▂ ▁)
+      signals=(█ ▆ ▄ ▂ ▁)
       signal=""
       rssi_=$(expr ${rssi} / -20)
       for ((i=$rssi_; i < 5; i++ )); do
         signal="${signals[$i]}${signal}"
       done
-      str="#[fg=colour014]${ssid} ${signal}#[default]"
+      airport="#[fg=black,bg=colour014]|${signal}|#[default] ${ssid} "
     ;;
-    "init"    ) str="#[fg=yellow]...#[default]" ;;
-    *         ) str="#[fg=red]✘#[default]" ;;
+    "init"    ) airport="#[fg=yellow]...#[default] " ;;
+    *         ) airport="#[bg=red,fg=black] ✘ #[default] " ;;
   esac  
-
-  line="${line}#[bold][#[default] $str #[bold]]#[default]"
 fi
 
 
@@ -43,23 +41,23 @@ if sound_info=$(osascript -e 'get volume settings') ; then
     for ((i=$sound_volume; i < 16; i++ )); do
       str="${str} "
     done
-    line="${line}#[bold][$str]#[default] "
+    sound="#[bold][$str]#[default] "
   else
-    line="${line}#[bold][      mute      ]#[default] "
+    sound="#[bold][      mute      ]#[default] "
   fi
 fi
 
 
 #battery
-if battery=$(/usr/bin/pmset -g ps | awk '{ if (NR == 2) print $2 " " $3 }' | sed -e "s/;//g" -e "s/%//") ; then
-  battery_quantity=$(echo $battery | awk '{print $1}')
-  if [[ ! $battery =~ "discharging" ]]; then
-    line="${line}#[bg=cyan,fg=black] ⚡ $battery_quantity% #[default]"
+if battery_info=$(/usr/bin/pmset -g ps | awk '{ if (NR == 2) print $2 " " $3 }' | sed -e "s/;//g" -e "s/%//") ; then
+  battery_quantity=$(echo $battery_info | awk '{print $1}')
+  if [[ ! $battery_info =~ "discharging" ]]; then
+    battery="#[bg=cyan,fg=black] ⚡ $battery_quantity% #[default]"
   elif (( $battery_quantity < 16 )); then
-    line="${line}#[bg=red,fg=white] $battery_quantity% #[default]"
+    battery="#[bg=red,fg=white] $battery_quantity% #[default]"
   else
-    line="${line}#[bg=cyan,fg=black] $battery_quantity% #[default]"
+    battery="#[bg=cyan,fg=black] $battery_quantity% #[default]"
   fi
 fi
 
-echo "$line"
+echo "${load_avg}${sound}${airport}${battery}"
