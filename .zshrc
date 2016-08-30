@@ -69,6 +69,7 @@ setopt list_types
 setopt print_eight_bit
 setopt auto_param_keys
 setopt auto_list
+setopt correct
 setopt prompt_subst
 
 PATH=$PATH:$HOME/dotfiles/bin
@@ -116,6 +117,9 @@ alias -s py='python'
 
 #excute before display prompt
 function precmd() {
+  if [[ $? = 2 ]] ; then
+    print -z $(history -1 | awk '{print $2}')
+  fi
   if git_info=$(git status 2>/dev/null ); then
     [[ $git_info =~ "Changes not staged" ]] &&  git_unstaged="%{[30;48;5;013m%}%F{black} ± %f%k" || git_unstaged=""
     [[ $git_info =~ "Changes to be committed" ]] && git_uncommited="%K{blue}%F{black} + %k%f" || git_uncommited=""
@@ -132,22 +136,13 @@ dir="%F{cyan}%K{black} %~ %k%f"
 
 PROMPT='%(?,,%F{red}%K{black} ✘%f %{[38;5;010m%}│%f%k)${root}${dir_info} '
 RPROMPT='${git_info}'
+SPROMPT='zsh: correct? %F{red}%R%f -> %F{green}%r%f [y/n]:'
 PROMPT2='%F{blue}» %f'
 
 function command_not_found_handler() {
   echo "zsh: command not found: ${fg[red]}$0${reset_color}"
-  local answer
-  echo -n "${fg[blue]}edit?${reset_color} [y/n]:"
-  read -k 1 answer 
-  echo
-  if [[ $answer = "y" ]] ; then
-
-    exit 0
-  else
-    exit 1
-  fi
+  exit 1
 }
-
 
 
 ######################## cd ########################
