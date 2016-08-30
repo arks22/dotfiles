@@ -75,8 +75,8 @@ let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
 "lightline.vim
 let g:lightline = {
-  \ 'colorscheme': 'solarized',
-  \ }
+  \ 'colorscheme': 'solarized'
+}
 
 
 "unite

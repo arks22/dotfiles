@@ -5,12 +5,13 @@ line="${line}#[bold][#[default]#[fg=blue] $(uptime | awk '{print $(NF-2)}') #[de
 
 
 #ssid
-if ssid=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep " SSID" | awk '{$1="";print}' | sed "s/ //") ; then
-  if [ -n "$ssid" ] ; then 
-    str="#[fg=colour014]$ssid#[default]"
-  else
-    str="#[fg=red]✘#[default]"
-  fi
+airport_path="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
+if air_info=($(eval "$airport_path" -I | grep -E "^ *(state|SSID):" | awk '{print $2}')) ; then
+  case "${air_info[0]}" in
+    "running" ) str="#[fg=colour014]${air_info[1]}#[default]" ;; 
+    "init"    ) str="#[fg=yellow]...#[default]" ;;
+    *         ) str="#[fg=red]✘#[default]" ;;
+  esac  
   line="${line}#[bold][#[default] $str #[bold]]#[default]"
 fi
 
