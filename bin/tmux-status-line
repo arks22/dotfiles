@@ -15,11 +15,11 @@ if air_info=($(eval "$airport_path" -I | grep -E "^ *(agrCtlRSSI|state|SSID):" |
 
   case "$state" in
     "running" )
-      signals=(█ ▆ ▄ ▂ ▁)
+      signals=(▁ ▂ ▄ ▆ █)
       signal=""
-      rssi_=$(expr ${rssi} / -20)
-      for ((i=$rssi_; i < 5; i++ )); do
-        signal="${signals[$i]}${signal}"
+      rssi_=$(expr 5 - ${rssi} / -20)
+      for ((i=0; i < $rssi_; i++ )); do
+        signal="${signal}${signals[$i]}"
       done
       airport="#[fg=black,bg=colour014]|${signal}|#[default] ${ssid} "
     ;;
