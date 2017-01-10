@@ -29,7 +29,6 @@ if air_info=($(eval "$airport_path" -I | grep -E "^ *(agrCtlRSSI|state|SSID):" |
 fi
 
 
-
 #sound-volume
 if sound_info=$(osascript -e 'get volume settings') ; then
   if [ "$(echo $sound_info | awk '{print $8}')" = "muted:false" ]; then

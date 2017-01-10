@@ -5,7 +5,6 @@ dotfiles=( ".vimrc" ".zshrc" ".tmux.conf" "Brewfile" )
 
 function dot_help() {
   echo "usage: dot [COMMANDS] [OPTIONS]"
-  echo "  dot manage your dotfiles"
   echo
   echo "OPTIONS:"
   echo "  --help    Display the help messages"
@@ -71,12 +70,21 @@ function dot() {
           fi
         fi
         if [ ! $SHELL == "/bin/zsh" ] ; then
-          echo "dot: change shell to zsh, please put ypur password"
+          echo "dot: change shell to zsh, please put your password"
           chsh -s /bin/zsh
         fi
       ;;
 
-      * ) dot_help && exit 1;;
+      * ) 
+        if [[ "$1" =~ ^- ]]; then
+          echo "dot: illegal option $1"
+          echo
+        else
+          echo "dot: illegal command $1"
+          echo
+        fi
+        dot_help && exit 1
+      ;;
 
     esac
   else
