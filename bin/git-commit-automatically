@@ -16,8 +16,9 @@ git_commit_automatically() {
   [ -z $deleted_files ] || message+="remove:[ ${deleted_files}] "
   [ -z $renamed_files ] || message+="rename:[ ${renamed_files}] "
   [ -z $modified_files ] || message+="improve:[ ${modified_files}]"
-  [ $# = 0 ] || str="$* | "
-  git commit -m "${str}${message}"
+  [ $# = 0 ] || str="$*"
+  git commit -m "${message}
+  ${str}"
 }
 
 if [[ $SHELL =~ "zsh" ]]; then
