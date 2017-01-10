@@ -18,4 +18,4 @@ fi
 chmod +x ~/dotfiles/bin/dot
 
 dot deploy
-dot initial
+dot init
