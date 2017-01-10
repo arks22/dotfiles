@@ -1,8 +1,5 @@
 # dotfiles
 
-## Install
-
-```
-curl -L raw.github.com/arks22/dotfiles/master/setup/install.sh | sh
-```
-
+これはmasterのREADMEのためのscreenshot置き場です.
+dotfilesに大きな変更を加える度にこのブランチのscreen_shot.pngを更新します.
+マージしたりしないように.
