@@ -21,11 +21,12 @@ if air_info=($(eval "$airport_path" -I | grep -E "^ *(agrCtlRSSI|state|SSID):" |
       for ((i=0; i < $rssi_; i++ )); do
         signal="${signal}${signals[$i]}"
       done
-      airport="#[fg=black,bg=colour014]|${signal}|#[default] ${ssid} "
+      airport_=" #[underscore]${ssid}#[default] | ${signal} "
     ;;
-    "init"    ) airport="#[fg=yellow]...#[default] " ;;
-    *         ) airport="#[bg=red,fg=black] ✘ #[default] " ;;
+    "init"    ) airport_="#[fg=yellow]... " ;;
+    *         ) airport_="#[fg=red] ✘  " ;;
   esac  
+  airport="#[bold]|#[default]${airport_}#[fg=colour014]|#[default] "
 fi
 
 
