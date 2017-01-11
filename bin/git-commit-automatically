@@ -2,20 +2,19 @@
 
 git_commit_automatically() {
   local action message
-  git status | sed '1,/Changes to be committed/ d' | sed '1,/^$/ d' | sed '/^$/,$ d' \
-    | while read line; do
-        action=$(echo $line | awk '{print $1}' | sed "s/://")
-        case "${action}" in
-          "new") new_files+="$(echo $line | awk '{print $3}') " ;;
-          "deleted") deleted_files+="$(echo $line | awk '{print $2}') "  ;;
-          "renamed") renamed_files+="$(echo $line | awk '{print $2 " " $3 " " $4}') " ;;
-          "modified") modified_files+="$(echo $line | awk '{print $2}' | awk -F '/' '{print $NF}') " ;;
-        esac
-      done
-  [ -z $new_files ] || message+="add:[ ${new_files}] "
-  [ -z $deleted_files ] || message+="remove:[ ${deleted_files}] "
-  [ -z $renamed_files ] || message+="rename:[ ${renamed_files}] "
-  [ -z $modified_files ] || message+="improve:[ ${modified_files}]"
+  git status | sed '1,/Changes to be committed/ d' | sed '1,/^$/ d' | sed '/^$/,$ d' | while read line; do
+    action=$(echo $line | awk '{print $1}' | sed "s/://")
+    case "${action}" in
+      "new") new_files+="$(echo $line | awk '{print $3}'), " ;;
+      "deleted") deleted_files+="$(echo $line | awk '{print $2}'), "  ;;
+      "renamed") renamed_files+="$(echo $line | awk '{print $2 " " $3 " " $4}'), " ;;
+      "modified") modified_files+="$(echo $line | awk '{print $2}' | awk -F '/' '{print $NF}'), " ;;
+    esac
+  done
+  [ -z $new_files ] || message+="add:[ $( echo ${new_files} | sed -e "s/\$,//")] "
+  [ -z $deleted_files ] || message+="remove:[ $( echo ${deleted_files} | sed -e "s/\$,//")] "
+  [ -z $renamed_files ] || message+="rename:[ $( echo ${renamed_files} | sed -e "s/\$,//")] "
+  [ -z $modified_files ] || message+="improve:[ $( echo ${modified_files} | sed -e "s/\$,//")]"
   [ $# = 0 ] || str="$*"
   git commit -m "${message}
   ${str}"
