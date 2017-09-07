@@ -28,5 +28,5 @@ dot [COMMANDS] [OPTIONS]
 
 ## ScreenShot
 
-![ScreenShot] (https://raw.githubusercontent.com/arks22/dotfiles/screen_shot/screen_shot.png)
+![ScreenShot](https://raw.githubusercontent.com/arks22/dotfiles/screen_shot/screen_shot.png)
 
