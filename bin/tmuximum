@@ -5,6 +5,13 @@ if [[ $SHELL =~ "zsh" ]] ; then
   colors
 fi
 
+tmuximum_help() {
+  echo "Usage"
+  echo "OPTION or COMMAND is not required (Except for help)"
+  echo "When you want to quit tmuximum, press esc" 
+  echo "To read this help, enter \"tmuximum --help\" or \" tmuximum help\""
+}
+
 tmux_operation() {
   answer=$(tmux_operation_choices | fzf-tmux -r --ansi --select-1 --prompt="Tmux >")
   case $answer in
@@ -14,7 +21,8 @@ tmux_operation() {
     "kill windows" ) tmux_kill_window ;;
     *switch* ) tmux select-window -t $(echo "$answer" | awk '{print $4}' | sed "s/://g") ;;
     *attach* ) tmux attach -t $(echo "$answer" | awk '{print $4}' | sed 's/://') ;;
-  esac
+    esac
+  fi
 }
 
 tmux_operation_choices() {
@@ -72,7 +80,11 @@ tmux_kill_window_choices() {
 }
 
 if type fzf-tmux >/dev/null 2>&1 ; then
-  tmux_operation
+  if [[ $# = 0 ]]
+    tmux_operation
+  elif [[ $1 =~ "help" ]];
+    tmuximum_help
+  fi
 else
-  echo "tmuximum: Required \"fzf-tmux\""
+  echo "tmuximum: \"fzf-tmux\" is required"
 fi
