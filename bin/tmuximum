@@ -21,8 +21,7 @@ tmux_operation() {
     "kill windows" ) tmux_kill_window ;;
     *switch* ) tmux select-window -t $(echo "$answer" | awk '{print $4}' | sed "s/://g") ;;
     *attach* ) tmux attach -t $(echo "$answer" | awk '{print $4}' | sed 's/://') ;;
-    esac
-  fi
+  esac
 }
 
 tmux_operation_choices() {
