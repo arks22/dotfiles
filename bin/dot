@@ -25,10 +25,11 @@ function dot() {
       "update" ) 
         cd ~/dotfiles >/dev/null 2>&1
         msg=$(git pull)
+        er=$?
         cd - >/dev/null 2>&1
         if [[ $msg =~ "Already up-to-date." ]] ; then
           echo "dot: dotfiles are already up-to-date."
-        else
+        elif [[ $er = 0 ]] ; then
           echo "dot: dotfiles were updated."
         fi
       ;;
