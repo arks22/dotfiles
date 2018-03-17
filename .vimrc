@@ -36,23 +36,25 @@ if dein#check_install()
 endif
 
 filetype plugin indent on
+
+
 "neocomplete.vim
+let g:acp_enableAtStartup = 0
+
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#enable_smart_case = 1
 let g:neocomplete#sources#syntax#min_keyword_length = 1
-let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-let g:neocomplete#sources#dictionary#dictionaries = { 'default' : '', 'scheme' : $HOME.'/.gosh_completions' }
+let g:neocomplete#sources#dictionary#dictionaries = {
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vimshell_hist',
+    \ 'scheme' : $HOME.'/.gosh_completions'
+    \ }
 
 if !exists('g:neocomplete#keyword_patterns')
   let g:neocomplete#keyword_patterns = {}
 endi
 
-inoremap <expr><C-g> neocomplete#undo_completion()
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-
-noremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>".
 
 function! s:my_cr_function()
   return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
@@ -61,13 +63,12 @@ endfunction
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 
 if !exists('g:neocomplete#sources#omni#input_patterns')
   let g:neocomplete#sources#omni#input_patterns = {}
 endif
-
-let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
 
 "lightline.vim
@@ -140,7 +141,6 @@ let &t_SI.="\e[5 q"
 let &t_EI.="\e[1 q"
 let &t_te.="\e[0 q"
 
-command! Config source ~/.vimrc
 
 syntax enable
 colorscheme solarized
@@ -168,6 +168,8 @@ set autoindent
 
 "maps
 let mapleader = "\<Space>"
+
+command! Reload source ~/.vimrc
 
 nmap s <Plug>(easymotion-overwin-f2)
 nmap S <Plug>(easymotion-overwin-f2)
