@@ -7,7 +7,7 @@ function dot_help() {
   echo "usage: dot [COMMANDS] [OPTIONS]"
   echo
   echo "OPTIONS:"
-  echo "  --help    Display the help messages"
+  echo "  --help    Display this help messages"
   echo
   echo "COMMANDS:"
   echo "  update    Update dotfiles (git pull)"

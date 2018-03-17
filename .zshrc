@@ -11,7 +11,8 @@ zplug "junegunn/fzf", as:command, use:"bin/fzf-tmux"
 zplug "arks22/zsh-gomi", as:command, use:bin/gomi
 zplug "seebi/dircolors-solarized"
 zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-syntax-highlighting", nice:10
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
+zplug "arks22/tmuximum", as:command
 
 #install plugins not installed
 if ! zplug check --verbose; then
@@ -22,7 +23,6 @@ if ! zplug check --verbose; then
 fi
 
 zplug load --verbose
-
 
 
 ######################## general ########################
@@ -51,7 +51,7 @@ export LANG=en_US.UTF-8
 
 export TERM=xterm-256color
 
-bindkey -v 
+bindkey -v
 
 #save 10000 historys
 HISTFILE=$HOME/.zsh-history
@@ -63,7 +63,7 @@ setopt auto_cd
 #setopt correct
 setopt no_beep
 setopt share_history
-setopt mark_dirs 
+setopt mark_dirs
 setopt interactive_comments
 setopt list_types
 setopt print_eight_bit
@@ -71,10 +71,6 @@ setopt auto_param_keys
 setopt auto_list
 setopt correct
 setopt prompt_subst
-
-PATH=$PATH:$HOME/dotfiles/bin
-
-
 
 ######################## aliases ########################
 
@@ -154,14 +150,14 @@ function chpwd() {
   cat ~/.powered_cd.log | while read line; do
     (( i++ ))
     if [ "$line" = "$pwd_" ]; then
-      sed -i -e "${i},${i}d" ~/.powered_cd.log 
+      sed -i -e "${i},${i}d" ~/.powered_cd.log
     fi
   done
   echo "${pwd_}" >> ~/.powered_cd.log
 }
 
 function powered_cd() {
-  case $# in 
+  case $# in
     0 ) cd $(gtac ~/.powered_cd.log | fzf-tmux | sed -e s@~@${HOME}@) ;;
     1 ) cd $1 ;;
     2 ) mv $1 $2 ;;
