@@ -13,11 +13,12 @@ endif
 
 execute 'set runtimepath^=' . s:dein_repo_dir
 
+"!!!neocomplete requires 'lua'!!!
 if dein#load_state(s:dein_dir)
   call dein#begin(s:dein_dir)
   call dein#add(s:dein_repo_dir)
   call dein#add('Shougo/vimproc.vim', {'build': 'make'})
-  call dein#add('Shougo/neocomplete.vim',{'if' : has('lua')})
+  call dein#add('Shougo/neocomplete.vim')
   call dein#add('Shougo/unite.vim')
   call dein#add('Shougo/vimfiler.vim')
   call dein#add('altercation/vim-colors-solarized')
@@ -36,7 +37,6 @@ if dein#check_install()
 endif
 
 filetype plugin indent on
-
 
 "neocomplete.vim
 let g:acp_enableAtStartup = 0
