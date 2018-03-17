@@ -15,6 +15,8 @@ zplug "arks22/fshow", as:command
 zplug "seebi/dircolors-solarized"
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+
 
 #install plugins not installed
 if ! zplug check --verbose; then
@@ -175,7 +177,6 @@ compdef _powered_cd powered_cd
 
 
 ######################## tmux ########################
-
 
 if [ ! -z $TMUX ]; then
   i=0
