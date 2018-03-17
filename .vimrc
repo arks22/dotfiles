@@ -49,7 +49,6 @@ if !exists('g:neocomplete#keyword_patterns')
 endi
 
 inoremap <expr><C-g> neocomplete#undo_completion()
-inoremap <expr><BS>  neocomplete#smart_close_popup()."\<C-h>"
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
