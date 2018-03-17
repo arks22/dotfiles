@@ -9,10 +9,12 @@ source ~/.zplug/init.zsh
 zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
 zplug "junegunn/fzf", as:command, use:"bin/fzf-tmux"
 zplug "arks22/zsh-gomi", as:command, use:bin/gomi
+zplug "arks22/tmuximum", as:command
+zplug "arks22/auto-git-commit", as:command
+zplug "arks22/fshow", as:command
 zplug "seebi/dircolors-solarized"
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
-zplug "arks22/tmuximum", as:command
 
 #install plugins not installed
 if ! zplug check --verbose; then
@@ -95,8 +97,8 @@ alias cl="clear"
 alias vag="vagrant"
 alias g="git"
 alias glog="git-log-fzf"
-alias gac="git add -A && git-commit-automatically"
-alias gacp="git add -A && git-commit-automatically && git push origin master"
+alias gac="git add -A && auto-git-commit"
+alias gacp="git add -A && auto-git-commit && git push origin master"
 alias gdc="git reset --hard HEAD^"
 alias gs="git status"
 alias ch="open -a Google\ Chrome"
