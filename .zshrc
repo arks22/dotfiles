@@ -174,6 +174,8 @@ _powered_cd() {
 compdef _powered_cd powered_cd
 
 
+######################## tmux ########################
+
 
 if [ ! -z $TMUX ]; then
   i=0
