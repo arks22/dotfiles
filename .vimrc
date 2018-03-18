@@ -27,7 +27,6 @@ if dein#load_state(s:dein_dir)
   call dein#add('easymotion/vim-easymotion')
   call dein#add('itchyny/lightline.vim')
   call dein#add('vim-jp/vital.vim')
-  call dein#add('dag/vim-fish')
   call dein#end()
   call dein#save_state()
 endif

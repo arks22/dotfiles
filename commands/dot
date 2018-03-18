@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 dotfiles=( ".vimrc" ".zshrc" ".tmux.conf" "setup/Brewfile" )
 
@@ -35,13 +35,17 @@ function dot() {
 
       "deploy" )
         for file in $(ls ~/dotfiles/commands); do
-          chmod a+x ~/dotfiles/commands/$file
-          ln -s ~/dotfiles/commands/$file /usr/local/bin/$file
-          if [[ $? = 0 ]] ; then
-            echo "deploy succeed : $file" 
-          else
-            echo "error! : $file"
-          fi  
+          pwd_=$PWD
+          cd /usr/loacl/bin
+          if [[ -e $file ]] ; then
+           chmod a+x ~/dotfiles/commands/$file
+            ln -s ~/dotfiles/commands/$file /usr/local/bin/$file
+            if [[ $? = 0 ]] ; then
+              echo "deploy succeed : $file" 
+            else
+              echo "error! : $file"
+            fi  
+          fi
         done
       ;;
 
