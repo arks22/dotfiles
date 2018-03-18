@@ -9,9 +9,9 @@ source ~/.zplug/init.zsh
 zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
 zplug "junegunn/fzf", as:command, use:"bin/fzf-tmux"
 zplug "arks22/zsh-gomi", as:command, use:bin/gomi
-zplug "arks22/tmuximum", as:command
 zplug "arks22/auto-git-commit", as:command
 zplug "arks22/fshow", as:command
+zplug "arks22/tmuximum", as:command
 zplug "seebi/dircolors-solarized"
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
@@ -97,19 +97,16 @@ alias c="powered_cd"
 alias rl="rails"
 alias cl="clear"
 alias vag="vagrant"
-alias g="git"
-alias glog="git-log-fzf"
-alias gac="git add -A && auto-git-commit"
-alias gacp="git add -A && auto-git-commit && git push origin master"
-alias gdc="git reset --hard HEAD^"
 alias gs="git status"
-alias ch="open -a Google\ Chrome"
-alias gg="google"
 alias electron="reattach-to-user-namespace electron"
-alias -g G="| grep"
 alias -g F="| fzf-tmux"
 alias -s rb="ruby"
 alias -s py='python'
+alias g="git"
+alias glog="git-log-fzf"
+alias gac="git add -A && auto-git-commit"
+alias gacp="git add -A && auto-git-commit && git push origin $(g branch | awk '/\*/' | sed -e "s/*//")"
+alias gps="git push origin $(g branch | awk '/\*/' | sed -e "s/*//")"
 
 
 
@@ -121,8 +118,12 @@ function precmd() {
     [[ $git_info =~ "Changes not staged" ]] &&  git_unstaged="%{[30;48;5;013m%}%F{black} ± %f%k" || git_unstaged=""
     [[ $git_info =~ "Changes to be committed" ]] && git_uncommited="%K{blue}%F{black} + %k%f" || git_uncommited=""
     [ -z "${git_unstaged}${git_uncommited}" ] && git_clean="%K{green}%F{black} ✔ %f%k" || git_clean=""
-    git_branch="⭠ $(echo $git_info | awk 'NR==1 {print $3}')"
-    git_info="%K{black} ${git_branch} ${git_unstaged}${git_uncommited}${git_clean}"
+    git_branch="$(echo $git_info | awk 'NR==1 {print $3}')"
+    if [[ $git_branch = "master" ]]; then
+      git_info="%K{black}%F{blue}⭠ ${git_branch}%f ${git_unstaged}${git_uncommited}${git_clean}"
+    else
+      git_info="%K{black} ⭠ ${git_branch} ${git_unstaged}${git_uncommited}${git_clean}"
+    fi
   fi
   [ $(whoami) = "root" ] && root="%K{black}%F{yellow} ⚡ %{[38;5;010m%}│%f%k"
   dir_info=$dir
