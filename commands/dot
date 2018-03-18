@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 dotfiles=( ".vimrc" ".zshrc" ".tmux.conf" "setup/Brewfile" )
 
@@ -10,7 +10,7 @@ function dot_help() {
   echo
   echo "COMMANDS:"
   echo "  update    Update dotfiles (git pull)"
-  echo "  deploy    Be able to use dotfiles"
+  echo "  deploy    Activate commands in dotfiles/commands"
   echo "  clean     Remove dotfiles"
   echo "  init      Install packeges (this command excuted when you install dotfiles)"
 }
@@ -50,14 +50,19 @@ function dot() {
       ;;
 
       "clean" )
-        echo "dot: remove dotfiles? [n/y]:\c "
+        echo "dot: remove dotfiles? [n/y]: "
         read answer
         if [[ "$answer" = "y" ]] ; then
           for file in ${dotfiles[@]}; do
-            rm ~/$file
+            unlink ~/$file
+          done
+          for file in $(ls ~/dotfiles/commands); do
+            unlink /usr/local/bin/$file
           done
           rm -rf ~/dotfiles
-          echo "dot: dotfiles were removed."
+          echo    "dot: dotfiles were removed."
+          echo    "     To install again, excute \"curl -L raw.github.com/arks22/dotfiles/master/setup/install.sh | sh\"."
+          echo -e "     More information about dotfiles : \e[4mhttps://github.com/arks22/dotfiles\e[m"
         fi 
       ;;
 
