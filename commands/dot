@@ -34,10 +34,10 @@ function dot() {
       ;;
 
       "deploy" )
+        cd /usr/local/bin
         for file in $(ls ~/dotfiles/commands); do
           pwd_=$PWD
-          cd /usr/loacl/bin
-          if [[ -e $file ]] ; then
+          if [[ ! -e $file ]] ; then
            chmod a+x ~/dotfiles/commands/$file
             ln -s ~/dotfiles/commands/$file /usr/local/bin/$file
             if [[ $? = 0 ]] ; then
