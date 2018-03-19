@@ -9,7 +9,7 @@ if git_info=$(cd $current_path && git status 2>/dev/null ); then
   if [[ $git_branch = "master" ]]; then
     git_info="#[bg=black,fg=blue] ⭠ ${git_branch} ${git_unstaged}${git_uncommited}${git_clean}"
   else
-    git_info="#[bg=black,fg=colour014] ⭠ ${git_branch}${git_unstaged}${git_uncommited}${git_clean}"
+    git_info="#[bg=black,fg=colour014] ⭠ ${git_branch} ${git_unstaged}${git_uncommited}${git_clean}"
   fi
 else
   git_info=""
