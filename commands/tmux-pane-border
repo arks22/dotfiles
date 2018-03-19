@@ -1,15 +1,16 @@
-#!/bin/bash
+#!/bin/zsh
 
-current_path=$1
-if git_info=$(cd $current_path && git status 2>/dev/null ); then
-  [[ $git_info =~ "Changes not staged" ]] &&  git_unstaged="#[bg=colour013,fg=black] ± #[fg=default]" || git_unstaged=""
-  [[ $git_info =~ "Changes to be committed" ]] && git_uncommited="#[bg=blue,fg=black] + #[default]" || git_uncommited=""
-  [ -z "${git_unstaged}${git_uncommited}" ] && git_clean="#[bg=green,fg=black] ✔ #[default]" || git_clean=""
+if git_info=$(cd $1 && git status 2>/dev/null ); then
   git_branch="$(echo $git_info | awk 'NR==1 {print $3}')"
+  case $git_info in
+    *Changes\ not\ staged* ) git_status="#[bg=colour013,fg=black] ± #[fg=default]" ;;
+    *Changes\ to\ be\ committed* ) git_staus="#[bg=blue,fg=black] + #[default]" ;; 
+    * )git_clean="#[bg=green,fg=black] ✔ #[default]" ;;
+  esac
   if [[ $git_branch = "master" ]]; then
-    git_info="#[underscore]#[bg=black,fg=blue] ⭠ ${git_branch} #[default]${git_unstaged}${git_uncommited}${git_clean}"
+    git_info="#[underscore]#[bg=black,fg=blue] ⭠ ${git_branch} #[default]${git_staus}"
   else
-    git_info="#[underscore]#[bg=black,fg=colour014] ⭠ ${git_branch} #[default]${git_unstaged}${git_uncommited}${git_clean}"
+    git_info="#[underscore]#[bg=black,fg=colour014] ⭠ ${git_branch} #[default]${git_staus}"
   fi
 else
   git_info=""
