@@ -7,14 +7,14 @@ if git_info=$(cd $current_path && git status 2>/dev/null ); then
   [ -z "${git_unstaged}${git_uncommited}" ] && git_clean="#[bg=green,fg=black] ✔ #[default]" || git_clean=""
   git_branch="$(echo $git_info | awk 'NR==1 {print $3}')"
   if [[ $git_branch = "master" ]]; then
-    git_info="#[bg=black,fg=blue] ⭠ ${git_branch} ${git_unstaged}${git_uncommited}${git_clean}"
+    git_info="#[underscore]#[bg=black,fg=blue] ⭠ ${git_branch}#[default] ${git_unstaged}${git_uncommited}${git_clean}"
   else
-    git_info="#[bg=black,fg=colour014] ⭠ ${git_branch} ${git_unstaged}${git_uncommited}${git_clean}"
+    git_info="#[underscore]#[bg=black,fg=colour014] ⭠ ${git_branch}#[default] ${git_unstaged}${git_uncommited}${git_clean}"
   fi
 else
   git_info=""
 fi
 
-directory="#[bg=black,fg=cyan]$1#[default]"
+directory="#[underscore]#[bg=black,fg=cyan]$1#[default]"
 
 echo "$directory$git_info"
