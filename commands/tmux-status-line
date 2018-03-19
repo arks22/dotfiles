@@ -23,10 +23,10 @@ if air_info=($(eval "$airport_path" -I | grep -E "^ *(agrCtlRSSI|state|SSID):" |
       done
       airport_=" #[underscore]${ssid}#[default] | ${signal} "
     ;;
-    "init"    ) airport_="#[fg=yellow] ... " ;;
-    *         ) airport_="#[fg=red] ✘ " ;;
+    "init"    ) airport_="#[fg=yellow] ... #[default]" ;;
+    *         ) airport_="#[fg=red] ✘ #[default]" ;;
   esac  
-  airport="#[bold]|#[default]${airport_}#[bold]#[fg=colour014]|#[default] "
+  airport="|${airport_}| "
 fi
 
 

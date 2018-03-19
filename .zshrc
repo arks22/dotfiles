@@ -11,7 +11,7 @@ zplug "junegunn/fzf", as:command, use:"bin/fzf-tmux"
 zplug "arks22/zsh-gomi", as:command, use:bin/gomi
 zplug "arks22/auto-git-commit", as:command
 zplug "arks22/fshow", as:command
-zplug "arks22/tmuximum", as:command
+zplug "arks22/tmuximum", at:develop, as:command
 zplug "seebi/dircolors-solarized"
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
@@ -105,8 +105,8 @@ alias -s py='python'
 alias g="git"
 alias glog="git-log-fzf"
 alias gac="git add -A && auto-git-commit"
-alias gacp="git add -A && auto-git-commit && git push origin $(g branch | awk '/\*/' | sed -e "s/*//")"
-alias gps="git push origin $(g branch | awk '/\*/' | sed -e "s/*//")"
+alias gacp="git add -A && auto-git-commit && git push origin $(git branch | awk '/\*/' | sed -e "s/*//")"
+alias gps="git push origin $(git branch | awk '/\*/' | sed -e "s/*//")"
 
 
 
@@ -114,21 +114,14 @@ alias gps="git push origin $(g branch | awk '/\*/' | sed -e "s/*//")"
 
 #excute before display prompt
 function precmd() {
-  if git_info=$(git status 2>/dev/null ); then
-    [[ $git_info =~ "Changes not staged" ]] &&  git_unstaged="%{[30;48;5;013m%}%F{black} ± %f%k" || git_unstaged=""
-    [[ $git_info =~ "Changes to be committed" ]] && git_uncommited="%K{blue}%F{black} + %k%f" || git_uncommited=""
-    [ -z "${git_unstaged}${git_uncommited}" ] && git_clean="%K{green}%F{black} ✔ %f%k" || git_clean=""
-    git_branch="$(echo $git_info | awk 'NR==1 {print $3}')"
-    if [[ $git_branch = "master" ]]; then
-      git_info="%K{black}%F{blue}⭠ ${git_branch}%f ${git_unstaged}${git_uncommited}${git_clean}"
-    else
-      git_info="%K{black} ⭠ ${git_branch} ${git_unstaged}${git_uncommited}${git_clean}"
-    fi
-  fi
   [ $(whoami) = "root" ] && root="%K{black}%F{yellow} ⚡ %{[38;5;010m%}│%f%k"
   dir_info=$dir
   dir="%F{cyan}%K{black} %~ %k%f"
+  if [ ! -z $TMUX ]; then
+    tmux refresh-client -S
+  fi
 }
+
 
 dir="%F{cyan}%K{black} %~ %k%f"
 
