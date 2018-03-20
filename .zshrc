@@ -105,26 +105,51 @@ alias -s py='python'
 alias g="git"
 alias glog="git-log-fzf"
 alias gac="git add -A && auto-git-commit"
-alias gacp="git add -A && auto-git-commit && git push origin $(git branch | awk '/\*/' | sed -e "s/*//")"
-alias gps="git push origin $(git branch | awk '/\*/' | sed -e "s/*//")"
+alias gacp="git_add_commit_push"
+alias gps="git_push_current_branch"
 
+function git_add_commit_push() {
+  git add -A && auto-git-commit && git push origin $(git branch | awk '/\*/' | sed -e "s/*//")
+}
 
+function git_push_current_branch {
+  git push origin $(git branch | awk '/\*/' | sed -e "s/*//")
+}
 
 ######################## prompt ########################
 
 #excute before display prompt
 function precmd() {
-  dir_info=$dir
-  dir="%F{cyan}%K{black} %~ %k%f"
+  [ $(whoami) = "root" ] && root="%K{black}%F{yellow} ⚡ %{\e[38;5;010m%}│%f%k" || root=""
   if [ ! -z $TMUX ]; then
     tmux refresh-client -S
+  else
+    dir="%F{cyan}%K{black} %~ %k%f"
+    if git_status=$(git status 2>/dev/null ); then
+      git_branch="$(echo $git_status| awk 'NR==1 {print $3}')"
+       case $git_status in
+        *Changes\ not\ staged* ) state=$'%{\e[30;48;5;013m%}%F{black} ± %f%k' ;;
+        *Changes\ to\ be\ committed* ) state="%K{blue}%F{black} + %k%f" ;;
+        * ) state="%K{green}%F{black} ✔ %f%k" ;;
+      esac
+      if [[ $git_branch = "master" ]]; then
+        git_info="%K{black}%F{blue}⭠ ${git_branch}%f%k ${state}"
+      else
+        git_info="%K{black}⭠ ${git_branch}%f ${state}"
+      fi
+    else
+      git_info=""
+    fi
   fi
 }
 
 
-dir="%F{cyan}%K{black} %~ %k%f"
-
-PROMPT=$'%(?,,%F{red}%K{black} ✘%f %{\e[38;5;010m%}│%f%k)%F{blue}%K{black} > %f%k'
+if [ ! -z $TMUX ]; then
+  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %{\e[38;5;010m%}│%f%k)${root}%F{blue}%K{black} > %f%k'
+else
+  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %{\e[38;5;010m%}│%f%k)${root}${dir} '
+  RPROMPT=$'${git_info}'
+fi
 SPROMPT='zsh: correct? %F{red}%R%f -> %F{green}%r%f [y/n]:'
 PROMPT2='%F{blue}» %f'
 
