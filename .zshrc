@@ -124,7 +124,7 @@ function precmd() {
 
 dir="%F{cyan}%K{black} %~ %k%f"
 
-PROMPT='%(?,,%F{red}%K{black} ✘%f %{[38;5;010m%}│%f%k) %F{blue}> %f'
+PROMPT=$'%(?,,%F{red}%K{black} ✘%f %{\e[38;5;010m%}│%f%k)%F{blue}%K{black} > %f%k'
 SPROMPT='zsh: correct? %F{red}%R%f -> %F{green}%r%f [y/n]:'
 PROMPT2='%F{blue}» %f'
 
@@ -138,7 +138,7 @@ function command_not_found_handler() {
 
 function chpwd() {
   if [[ ! $PWD = $HOME ]] ; then
-    echo -n "${fg[yellow]}[list - ${fg[cyan]}$PWD${reset_color} ] : ${reset_color}"
+    echo -n "${fg[yellow]}[list: ${fg[cyan]}$PWD${reset_color} ${fg[yellow]}] -> ${reset_color}"
     ls
   fi
   local i=0
