@@ -1,9 +1,9 @@
-#!/bin/zsh
+#!/bin/sh
 
 dotfiles=( ".vimrc" ".zshrc" ".tmux.conf" "setup/Brewfile" )
 
-function dot_help() {
-  echo "usage: dot [COMMANDS] [OPTIONS]"
+function dotmanager_help() {
+  echo "usage: dotmanager [COMMANDS] [OPTIONS]"
   echo
   echo "OPTIONS:"
   echo "  --help    Display this help messages"
@@ -15,11 +15,11 @@ function dot_help() {
   echo "  init      Install packeges (this command excuted when you install dotfiles)"
 }
 
-function dot() {
+function dotmanager() {
   if [[ $# = 1 ]] ; then
     case $1 in
 
-      "--help" ) dot_help ;;
+      "--help" ) dotmanager_help ;;
 
       "update" ) 
         cd ~/dotfiles >/dev/null 2>&1
@@ -27,9 +27,9 @@ function dot() {
         er=$?
         cd - >/dev/null 2>&1
         if [[ $msg =~ "Already up-to-date." ]] ; then
-          echo "dot: dotfiles are already up-to-date."
+          echo "dotmanager: dotfiles are already up-to-date."
         elif [[ $er = 0 ]] ; then
-          echo "dot: dotfiles were updated."
+          echo "dotmanager: dotfiles were updated."
         fi
       ;;
 
@@ -50,7 +50,7 @@ function dot() {
       ;;
 
       "clean" )
-        echo "dot: remove dotfiles? [n/y]: "
+        echo "dotmanager: remove dotfiles? [n/y]: "
         read answer
         if [[ "$answer" = "y" ]] ; then
           for file in ${dotfiles[@]}; do
@@ -60,7 +60,7 @@ function dot() {
             unlink /usr/local/bin/$file
           done
           rm -rf ~/dotfiles
-          echo    "dot: dotfiles were removed."
+          echo    "dotmanager: dotfiles were removed."
           echo    "     To install again, excute \"curl -L raw.github.com/arks22/dotfiles/master/setup/install.sh | sh\"."
           echo -e "     More information about dotfiles : \e[4mhttps://github.com/arks22/dotfiles\e[m"
         fi 
@@ -70,7 +70,7 @@ function dot() {
         if ! type brew >/dev/null 2>&1 ; then
           if [ $(uname -s) = "Darwin" ]; then
             cp ~/dotfiles/setup/Brewfile ~
-            echo "dot: installing Homebrew ..."
+            echo "dotmanager: installing Homebrew ..."
             /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
             brew tap Homebrew/bundle
             brew bundle
@@ -78,30 +78,30 @@ function dot() {
           elif [ $(uname -s) = "Linux" ]; then
             sudo apt-get install curl git ruby zsh
           else
-            echo "dot: not support your OS"
+            echo "dotmanager: not support your OS"
           fi
         fi
         if [ ! $SHELL == "/bin/zsh" ] ; then
-          echo "dot: change shell to zsh, please put your password"
+          echo "dotmanager: change shell to zsh, please put your password"
           chsh -s /bin/zsh
         fi
       ;;
 
       * ) 
         if [[ "$1" =~ ^- ]]; then
-          echo "dot: illegal option $1"
+          echo "dotmanager: illegal option $1"
           echo
         else
-          echo "dot: illegal command $1"
+          echo "dotmanager: illegal command $1"
           echo
         fi
-        dot_help && exit 1
+        dotmanager_help && exit 1
       ;;
 
     esac
   else
-    dot_help && exit 1
+    dotmanager_help && exit 1
   fi
 }
 
-dot $@
+dotmanager $@

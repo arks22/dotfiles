@@ -7,10 +7,10 @@ curl -L raw.github.com/arks22/dotfiles/master/setup/install.sh | sh
 ```
 ## Management
 
-Use [dot](https://github.com/arks22/dotfiles/blob/master/commands/dot) command. 
+Use [dotmanager](https://github.com/arks22/dotfiles/blob/master/commands/dot) command. 
 
 ```
-dot [COMMANDS] [OPTIONS]
+dotmanager [COMMANDS] [OPTIONS]
 ```
 
 |Option|Description|
