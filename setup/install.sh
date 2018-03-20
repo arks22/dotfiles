@@ -15,7 +15,8 @@ else
   mv -f dotfiles-master ~/dotfiles
 fi
 
-chmod +x ~/dotfiles/commands/dot
+chmod +x ~/dotfiles/commands/dotmanager
+ln -s ~/dotfiles/commands/dotmanager /usr/local/bin/dotmanager
 
-dot deploy
-dot init
+dotmanager deploy
+dotmanager init
