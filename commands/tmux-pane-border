@@ -18,4 +18,6 @@ fi
 
 directory="#[underscore]#[bg=black,fg=cyan]$1#[default]"
 
-echo "$directory$git_info"
+host_name=$(hostname)
+
+echo "$host_name$directory$git_info"
