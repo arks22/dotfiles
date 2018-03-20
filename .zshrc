@@ -114,7 +114,6 @@ alias gps="git push origin $(git branch | awk '/\*/' | sed -e "s/*//")"
 
 #excute before display prompt
 function precmd() {
-  [ $(whoami) = "root" ] && root="%K{black}%F{yellow} ⚡ %{[38;5;010m%}│%f%k"
   dir_info=$dir
   dir="%F{cyan}%K{black} %~ %k%f"
   if [ ! -z $TMUX ]; then
@@ -125,8 +124,7 @@ function precmd() {
 
 dir="%F{cyan}%K{black} %~ %k%f"
 
-PROMPT='%(?,,%F{red}%K{black} ✘%f %{[38;5;010m%}│%f%k)${root}${dir_info} '
-RPROMPT='${git_info}'
+PROMPT='%(?,,%F{red}%K{black} ✘%f %{[38;5;010m%}│%f%k) %F{blue}> %f'
 SPROMPT='zsh: correct? %F{red}%R%f -> %F{green}%r%f [y/n]:'
 PROMPT2='%F{blue}» %f'
 
@@ -140,7 +138,7 @@ function command_not_found_handler() {
 
 function chpwd() {
   if [[ ! $PWD = $HOME ]] ; then
-    echo -n "${fg[yellow]}[list] : ${reset_color}"
+    echo -n "${fg[yellow]}[list - ${fg[cyan]}$PWD${reset_color} ] : ${reset_color}"
     ls
   fi
   local i=0
