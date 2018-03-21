@@ -11,7 +11,7 @@ zplug "junegunn/fzf", as:command, use:"bin/fzf-tmux"
 zplug "arks22/zsh-gomi", as:command, use:bin/gomi
 zplug "arks22/auto-git-commit", as:command
 zplug "arks22/fshow", as:command
-zplug "arks22/tmuximum", at:develop, as:command
+zplug "arks22/tmuximum", as:command
 zplug "seebi/dircolors-solarized"
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
@@ -179,7 +179,10 @@ function chpwd() {
 
 function powered_cd() {
   case $# in
-    0 ) cd $(gtac ~/.powered_cd.log | fzf-tmux | sed -e s@~@${HOME}@) ;;
+    0 ) 
+      test -f ~/.powered_cd.log 2>/dev/null || touch ~/.powered_cd.log
+      cd $(gtac ~/.powered_cd.log | fzf-tmux -r | sed -e s@~@${HOME}@)
+    ;;
     1 ) cd $1 ;;
     2 ) mv $1 $2 ;;
     * ) echo "powered_cd: too many arguments" ;;

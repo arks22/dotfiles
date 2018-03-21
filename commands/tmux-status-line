@@ -1,19 +1,15 @@
-#!/bin/bash
+#!/bin/zsh
 
 #load-average
 load_avg="#[bold][#[default]#[fg=blue] $(uptime | awk '{print $(NF-2)}') #[default]#[bold]]#[default]"
 
-
 #airport
 airport_path="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
-
 if air_info=($(eval "$airport_path" -I | grep -E "^ *(agrCtlRSSI|state|SSID):" | awk '{print $2}')) ; then
-
-  rssi=${air_info[0]}
-  state=${air_info[1]}
-  ssid=${air_info[2]}
-
-  case "$state" in
+  rssi=${air_info[1]}
+  state=${air_info[2]}
+  ssid=${air_info[3]}
+  case $state in
     "running" )
       signals=(▁ ▂ ▄ ▆ █)
       signal=""
@@ -23,12 +19,11 @@ if air_info=($(eval "$airport_path" -I | grep -E "^ *(agrCtlRSSI|state|SSID):" |
       done
       airport_=" #[underscore]${ssid}#[default] | ${signal} "
     ;;
-    "init"    ) airport_="#[fg=yellow] ... #[default]" ;;
-    *         ) airport_="#[fg=red] ✘ #[default]" ;;
+    "init" ) airport_="#[fg=yellow] ... #[default]" ;;
+    * ) airport_="#[fg=red] ✘ #[default]" ;;
   esac  
   airport="|${airport_}| "
 fi
-
 
 #sound-volume
 if sound_info=$(osascript -e 'get volume settings') ; then
@@ -46,7 +41,6 @@ if sound_info=$(osascript -e 'get volume settings') ; then
     sound="#[bold][      mute      ]#[default] "
   fi
 fi
-
 
 #battery
 if battery_info=$(/usr/bin/pmset -g ps | awk '{ if (NR == 2) print $2 " " $3 }' | sed -e "s/;//g" -e "s/%//") ; then

@@ -1,4 +1,4 @@
-#!bin/sh
+#!bin/bash
 
 if type git >/dev/null 2>&1; then
   echo "Downloading dotfiles with git..."
