@@ -108,6 +108,13 @@ alias gac="git add -A && auto-git-commit"
 alias gacp="git_add_commit_push"
 alias gps="git_push_current_branch"
 
+ssh_tmux() {
+    ssh_cmd="ssh $@"
+    echo $@
+    echo $*
+    tmux new-window -n "$*" "$ssh_cmd"
+}
+
 function git_add_commit_push() {
   git add -A && auto-git-commit && git push origin $(git branch | awk '/\*/' | sed -e "s/*//")
 }
