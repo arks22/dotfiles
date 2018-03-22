@@ -1,9 +1,12 @@
 #!/bin/zsh
 
-
 if [[ $1 = "ssh" ]]; then
   pane_pid=$2
   info=$({ pgrep -flaP $pane_pid ; ps -o command -p $pane_pid; } | xargs -I{} echo {} | awk '/ssh/' | sed -E 's/^[0-9]*[[:blank:]]*ssh //')
+  port=$(echo $info | grep -Eo '\-p ([0-9]+)'|sed 's/-p //')
+  if [ -z $port ]; then
+    local port=22
+  fi
   info=$(echo $info | sed 's/\-p '"$port"'//g')
   user=$(echo $info | awk '{print $NF}' | cut -f1 -d@)
   host=$(echo $info | awk '{print $NF}' | cut -f2 -d@)
@@ -39,7 +42,7 @@ else
     git_branch="$(echo $git_status| awk 'NR==1 {print $3}')"
     case $git_status in
       *Changes\ not\ staged* ) state="#[bg=colour013,fg=black] ± #[fg=default]" ;;
-      *Changes\ to\ be\ committed* ) state="#[bg=blue,fg=black] + #[default]" ;; 
+      *Changes\ to\ be\ committed* ) state="#[bg=blue,fg=black] + #[default]" ;;
       * ) state="#[bg=green,fg=black] ✔ #[default]" ;;
     esac
     if [[ $git_branch = "master" ]]; then
