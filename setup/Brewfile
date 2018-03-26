@@ -8,6 +8,7 @@ brew 'reattach-to-user-namespace'
 brew 'ruby'
 brew 'tmux'
 brew 'vim', args: ['with-lua']
+brew 'nvim'
 brew 'zsh'
 brew 'coreutils'
 brew 'homebrew/dupes/libiconv'

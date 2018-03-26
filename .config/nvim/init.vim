@@ -1,8 +1,9 @@
+"init.vim is configuration file for 'NeoVim'.
+
 "dein.vim
 if &compatible
   set nocompatible
 endif
-
 
 let s:dein_dir = expand('~/.cache/dein')
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
@@ -13,20 +14,22 @@ endif
 
 execute 'set runtimepath^=' . s:dein_repo_dir
 
-"!!!neocomplete requires 'lua'!!!
 if dein#load_state(s:dein_dir)
   call dein#begin(s:dein_dir)
   call dein#add(s:dein_repo_dir)
   call dein#add('Shougo/vimproc.vim', {'build': 'make'})
   call dein#add('Shougo/deoplete.nvim')
+  if !has('nvim')
+    call dein#add('roxma/nvim-yarp')
+    call dein#add('roxma/vim-hug-neovim-rpc')
+  endif
+  call dein#add('Shougo/denite.nvim')
   call dein#add('Shougo/unite.vim')
   call dein#add('Shougo/vimfiler.vim')
-  call dein#add('altercation/vim-colors-solarized')
+  call dein#add('iCyMind/NeoSolarized')
   call dein#add('mattn/emmet-vim')
   call dein#add('Yggdroot/indentLine')
   call dein#add('easymotion/vim-easymotion')
-  call dein#add('itchyny/lightline.vim')
-  call dein#add('vim-jp/vital.vim')
   call dein#end()
   call dein#save_state()
 endif
@@ -35,15 +38,8 @@ if dein#check_install()
   call dein#install()
 endif
 
-filetype plugin indent on
-
 "deoplete.vim
-
-
-"lightline.vim
-let g:lightline = {
-  \ 'colorscheme': 'solarized'
-  \ }
+let g:deoplete#enable_at_startup = 1 
 
 
 "unite
@@ -55,6 +51,10 @@ call unite#custom#source(
 
 
 "vimfiler
+if !argc()
+  autocmd VimEnter * VimFilerExplorer
+endif
+
 let g:vimfiler_no_default_key_mappings = 1
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_enable_auto_cd = 1
@@ -84,12 +84,12 @@ autocmd FileType vimfiler nmap <buffer> q <Plug>(vimfiler_hide)
 autocmd FileType vimfiler nmap <buffer> Q <Plug>(vimfiler_exit)
 autocmd FileType vimfiler nmap <buffer> , <Plug>(vimfiler_toggle_mark_current_line)
 autocmd FileType vimfiler nmap <buffer> v <Plug>(vimfiler_split_edit_file)
-
+autocmd FileType vimfiler nmap <buffer> S <Plug>(easymotion-overwin-f2)
 autocmd FileType vimfiler nnoremap <silent><buffer><expr> s vimfiler#do_switch_action('split')
 autocmd FileType vimfiler nnoremap <silent><buffer><expr> t vimfiler#do_switch_action('tabopen')
 
-autocmd FileType vimfiler nmap <buffer> S <Plug>(easymotion-overwin-f2)
 
+filetype plugin indent on
 
 "vim-easymotion
 let g:EasyMotion_do_mapping = 0
@@ -111,10 +111,14 @@ let &t_EI.="\e[1 q"
 let &t_te.="\e[0 q"
 
 
+"colorscheme
+set background=dark
+colorscheme NeoSolarized
 syntax enable
-colorscheme solarized
 highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 
+set statusline=
+set clipboard=unnamed
 set wrapscan
 set hlsearch
 set cursorline

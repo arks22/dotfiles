@@ -6,6 +6,7 @@ fi
 
 source ~/.zplug/init.zsh
 
+zplug "zplug/zplug", hook-build:'zplug --self-manage'
 zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
 zplug "junegunn/fzf", as:command, use:"bin/fzf-tmux"
 zplug "arks22/zsh-gomi", as:command, use:bin/gomi
@@ -15,7 +16,6 @@ zplug "arks22/tmuximum", as:command
 zplug "seebi/dircolors-solarized"
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
-zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
 
 #install plugins not installed
@@ -24,6 +24,10 @@ if ! zplug check --verbose; then
   if read -q; then
     echo; zplug install
   fi
+fi
+
+if [[ ! $PATH =~ "$HOME/.zplug/bin" ]]; then
+  export PATH="$PATH:$HOME/.zplug/bin"
 fi
 
 zplug load --verbose
@@ -50,7 +54,7 @@ zstyle ':completion:*' completer _complete _prefix _approximate _history
 zstyle ':completion:*:default' menu select=2
 zstyle ':completion:*' list-separator '-->'
 
-export EDITOR=vim
+export EDITOR=nvim
 export LANG=en_US.UTF-8
 
 export TERM=xterm-256color
@@ -78,6 +82,7 @@ setopt auto_list
 setopt correct
 setopt prompt_subst
 
+
 ######################## aliases ########################
 
 if [[ $(uname -s) = "Darwin" ]]; then
@@ -87,11 +92,10 @@ elif [[ $(uname -s) = "Linux" ]]; then
   alias l="ls"
   alias ls="ls -a"
 fi
-
-alias vi="vim"
+alias v="nvim"
+alias vi="nvim"
 alias q="exit"
-alias tls="tmux list-sessions"
-alias tnw="tmux new-window"
+alias tx="tmux"
 alias reload="exec $SHELL -l"
 alias d="gomi"
 alias t="tmuximum"
@@ -118,6 +122,7 @@ function git_push_current_branch {
   git push origin $(git branch | awk '/\*/' | sed -e "s/*//")
 }
 
+
 ######################## prompt ########################
 
 #excute before display prompt
@@ -129,7 +134,7 @@ function precmd() {
     dir="%F{cyan}%K{black} %~ %k%f"
     if git_status=$(git status 2>/dev/null ); then
       git_branch="$(echo $git_status| awk 'NR==1 {print $3}')"
-       case $git_status in
+      case $git_status in
         *Changes\ not\ staged* ) state=$'%{\e[30;48;5;013m%}%F{black} ± %f%k' ;;
         *Changes\ to\ be\ committed* ) state="%K{blue}%F{black} + %k%f" ;;
         * ) state="%K{green}%F{black} ✔ %f%k" ;;
@@ -146,12 +151,13 @@ function precmd() {
 }
 
 
-if [ ! -z $TMUX ]; then
-  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %{\e[38;5;010m%}│%f%k)${root}%F{blue}%K{black} > %f%k'
-else
+if [ -z $TMUX ]; then
   PROMPT=$'%(?,,%F{red}%K{black} ✘%f %{\e[38;5;010m%}│%f%k)${root}${dir} '
   RPROMPT=$'${git_info}'
+else
+  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %{\e[38;5;010m%}│%f%k)${root}%F{blue}%K{black} > %f%k'
 fi
+
 SPROMPT='zsh: correct? %F{red}%R%f -> %F{green}%r%f [y/n]:'
 PROMPT2='%F{blue}» %f'
 

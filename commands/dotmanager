@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dotfiles=( ".vimrc" ".zshrc" ".tmux.conf" "setup/Brewfile" )
+dotfiles=$(ls -A $HOME/dotfiles | grep -v 'setup\|commands\|.git\|README.md\|.DS_Store')
 
 function dotmanager_help() {
   echo "usage: dotmanager [COMMANDS] [OPTIONS]"
@@ -10,7 +10,7 @@ function dotmanager_help() {
   echo
   echo "COMMANDS:"
   echo "  update    Update dotfiles (git pull)"
-  echo "  deploy    Activate commands in dotfiles/commands"
+  echo "  link      Activate commands in dotfiles/commands"
   echo "  clean     Remove dotfiles"
   echo "  init      Install packeges (this command excuted when you install dotfiles)"
 }
@@ -33,20 +33,33 @@ function dotmanager() {
         fi
       ;;
 
-      "deploy" )
-        cd /usr/local/bin
-        for file in $(ls ~/dotfiles/commands); do
-          pwd_=$PWD
-          if [[ ! -e $file ]] ; then
-           chmod a+x ~/dotfiles/commands/$file
-            ln -s ~/dotfiles/commands/$file /usr/local/bin/$file
+      "link" )
+        pwd_=$PWD
+        local msg
+        cd $HOME
+        for dotfile in $dotfiles; do
+          if [ ! -e $dotfile ]; then
+            ln -s $HOME/dotfiles/$dotfile $HOME/$dotfile
             if [[ $? = 0 ]] ; then
-              echo "deploy succeed : $file" 
+              echo "link succeed : $dotfile" 
             else
-              echo "error! : $file"
+              echo "link failed : $dotfile"
             fi  
           fi
         done
+        cd /usr/local/bin
+        for command in $(ls ~/dotfiles/commands); do
+          if [ ! -e $command ] ; then
+           chmod a+x ~/dotfiles/commands/$commad
+            ln -s ~/dotfiles/commands/$command /usr/local/bin/$command
+            if [[ $? = 0 ]] ; then
+              echo "link succeed : $command" 
+            else
+              echo "link faild : $command"
+            fi  
+          fi
+        done
+        cd $pwd_
       ;;
 
       "clean" )
@@ -95,12 +108,14 @@ function dotmanager() {
           echo "dotmanager: illegal command $1"
           echo
         fi
-        dotmanager_help && exit 1
+        dotmanager_help
+        exit 1
       ;;
 
     esac
   else
-    dotmanager_help && exit 1
+    dotmanager_help
+    exit 1
   fi
 }
 

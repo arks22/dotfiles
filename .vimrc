@@ -1,3 +1,6 @@
+" .vimrc is configuraation file for 'vim' and init.vim is for NeoVim.
+" I'm using NeoVim as editor, so develop for .vimrc is stopping.
+
 "dein.vim
 if &compatible
   set nocompatible
@@ -25,7 +28,6 @@ if dein#load_state(s:dein_dir)
   call dein#add('mattn/emmet-vim')
   call dein#add('Yggdroot/indentLine')
   call dein#add('easymotion/vim-easymotion')
-  call dein#add('itchyny/lightline.vim')
   call dein#add('vim-jp/vital.vim')
   call dein#end()
   call dein#save_state()
@@ -51,7 +53,7 @@ let g:neocomplete#sources#dictionary#dictionaries = {
 
 if !exists('g:neocomplete#keyword_patterns')
   let g:neocomplete#keyword_patterns = {}
-endi
+endif
 
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 
@@ -69,13 +71,6 @@ if !exists('g:neocomplete#sources#omni#input_patterns')
   let g:neocomplete#sources#omni#input_patterns = {}
 endif
 
-
-"lightline.vim
-let g:lightline = {
-  \ 'colorscheme': 'solarized'
-  \ }
-
-
 "unite
 call unite#custom#source(
   \ 'file_rec/async', 
@@ -85,6 +80,10 @@ call unite#custom#source(
 
 
 "vimfiler
+if !argc()
+  autocmd VimEnter * VimFilerExplorer
+endif
+
 let g:vimfiler_no_default_key_mappings = 1
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_enable_auto_cd = 1
@@ -142,6 +141,7 @@ let &t_te.="\e[0 q"
 
 
 syntax enable
+set background=dark
 colorscheme solarized
 highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 
