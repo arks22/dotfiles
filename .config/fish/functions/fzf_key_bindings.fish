@@ -1,1 +1,0 @@
-/Users/arks22/.fzf/shell/key-bindings.fish
