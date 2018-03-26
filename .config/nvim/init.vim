@@ -155,7 +155,7 @@ nnoremap <Leader>s :%s/
 nnoremap <Leader><Space> :w<CR>
 nnoremap <Leader>n :noh<CR>
 nnoremap <Leader>t :tabnew<CR>
-nnoremap <Leader>e :VimFilerExplorer -winwidth=30<CR>
+nnoremap <Leader>e :VimFilerExplorer -winwidth=26<CR>
 nnoremap <Leader>f :VimFiler -horizontal<CR>
 nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
