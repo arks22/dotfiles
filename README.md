@@ -21,7 +21,7 @@ dotmanager [COMMANDS] [OPTIONS]
 |Command|Description|
 |:------|:------|
 |``update``|Update dotfiles (git pull)|
-|``deploy``|Be able to use dotfiles|
+|``link``|Be able to use dotfiles|
 |``clean``|Remove dotfiles|
 |``init``|Install packeges (excuted when you install dotfiles) |
 

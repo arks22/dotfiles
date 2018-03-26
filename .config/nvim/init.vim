@@ -114,7 +114,7 @@ let &t_te.="\e[0 q"
 "colorscheme
 set background=dark
 colorscheme NeoSolarized
-syntax enable
+syntax on
 highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 
 set statusline=
