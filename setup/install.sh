@@ -1,6 +1,6 @@
 #!bin/bash
 
-if [ -e $HOME/dotfiles ]; then
+if [ ! -e $HOME/dotfiles ]; then
   if type git >/dev/null 2>&1; then
     echo "Downloading dotfiles with git..."
     git clone https://github.com/arks22/dotfiles.git ~/dotfiles
@@ -25,3 +25,5 @@ ln -s ~/dotfiles/commands/dotmanager /usr/local/bin/dotmanager
 
 dotmanager link
 dotmanager init
+
+rm $PWD/install.sh
