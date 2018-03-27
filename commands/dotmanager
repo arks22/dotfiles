@@ -55,9 +55,10 @@ function dotmanager_link() {
 }
 
 function dotmanager_clean() {
-  echo "dotmanager: remove dotfiles? [n/y]: "
-  read answer
+  echo -n "dotmanager: remove dotfiles? [n/y]:"
+  read -n 1 answer
   if [[ "$answer" = "y" ]] ; then
+    echo
     for dotfile in ${dotfiles[@]}; do
       unlink ~/$dotfile
       [[ $? = 0 ]] && echo "unlinked : $dotfile" || echo "unlink failed : $dotfile"
@@ -74,27 +75,32 @@ function dotmanager_clean() {
 }
 
 function dotmanager_init() {
-  if [ $(uname -s) = "Darwin" ]; then
-    if ! type brew >/dev/null 2>&1　; then
-      echo "dotmanager: installing Homebrew ..."
-      /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    fi
-    cp ~/dotfiles/setup/Brewfile ~
-    brew tap Homebrew/bundle
-    brew bundle
-    rm $HOME/Brewfile
-  elif [ $(uname -s) = "Linux" ]; then
-    for package in ${packages[@]}; do
-      if type apt-get >/dev/null 2>&1 ; then
-        dotmanager_init_package_install_for_linux yum
-      elif type yum >/dev/null 2>&1 ; then
-        dotmanager_init_package_install_for_linux apt-get
-      else
-        echo "yum or apt-get is required."
+  echo -n "dotmanager: Install packeges ? This task will take some time. [n/y]:"
+  read -n 1 answer
+  if [[ "$answer" = "y" ]] ; then
+    echo
+    if [ $(uname -s) = "Darwin" ]; then
+      if ! type brew >/dev/null 2>&1　; then
+        echo "dotmanager: installing Homebrew ..."
+        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
       fi
-    done
-  else
-    echo "dotmanager: not support your OS"
+      cp ~/dotfiles/setup/Brewfile ~
+      brew tap Homebrew/bundle
+      brew bundle
+      rm $HOME/Brewfile
+    elif [ $(uname -s) = "Linux" ]; then
+      for package in ${packages[@]}; do
+        if type apt-get >/dev/null 2>&1 ; then
+          dotmanager_init_package_install_for_linux yum
+        elif type yum >/dev/null 2>&1 ; then
+          dotmanager_init_package_install_for_linux apt-get
+        else
+          echo "yum or apt-get is required."
+        fi
+      done
+    else
+      echo "dotmanager: not support your OS"
+    fi
   fi
   if [ ! $SHELL == "/bin/zsh" ] ; then
     echo "dotmanager: change shell to zsh, please put your password"
