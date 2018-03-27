@@ -55,15 +55,6 @@ function dotmanager_link() {
 function dotmanager_clean() {
   echo -n "dotmanager: remove dotfiles? [n/y]:"
   read -n 1 answer
-  read -n 1 answer1
-  read -n 1 answer2
-  read -n 1 answer3
-  read -n 1 answer4
-  echo $answer
-  echo $answer1
-  echo $answer2
-  echo $answer3
-  echo $answer4
   if [[ "$answer" = "y" ]] ; then
     echo
     for dotfile in ${dotfiles[@]}; do
@@ -85,6 +76,15 @@ function dotmanager_clean() {
 function dotmanager_init() {
   echo -n "dotmanager: Install packeges? This task will take some time. [n/y]:"
   read answer
+  read -n 1 answer1
+  read -n 1 answer2
+  read -n 1 answer3
+  read -n 1 answer4
+  echo 0:$answer
+  echo 1:$answer1
+  echo 2:$answer2
+  echo 3:$answer3
+  echo 4:$answer4
   if [[ "$answer" = "y" ]]; then
     echo
     if [ $(uname -s) = "Darwin" ]; then
