@@ -189,10 +189,10 @@ function powered_cd() {
   case $# in
     0 ) 
       test -f ~/.powered_cd.log 2>/dev/null || touch ~/.powered_cd.log
-      cd $(gtac ~/.powered_cd.log | fzf-tmux -r | sed -e s@~@${HOME}@)
+      cd "$(gtac ~/.powered_cd.log | fzf-tmux -r | sed -e s@~@${HOME}@)"
     ;;
-    1 ) cd $1 ;;
-    2 ) mv $1 $2 ;;
+    1 ) cd "$1" ;;
+    2 ) mv "$1" "$2" ;;
     * ) echo "powered_cd: too many arguments" ;;
   esac
 }

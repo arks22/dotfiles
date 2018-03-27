@@ -54,7 +54,7 @@ else
     git_info=""
   fi
   ssh_hostname=""
-  directory="$3"
+  directory=" $3 "
 fi
 
-echo "#[bg=colour013,fg=black]$ssh_hostname#[default]#[bg=black,fg=cyan]#[underscore]$directory#[default]$git_info"
+echo "#[bg=colour013,fg=black]$ssh_hostname#[default]#[bg=cyan,fg=black]#[underscore]$directory#[default]$git_info"
