@@ -68,14 +68,15 @@ function dotmanager_clean() {
       [[ $? = 0 ]] && echo "unlinked : $command" || echo "unlink failed : $command"
     done
     rm -rf ~/dotfiles
-    echo  "dotmanager: dotfiles were removed."
-    echo  "     To install again, excute \"curl -L raw.github.com/arks22/dotfiles/master/setup/install.sh | sh\"."
-    echo  "     More information about dotfiles : https://github.com/arks22/dotfiles"
+    echo "dotmanager:"
+    echo "dotfiles were removed."
+    echo "To install again, excute \"curl -L raw.github.com/arks22/dotfiles/master/setup/install.sh | sh\"."
+    echo "More information about dotfiles : https://github.com/arks22/dotfiles"
   fi 
 }
 
 function dotmanager_init() {
-  echo -n "dotmanager: Install packeges ? This task will take some time. [n/y]:"
+  echo -n "dotmanager: Install packeges? This task will take some time. [n/y]:"
   read -n 1 answer
   if [[ "$answer" = "y" ]] ; then
     echo
