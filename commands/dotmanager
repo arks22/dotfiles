@@ -93,7 +93,7 @@ function dotmanager() {
           if type apt-get >/dev/null 2>&1 ; then
             echo "Installing curl, git, ruby, zsh with 'apt-get' Please put your Password."
             sudo apt-get install curl git ruby zsh
-          elif type yum >/dev/null 2>&1
+          elif type yum >/dev/null 2>&1 ; then
             echo "Installing curl, git, ruby, zsh with 'yum' Please put your Password."
             ##############
           fi
