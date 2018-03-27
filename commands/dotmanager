@@ -28,7 +28,7 @@ function dotmanager_upadte() {
   fi
 }
 
-function() dotmanager_link {
+function dotmanager_link() {
   pwd_=$PWD
   cd $HOME
   local i=0
@@ -54,7 +54,7 @@ function() dotmanager_link {
   cd $pwd_
 }
 
-function() dotmanager_clean {
+function dotmanager_clean() {
   echo "dotmanager: remove dotfiles? [n/y]: "
   read answer
   if [[ "$answer" = "y" ]] ; then
