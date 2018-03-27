@@ -3,7 +3,8 @@
 if [ ! -e $HOME/dotfiles ]; then
   if type git >/dev/null 2>&1; then
     echo "Downloading dotfiles with git..."
-    git clone https://github.com/arks22/dotfiles.git $HOME/dotfiles
+    ########## develop only ###########
+    git clone -b develop https://github.com/arks22/dotfiles.git $HOME/dotfiles
   else
     tarball="https://github.com/arks22/dotfiles/archive/master.tar.gz"
     if type curl >/dev/null 2>&1; then
