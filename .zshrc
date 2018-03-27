@@ -92,8 +92,7 @@ elif [[ $(uname -s) = "Linux" ]]; then
   alias l="ls"
   alias ls="ls -a"
 fi
-alias v="nvim"
-alias vi="nvim"
+alias vi="vim"
 alias q="exit"
 alias tx="tmux"
 alias reload="exec $SHELL -l"

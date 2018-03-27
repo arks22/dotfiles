@@ -1,5 +1,4 @@
 " .vimrc is configuraation file for 'vim' and init.vim is for NeoVim.
-" I'm using NeoVim as editor, so develop for .vimrc is stopping.
 
 "dein.vim
 if &compatible
@@ -181,7 +180,7 @@ nnoremap <Leader>s :%s/
 nnoremap <Leader><Space> :w<CR>
 nnoremap <Leader>n :noh<CR>
 nnoremap <Leader>t :tabnew<CR>
-nnoremap <Leader>e :VimFilerExplorer -winwidth=30<CR>
+nnoremap <Leader>e :VimFilerExplorer -winwidth=23<CR>
 nnoremap <Leader>f :VimFiler -horizontal<CR>
 nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
