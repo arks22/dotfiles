@@ -29,15 +29,14 @@ function dotmanager_upadte() {
 }
 
 function dotmanager_link() {
-  pwd_=$PWD
-  cd $HOME
+  echo "dotmanager:"
   local i=0
   local j=0
   for dotfile in ${dotfiles[@]}; do
     if [ ! -e $dotfile ]; then
       ((i++))
       ln -s $HOME/dotfiles/$dotfile $HOME/$dotfile
-      [[ $? = 0 ]] && echo "linked: $dotfile" || echo "link failed : $dotfile"
+      [[ $? = 0 ]] && echo "linked : $dotfile" || echo "link failed : $dotfile"
     fi
   done
   [ $i = 0 ] && echo "All dotfiles are already linked."
@@ -51,7 +50,6 @@ function dotmanager_link() {
     fi
   done
   [ $j = 0 ] && echo "All commands are already linked."
-  cd $pwd_
 }
 
 function dotmanager_clean() {
