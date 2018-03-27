@@ -81,7 +81,7 @@ function dotmanager() {
 
       "init" )
         if [ $(uname -s) = "Darwin" ]; then
-          if ! type brew >/dev/null 2>&1
+          if ! type brew >/dev/null 2>&1　; then
             echo "dotmanager: installing Homebrew ..."
             /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
           fi
@@ -90,7 +90,7 @@ function dotmanager() {
           brew bundle
           rm $HOME/Brewfile
         elif [ $(uname -s) = "Linux" ]; then
-          if type apt-get >/dev/null 2>&1
+          if type apt-get >/dev/null 2>&1 ; then
             echo "Installing curl, git, ruby, zsh with 'apt-get' Please put your Password."
             sudo apt-get install curl git ruby zsh
           elif type yum >/dev/null 2>&1
