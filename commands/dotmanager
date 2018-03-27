@@ -16,97 +16,108 @@ function dotmanager_help() {
   echo "  init      Install packeges (this command excuted when you install dotfiles)"
 }
 
+function dotmanager_upadte() {
+  cd ~/dotfiles >/dev/null 2>&1
+  msg=$(git pull)
+  er=$?
+  cd - >/dev/null 2>&1
+  if [[ $msg =~ "Already up-to-date." ]] ; then
+    echo "dotmanager: dotfiles are already up-to-date."
+  elif [[ $er = 0 ]] ; then
+    echo "dotmanager: dotfiles were updated."
+  fi
+}
+
+function() dotmanager_link {
+  pwd_=$PWD
+  cd $HOME
+  local i=0
+  local j=0
+  for dotfile in ${dotfiles[@]}; do
+    if [ ! -e $dotfile ]; then
+      ((i++))
+      ln -s $HOME/dotfiles/$dotfile $HOME/$dotfile
+      [[ $? = 0 ]] && echo "linked: $dotfile" || echo "link failed : $dotfile"
+    fi
+  done
+  [ $i = 0 ] && echo "All dotfiles are already linked."
+  cd /usr/local/bin
+  for command in ${commands[@]}; do
+    if [ ! -e $command ] ; then
+      ((j++))
+      chmod a+x ~/dotfiles/commands/$commad
+      ln -s ~/dotfiles/commands/$command /usr/local/bin/$command
+      [[ $? = 0 ]] && echo "linked : $command" || echo "link failed : $command"
+    fi
+  done
+  [ $j = 0 ] && echo "All commands are already linked."
+  cd $pwd_
+}
+
+function() dotmanager_clean {
+  echo "dotmanager: remove dotfiles? [n/y]: "
+  read answer
+  if [[ "$answer" = "y" ]] ; then
+    for dotfile in ${dotfiles[@]}; do
+      unlink ~/$dotfile
+      [[ $? = 0 ]] && echo "unlinked : $dotfile" || echo "unlink failed : $dotfile"
+    done
+    for command in ${commands[@]}; do
+      unlink /usr/local/bin/$command
+      [[ $? = 0 ]] && echo "unlinked : $command" || echo "unlink failed : $command"
+    done
+    rm -rf ~/dotfiles
+    echo    "dotmanager: dotfiles were removed."
+    echo    "     To install again, excute \"curl -L raw.github.com/arks22/dotfiles/master/setup/install.sh | sh\"."
+    echo -e "     More information about dotfiles : \e[4mhttps://github.com/arks22/dotfiles\e[m"
+  fi 
+}
+
+function dotmanager_init() {
+  if [ $(uname -s) = "Darwin" ]; then
+    if ! type brew >/dev/null 2>&1　; then
+      echo "dotmanager: installing Homebrew ..."
+      /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    fi
+    cp ~/dotfiles/setup/Brewfile ~
+    brew tap Homebrew/bundle
+    brew bundle
+    rm $HOME/Brewfile
+  elif [ $(uname -s) = "Linux" ]; then
+    for package in ${packages[@]}; do
+      if type apt-get >/dev/null 2>&1 ; then
+        dotmanager_init_package_install_for_linux yum
+      elif type yum >/dev/null 2>&1 ; then
+        dotmanager_init_package_install_for_linux apt-get
+      else
+        echo "yum or apt-get is required."
+      fi
+    done
+  else
+    echo "dotmanager: not support your OS"
+  fi
+  if [ ! $SHELL == "/bin/zsh" ] ; then
+    echo "dotmanager: change shell to zsh, please put your password"
+    chsh -s /bin/zsh
+  fi
+}
+
+function dotmanager_init_package_install_for_linux() {
+  packeges=(git ruby zsh)
+  echo "Installing packeges with $1. Please put your Password."
+  for package in ${package[@]} ; do
+    type $package >/dev/null 2>&1 || sudo $1 install $package
+  done
+}
+
 function dotmanager() {
   if [[ $# = 1 ]] ; then
     case $1 in
-
       "--help" ) dotmanager_help ;;
-
-      "update" ) 
-        cd ~/dotfiles >/dev/null 2>&1
-        msg=$(git pull)
-        er=$?
-        cd - >/dev/null 2>&1
-        if [[ $msg =~ "Already up-to-date." ]] ; then
-          echo "dotmanager: dotfiles are already up-to-date."
-        elif [[ $er = 0 ]] ; then
-          echo "dotmanager: dotfiles were updated."
-        fi
-      ;;
-
-      "link" )
-        pwd_=$PWD
-        cd $HOME
-        local i=0
-        local j=0
-        for dotfile in ${dotfiles[@]}; do
-          if [ ! -e $dotfile ]; then
-            ((i++))
-            ln -s $HOME/dotfiles/$dotfile $HOME/$dotfile
-            [[ $? = 0 ]] && echo "linked: $dotfile" || echo "link failed : $dotfile"
-          fi
-        done
-        [ $i = 0 ] && echo "All dotfiles are already linked."
-        cd /usr/local/bin
-        for command in ${commands[@]}; do
-          if [ ! -e $command ] ; then
-            ((j++))
-           chmod a+x ~/dotfiles/commands/$commad
-            ln -s ~/dotfiles/commands/$command /usr/local/bin/$command
-            [[ $? = 0 ]] && echo "linked : $command" || echo "link failed : $command"
-          fi
-        done
-        [ $j = 0 ] && echo "All commands are already linked."
-        cd $pwd_
-      ;;
-
-      "clean" )
-        echo "dotmanager: remove dotfiles? [n/y]: "
-        read answer
-        if [[ "$answer" = "y" ]] ; then
-          for dotfile in ${dotfiles[@]}; do
-            unlink ~/$dotfile
-            [[ $? = 0 ]] && echo "unlinked : $dotfile" || echo "unlink failed : $dotfile"
-          done
-          for command in ${commands[@]}; do
-            unlink /usr/local/bin/$command
-            [[ $? = 0 ]] && echo "unlinked : $command" || echo "unlink failed : $command"
-          done
-          rm -rf ~/dotfiles
-          echo    "dotmanager: dotfiles were removed."
-          echo    "     To install again, excute \"curl -L raw.github.com/arks22/dotfiles/master/setup/install.sh | sh\"."
-          echo -e "     More information about dotfiles : \e[4mhttps://github.com/arks22/dotfiles\e[m"
-        fi 
-      ;;
-
-      "init" )
-        if [ $(uname -s) = "Darwin" ]; then
-          if ! type brew >/dev/null 2>&1　; then
-            echo "dotmanager: installing Homebrew ..."
-            /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-          fi
-          cp ~/dotfiles/setup/Brewfile ~
-          brew tap Homebrew/bundle
-          brew bundle
-          rm $HOME/Brewfile
-        elif [ $(uname -s) = "Linux" ]; then
-          if type apt-get >/dev/null 2>&1 ; then
-            echo "Installing curl, git, ruby, zsh with 'apt-get' Please put your Password."
-            sudo apt-get install curl git ruby zsh
-          elif type yum >/dev/null 2>&1 ; then
-            echo "Installing curl, git, ruby, zsh with 'yum' Please put your Password."
-            ##############
-          fi
-        else
-          echo "dotmanager: not support your OS"
-        fi
-
-        if [ ! $SHELL == "/bin/zsh" ] ; then
-          echo "dotmanager: change shell to zsh, please put your password"
-          chsh -s /bin/zsh
-        fi
-      ;;
-
+      "update" ) dotmanager_update ;;
+      "link"   ) dotmanager_link ;;
+      "clean"  ) dotmanager_clean ;;
+      "init"   ) dotmanager_init ;;
       * ) 
         if [[ "$1" =~ ^- ]]; then
           echo "dotmanager: illegal option $1"

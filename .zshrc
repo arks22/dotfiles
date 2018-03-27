@@ -54,7 +54,7 @@ zstyle ':completion:*' completer _complete _prefix _approximate _history
 zstyle ':completion:*:default' menu select=2
 zstyle ':completion:*' list-separator '-->'
 
-export EDITOR=nvim
+export EDITOR=vim
 export LANG=en_US.UTF-8
 
 export TERM=xterm-256color
