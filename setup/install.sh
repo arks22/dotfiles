@@ -25,5 +25,3 @@ ln -s ~/dotfiles/commands/dotmanager /usr/local/bin/dotmanager
 
 dotmanager link
 dotmanager init
-
-rm $PWD/install.sh
