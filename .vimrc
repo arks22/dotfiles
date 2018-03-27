@@ -145,6 +145,7 @@ colorscheme solarized
 highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 
 set wrapscan
+set clipboard=unnamed
 set hlsearch
 set cursorline
 set number
