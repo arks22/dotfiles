@@ -74,17 +74,8 @@ function dotmanager_clean() {
 }
 
 function dotmanager_init() {
-  echo -n "dotmanager: Install packeges? This task will take some time. [n/y]:"
+  echo "dotmanager: Install packeges? This task will take some time. [n/y]:"
   read answer
-  read -n 1 answer1
-  read -n 1 answer2
-  read -n 1 answer3
-  read -n 1 answer4
-  echo 0:$answer
-  echo 1:$answer1
-  echo 2:$answer2
-  echo 3:$answer3
-  echo 4:$answer4
   if [[ "$answer" = "y" ]]; then
     echo
     if [ $(uname -s) = "Darwin" ]; then
@@ -113,6 +104,8 @@ function dotmanager_init() {
   if [ ! $SHELL == "/bin/zsh" ] ; then
     echo "dotmanager: change shell to zsh, please put your password"
     chsh -s /bin/zsh
+  else
+    
   fi
 }
 
