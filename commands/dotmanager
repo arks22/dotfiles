@@ -105,6 +105,7 @@ function dotmanager_init() {
     echo "dotmanager: change shell to zsh, please put your password"
     chsh -s /bin/zsh
   fi
+  dotmanager_clean
 }
 
 function dotmanager_init_package_install_for_linux() {
