@@ -104,8 +104,6 @@ function dotmanager_init() {
   if [ ! $SHELL == "/bin/zsh" ] ; then
     echo "dotmanager: change shell to zsh, please put your password"
     chsh -s /bin/zsh
-  else
-    
   fi
 }
 
