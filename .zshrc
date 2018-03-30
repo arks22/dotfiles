@@ -13,6 +13,7 @@ zplug "arks22/zsh-gomi", as:command, use:bin/gomi
 zplug "arks22/auto-git-commit", as:command
 zplug "arks22/fshow", as:command
 zplug "arks22/tmuximum", as:command
+zplug "arks22/tweet", as:command
 zplug "seebi/dircolors-solarized"
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
