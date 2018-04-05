@@ -55,11 +55,14 @@ zstyle ':completion:*' completer _complete _prefix _approximate _history
 zstyle ':completion:*:default' menu select=2
 zstyle ':completion:*' list-separator '-->'
 
+export OS="$(uname -s)"
+export UNKOO="UNKO"
+
+[[ $OS = "Darwin" ]] && export HARDWARE="$(/usr/sbin/system_profiler SPHardwareDataType | awk '{ if (NR == 5) print $3}')"
+
 export EDITOR=vim
 export LANG=en_US.UTF-8
-
 export TERM=xterm-256color
-
 export XDG_CONFIG_HOME=$HOME/.config
 
 bindkey -v
@@ -86,10 +89,10 @@ setopt prompt_subst
 
 ######################## aliases ########################
 
-if [[ $(uname -s) = "Darwin" ]]; then
+if [[ $OS = "Darwin" ]]; then
   alias l="gls -X --color=auto"
   alias ls="gls -AX --color=auto"
-elif [[ $(uname -s) = "Linux" ]]; then
+elif [[ $OS = "Linux" ]]; then
   alias l="ls"
   alias ls="ls -a"
 fi

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 dotfiles=$(ls -A $HOME/dotfiles | grep -v 'setup\|commands\|.git\|README.md\|.DS_Store')
 commands=$(ls $HOME/dotfiles/commands)
