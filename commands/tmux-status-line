@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env bash
 
 [[ -z $OS ]] && OS="$(uname -s)"
 
@@ -7,38 +7,47 @@ if [[ $OS = "Darwin" ]] && [[ -z $HARDWARE ]]; then
 fi
 
 #load-average
-load_avg="#[bold][#[default]#[fg=blue] $(uptime | awk '{print $(NF-2)}') #[default]#[bold]]#[default]"
+function get-load-avg() {
+  echo "#[bold][#[default]#[fg=blue] $(uptime | awk '{print $(NF-2)}') #[default]#[bold]]#[default]"
+}
 
 #airport
-if [[ $os = "Darwin" ]]; then
-  airport_path="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
-  if air_info=($(eval "$airport_path" -I | grep -E "^ *(agrCtlRSSI|state|SSID):" | awk '{print $2}')) ; then
-    rssi=${air_info[1]}
-    state=${air_info[2]}
-    ssid=${air_info[3]}
-    case $state in
-      "running" )
-        signals=(▁ ▂ ▄ ▆ █)
-        signal=""
-        rssi_=$(expr 5 - ${rssi} / -20)
-        for ((i=0; i < $rssi_; i++ )); do
-          signal="${signal}${signals[$i]}"
-        done
-        airport_=" #[underscore]${ssid}#[default] | ${signal} "
-      ;;
-      "init" ) airport_="#[fg=yellow] ... #[default]" ;;
-      * ) airport_="#[fg=red] ✘ #[default]" ;;
-    esac  
-    airport="|${airport_}| "
+function get-airport() {
+  if [[ $OS = "Darwin" ]]; then
+    local airport_path="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
+    local air_info=($(eval "$airport_path" -I | grep -E "^ *(agrCtlRSSI|state|SSID):" | awk '{print $2}'))
+    if [ -n $air_info ]; then
+      local airport_
+      local rssi=${air_info[0]}
+      local state=${air_info[1]}
+      local ssid=${air_info[2]}
+      case $state in
+        "running" )
+          local signals=(▁ ▂ ▄ ▆ █)
+          local signal
+          rssi_=$(expr 5 - ${rssi} / -20)
+          for ((i=0; i < $rssi_; i++ )); do
+            signal="${signal}${signals[$i]}"
+          done
+          airport_=" #[underscore]${ssid}#[default] | ${signal} "
+        ;;
+        "init" ) airport_="#[fg=yellow] ... #[default]" ;;
+        * ) airport_="#[fg=red] ✘ #[default]" ;;
+      esac  
+      airport="|${airport_}| "
+    fi  
   fi
-fi
+  echo $airport
+}
 
 #sound-volume
-if [[ $OS = "Darwin" ]]; then
-  if sound_info=$(osascript -e 'get volume settings') ; then
-    if [ "$(echo $sound_info | awk '{print $8}')" = "muted:false" ]; then
+function get-sound-volume() {
+  if [[ $OS = "Darwin" ]]; then
+    local sound_info=$(osascript -e 'get volume settings')
+    local sound
+    if  [[ -n $sound_info ]] && [[ "$(echo $sound_info | awk '{print $8}')" = "muted:false" ]]; then
       sound_volume=$(expr $(echo $sound_info | awk '{print $2}' | sed "s/[^0-9]//g") / 6 )
-      str=""
+      local str
       for ((i=0; i < $sound_volume; i++ )); do
         str="${str}■"
       done
@@ -50,20 +59,35 @@ if [[ $OS = "Darwin" ]]; then
       sound="#[bold][      mute      ]#[default] "
     fi
   fi
-fi
+  echo $sound
+}
 
 #battery
-if [[ "$OS" = "Darwin" ]] || [[ "$HARDWARE" = "MacBook" ]]; then
-  if battery_info=$(/usr/bin/pmset -g ps | awk '{ if (NR == 2) print $3 " " $4 }' | sed -e "s/;//g" -e "s/%//") ; then
-    battery_quantity=" $(echo $battery_info | awk '{print $1}')"
-    if [[ ! $battery_info =~ "discharging" ]]; then
-      battery="#[bg=cyan,fg=black] +$battery_quantity% #[default]"
-    elif (( $battery_quantity < 16 )); then
-      battery="#[bg=red,fg=white]$battery_quantity% #[default]"
-    else
-      battery="#[bg=cyan,fg=black]$battery_quantity% #[default]"
+function get-battery() {
+  if [[ "$OS" = "Darwin" ]] || [[ "$HARDWARE" = "MacBook" ]]; then
+    local battery_info=$(/usr/bin/pmset -g ps | awk '{ if (NR == 2) print $3 " " $4 }' | sed -e "s/;//g" -e "s/%//")
+    if [[ -n $battery_info ]]; then
+      local battery_quantity
+      local battery
+      battery_quantity=" $(echo $battery_info | awk '{print $1}')"
+      if [[ ! $battery_info =~ "discharging" ]]; then
+        battery="#[bg=cyan,fg=black] +$battery_quantity% #[default]"
+      elif (( $battery_quantity < 16 )); then
+        battery="#[bg=red,fg=white]$battery_quantity% #[default]"
+      else
+        battery="#[bg=cyan,fg=black]$battery_quantity% #[default]"
+      fi
     fi
   fi
-fi
+  echo $battery
+}
 
-echo "${load_avg}${sound}${airport}${battery}"
+function main() {
+  local load_avg=$(get-load-avg)
+  local sound=$(get-sound-volume)
+  local airport=$(get-airport)
+  local battery=$(get-battery)
+  echo "${load_avg}${sound}${airport}${battery}"
+}
+
+main $@
