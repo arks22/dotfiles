@@ -16,7 +16,7 @@ function dotmanager_help() {
   echo "  init      Install packeges (this command excuted when you install dotfiles)"
 }
 
-function dotmanager_upadte() {
+function dotmanager_update() {
   cd ~/dotfiles >/dev/null 2>&1
   msg=$(git pull)
   er=$?
