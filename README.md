@@ -3,7 +3,7 @@
 ## Installation
 
 ```
-curl -L raw.github.com/arks22/dotfiles/master/setup/install.bssh | bssh
+curl -L raw.github.com/arks22/dotfiles/master/setup/install.bash | bash
 ```
 ## Management
 
