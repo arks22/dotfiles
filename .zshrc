@@ -67,10 +67,9 @@ export XDG_CONFIG_HOME=$HOME/.config
 
 bindkey -v
 
-#save 10000 historys
 HISTFILE=$HOME/.zsh-history
-HISTSIZE=10000
-SAVEHIST=10000
+HISTSIZE=100000
+SAVEHIST=100000
 
 #set options
 setopt auto_cd
