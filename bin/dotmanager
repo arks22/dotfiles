@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-dotfiles=$(ls -A $HOME/dotfiles | grep -v 'setup\|commands\|.git\|README.md\|.DS_Store')
-commands=$(ls $HOME/dotfiles/commands)
+dotfiles=$(ls -A $HOME/dotfiles | grep -v 'setup\|bi\|.git\|README.md\|.DS_Store')
 
-function dotmanager_help() {
+function dotmanager::help() {
   echo "usage: dotmanager [COMMANDS] [OPTIONS]"
   echo
   echo "OPTIONS:"
@@ -11,12 +10,12 @@ function dotmanager_help() {
   echo
   echo "COMMANDS:"
   echo "  update    Update dotfiles (git pull)"
-  echo "  link      Activate commands in dotfiles/commands"
+  echo "  deploy    Activate commands in dotfiles/bin"
   echo "  clean     Remove dotfiles"
   echo "  init      Install packeges (this command excuted when you install dotfiles)"
 }
 
-function dotmanager_update() {
+function dotmanager::update() {
   cd ~/dotfiles >/dev/null 2>&1
   msg=$(git pull)
   er=$?
@@ -28,31 +27,39 @@ function dotmanager_update() {
   fi
 }
 
-function dotmanager_link() {
-  echo "dotmanager:"
+function dotmanager::deploy() {
+  echo "dotfiles:"
+  dotmanager::deploy::dotfiles
+  dotmanager::deploy::commands
+}
+
+function dotmanager::deploy::dotfiles() {
   local i=0
-  local j=0
   for dotfile in ${dotfiles[@]}; do
-    if [ ! -e $dotfile ]; then
+    if [ ! -e $HOME/$dotfile ]; then
       ((i++))
       ln -s $HOME/dotfiles/$dotfile $HOME/$dotfile
       [[ $? = 0 ]] && echo "linked : $dotfile" || echo "link failed : $dotfile"
     fi
   done
   [ $i = 0 ] && echo "All dotfiles are already linked."
-  cd /usr/local/bin
-  for command in ${commands[@]}; do
-    if [ ! -e $command ] ; then
-      ((j++))
-      chmod a+x ~/dotfiles/commands/$commad
-      ln -s ~/dotfiles/commands/$command /usr/local/bin/$command
-      [[ $? = 0 ]] && echo "linked : $command" || echo "link failed : $command"
-    fi
-  done
-  [ $j = 0 ] && echo "All commands are already linked."
 }
 
-function dotmanager_clean() {
+function dotmanager::deploy::commands() {
+  local j=0
+  [[ ! $PATH =~ "$HOME/dotfiles/bin" ]] && echo "export PATH=\$PATH:\$HOME/dotfiles/bin" >> $HOME/.zshenv
+  commands=$(ls $HOME/dotfiles/bin)
+  for command in ${commands[@]}; do
+    if [ ! -x $HOME/dotfiles/bin/$command ] ; then
+      ((j++))
+      chmod a+x ~/dotfiles/bin/$commad
+      [[ $? = 0 ]] && echo "excutable: $command" || echo "failed to make it excutable: $command"
+    fi
+  done
+  [ $j = 0 ] && echo "All commands are already excutable."
+}
+
+function dotmanager::clean() {
   echo -n "dotmanager: remove dotfiles? [n/y]:"
   read -n 1 answer
   if [[ "$answer" = "y" ]] ; then
@@ -61,19 +68,15 @@ function dotmanager_clean() {
       unlink ~/$dotfile
       [[ $? = 0 ]] && echo "unlinked : $dotfile" || echo "unlink failed : $dotfile"
     done
-    for command in ${commands[@]}; do
-      unlink /usr/local/bin/$command
-      [[ $? = 0 ]] && echo "unlinked : $command" || echo "unlink failed : $command"
-    done
     rm -rf ~/dotfiles
-    echo "dotmanager:"
+    echo "dotmanager::"
     echo "dotfiles were removed."
     echo "To install again, excute \"curl -L raw.github.com/arks22/dotfiles/master/setup/install.sh | sh\"."
     echo "More information about dotfiles : https://github.com/arks22/dotfiles"
   fi 
 }
 
-function dotmanager_init() {
+function dotmanager::init() {
   echo -n "dotmanager: Install packeges? This task will take some time. [n/y]:"
   read answer
   if [[ "$answer" = "y" ]]; then
@@ -88,41 +91,44 @@ function dotmanager_init() {
       brew bundle
       rm $HOME/Brewfile
     elif [ $(uname -s) = "Linux" ]; then
-      for package in ${packages[@]}; do
-        if type apt-get >/dev/null 2>&1 ; then
-          dotmanager_init_package_install_for_linux yum
-        elif type yum >/dev/null 2>&1 ; then
-          dotmanager_init_package_install_for_linux apt-get
-        else
-          echo "yum or apt-get is required."
-        fi
-      done
+      dotmanager::init::install_packages_for_linux
     else
       echo "dotmanager: not support your OS"
     fi
   fi
   if [ ! $SHELL == "/bin/zsh" ] ; then
-    echo "dotmanager: change shell to zsh, please put your password"
+    echo "dotmanager:  Please put your password to change shell to zsh."
     chsh -s /bin/zsh
+    exec $SHELL -l
   fi
 }
 
-function dotmanager_init_package_install_for_linux() {
-  packeges=(git ruby zsh)
-  echo "Installing packeges with $1. Please put your Password."
-  for package in ${package[@]} ; do
-    type $package >/dev/null 2>&1 || sudo $1 install $package
+function dotmanager::init::install_packages_for_linux() {
+  local packeges=(git ruby zsh)
+  local installer
+  if [ type apt-get >/dev/null 2>&1 ]; then
+    installer="apt-get"
+  elif [ type yum >/dev/null 2>&1 ]; then
+    installer="yum"
+  else
+    echo "dotmanager: yum or apt-get is required."
+    echo "After installing yum or apt-get, Plese run \`dotmanager init\`"
+    exit 1
+  fi
+  echo "Installing packeges with $installer. Please put your Password."
+  for package in ${packages[@]} ; do
+    type $package >/dev/null 2>&1 || sudo $installer install $package
   done
 }
 
-function dotmanager() {
+function main() {
   if [[ $# = 1 ]] ; then
     case $1 in
-      "--help" ) dotmanager_help ;;
-      "update" ) dotmanager_update ;;
-      "link"   ) dotmanager_link ;;
-      "clean"  ) dotmanager_clean ;;
-      "init"   ) dotmanager_init ;;
+      "--help" ) dotmanager::help ;;
+      "update" ) dotmanager::update ;;
+      "deploy"   ) dotmanager::deploy;;
+      "clean"  ) dotmanager::clean ;;
+      "init"   ) dotmanager::init ;;
       * ) 
         if [[ "$1" =~ ^- ]]; then
           echo "dotmanager: illegal option $1"
@@ -131,15 +137,15 @@ function dotmanager() {
           echo "dotmanager: illegal command $1"
           echo
         fi
-        dotmanager_help
+        dotmanager::help
         exit 1
       ;;
 
     esac
   else
-    dotmanager_help
+    dotmanager::help
     exit 1
   fi
 }
 
-dotmanager $@
+main $@

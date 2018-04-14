@@ -13,7 +13,7 @@ if [ ! -e $HOME/dotfiles ]; then
     fi
     mv -f dotfiles-master ~/dotfiles
   fi
-  bash $HOME/dotfiles/commands/dotmanager link
+  bash $HOME/dotfiles/commands/dotmanager deploy
   bash $HOME/dotfiles/commands/dotmanager init
 else
   echo "dotfiles are already exists."
