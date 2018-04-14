@@ -71,7 +71,7 @@ function dotmanager::clean() {
     rm -rf ~/dotfiles
     echo "dotmanager::"
     echo "dotfiles were removed."
-    echo "To install again, excute \"curl -L raw.github.com/arks22/dotfiles/master/setup/install.sh | sh\"."
+    echo "To install again, excute \"curl -L raw.github.com/arks22/dotfiles/master/setup/install.bash | bash\"."
     echo "More information about dotfiles : https://github.com/arks22/dotfiles"
   fi 
 }
@@ -104,7 +104,7 @@ function dotmanager::init() {
 }
 
 function dotmanager::init::install_packages_for_linux() {
-  local packeges=(git ruby zsh)
+  local packeges=(git ruby zsh tmux)
   local installer
   if [ type apt-get >/dev/null 2>&1 ]; then
     installer="apt-get"
