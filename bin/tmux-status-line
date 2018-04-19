@@ -87,6 +87,19 @@ function get-music-state() {
     track_name=$(osascript -e 'tell application "iTunes"' -e 'name of current track' -e 'end tell')
     album_name=$(osascript -e 'tell application "iTunes"' -e 'album of current track' -e 'end tell')
     is_track_playing=$(osascript -e 'tell application "iTunes"' -e 'player state' -e 'end tell')
+    echo $(( ${#track_name} + ${#album_name} ))
+    if (( $(( ${#track_name} + ${#album_name} )) > 61 )); then
+      if (( ${#track_name} > 30 && ${#album_name} > 30)); then
+        track_name=$(echo $track_name | cut -c 1-30 | sed -e "s/\$/.../")
+        album_name=$(echo $album_name | cut -c 1-30 | sed -e "s/\$/.../")
+      elif (( ${#track_name} > 30 && ${#album_name} < 30)); then
+        cut_length=$((61 - ${#album_name}))
+        track_name=$(echo $track_name | cut -c 1-${cut_length} | sed -e "s/\$/.../")
+      else
+        cut_length=$((61 - ${#track_name}))
+        track_name=$(echo $album_name | cut -c 1-${cut_length} | sed -e "s/\$/.../")
+      fi
+    fi
     if [[ $is_track_playing = "paused" ]]; then
       music=■
     else
