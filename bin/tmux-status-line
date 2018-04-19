@@ -12,7 +12,7 @@ function get-load-avg() {
 }
 
 #airport
-function get-airport() {
+function get-airport-state() {
   if [[ $OS = "Darwin" ]]; then
     local airport_path="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
     local air_info=($(eval "$airport_path" -I | grep -E "^ *(agrCtlRSSI|state|SSID):" | awk '{print $2}'))
@@ -29,15 +29,14 @@ function get-airport() {
           for ((i=0; i < $rssi_; i++ )); do
             signal="${signal}${signals[$i]}"
           done
-          airport_=" #[underscore]${ssid}#[default] | ${signal} "
+          airport=" #[underscore]${ssid}#[default] | ${signal} |"
         ;;
-        "init" ) airport_="#[fg=yellow] ... #[default]" ;;
-        * ) airport_="#[fg=red] ✘ #[default]" ;;
+        "init" ) airport="#[fg=yellow] ... #[default]" ;;
+        * ) airport="#[fg=red] ✘ #[default]" ;;
       esac  
-      airport="|${airport_}| "
     fi  
   fi
-  echo $airport
+  echo "#[bold][#[default]${airport}#[bold]]#[default]"
 }
 
 #sound-volume
@@ -48,22 +47,23 @@ function get-sound-volume() {
     if  [[ -n $sound_info ]] && [[ "$(echo $sound_info | awk '{print $8}')" = "muted:false" ]]; then
       sound_volume=$(expr $(echo $sound_info | awk '{print $2}' | sed "s/[^0-9]//g") / 6 )
       local str
-      for ((i=0; i < $sound_volume; i++ )); do
-        str="${str}■"
+      for ((i=0; i < 16; i++ )); do
+        if (($i<$sound_volume)) ; then
+          str="${str}■" 
+        else
+          str="${str} "
+        fi
       done
-      for ((i=$sound_volume; i < 16; i++ )); do
-        str="${str} "
-      done
-      sound="#[bold][$str]#[default] "
+      sound="${str}"
     else
-      sound="#[bold][      mute      ]#[default] "
+      sound="──────mute──────"
     fi
   fi
-  echo $sound
+  echo "#[bold][${sound}]#[default]"
 }
 
 #battery
-function get-battery() {
+function get-battery-state() {
   if [[ "$OS" = "Darwin" ]] || [[ "$HARDWARE" = "MacBook" ]]; then
     local battery_info=$(/usr/bin/pmset -g ps | awk '{ if (NR == 2) print $3 " " $4 }' | sed -e "s/;//g" -e "s/%//")
     if [[ -n $battery_info ]]; then
@@ -82,12 +82,28 @@ function get-battery() {
   echo $battery
 }
 
+function get-music-state() {
+  if [[ $(osascript -e 'if application "iTunes" is running then' -e '"running"' -e 'end if') = "running" ]]; then
+    track_name=$(osascript -e 'tell application "iTunes"' -e 'name of current track' -e 'end tell')
+    album_name=$(osascript -e 'tell application "iTunes"' -e 'album of current track' -e 'end tell')
+    is_track_playing=$(osascript -e 'tell application "iTunes"' -e 'player state' -e 'end tell')
+    if [[ $is_track_playing = "paused" ]]; then
+      music=■
+    else
+      music="#[underscore]${album_name}#[default] | #[underscore]${track_name}#[default]"
+    fi
+    echo "#[bold][#[default] ${music} #[bold]]#[default]"
+  fi
+}
+
+
 function main() {
   local load_avg=$(get-load-avg)
   local sound=$(get-sound-volume)
-  local airport=$(get-airport)
-  local battery=$(get-battery)
-  echo "${load_avg}${sound}${airport}${battery}"
+  local airport=$(get-airport-state)
+  local battery=$(get-battery-state)
+  local music=$(get-music-state)
+  echo "${music}${sound}${load_avg}${airport}${battery}"
 }
 
 main $@
