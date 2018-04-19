@@ -56,7 +56,6 @@ zstyle ':completion:*:default' menu select=2
 zstyle ':completion:*' list-separator '-->'
 
 export OS="$(uname -s)"
-export UNKOO="UNKO"
 
 [[ $OS = "Darwin" ]] && export HARDWARE="$(/usr/sbin/system_profiler SPHardwareDataType | awk '{ if (NR == 5) print $3}')"
 
@@ -108,6 +107,7 @@ alias vag="vagrant"
 alias gs="git status"
 alias electron="reattach-to-user-namespace electron"
 alias -g F="| fzf-tmux"
+alias -g G="| grep"
 alias -s rb="ruby"
 alias -s py='python'
 alias g="git"
@@ -116,6 +116,17 @@ alias gac="git add -A && auto-git-commit"
 alias gacp="git_add_commit_push"
 alias gps="git_push_current_branch"
 alias ggl="google"
+alias ecc=compile_and_exec_c_file
+
+function compile_and_exec_c_file() {
+  if [[ $# = 1 ]]; then
+    gcc $1 && ./a.out
+  elif [[ $# = 2 ]]; then
+    gcc -o $1 $2 && ./$1
+  else
+    echo "argument must be one or two (ecc [FILE_NAME] [EXEC_FILE_NAME])"
+  fi
+}
 
 function git_add_commit_push() {
   git add -A && auto-git-commit && git push origin $(git branch | awk '/\*/' | sed -e "s/*//")

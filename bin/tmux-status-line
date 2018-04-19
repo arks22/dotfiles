@@ -48,7 +48,7 @@ function get-sound-volume() {
     local sound_info=$(osascript -e 'get volume settings')
     local sound
     if  [[ -n $sound_info ]] && [[ "$(echo $sound_info | awk '{print $8}')" = "muted:false" ]]; then
-      sound_volume=$(expr $(echo $sound_info | awk '{print $2}' | sed "s/[^0-9]//g") / 6 )
+      sound_volume=$(( $(echo $sound_info | awk '{print $2}' | sed "s/[^0-9]//g") / 6))
       local str
       for ((i=0; i < 16; i++ )); do
         if (($i<$sound_volume)) ; then
@@ -62,7 +62,7 @@ function get-sound-volume() {
       sound="──────mute──────"
     fi
   fi
-  echo "#[bold][${sound}]#[default]"
+  #echo "#[bold][${sound}]#[default]"
 }
 
 #battery
