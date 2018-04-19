@@ -21,6 +21,9 @@ function get-airport-state() {
       local rssi=${air_info[0]}
       local state=${air_info[1]}
       local ssid=${air_info[2]}
+      if (( ${#ssid} > 20 )); then
+        ssid=$(echo $ssid | cut -c 1-20 | sed -e "s/\$/.../")
+      fi
       case $state in
         "running" )
           local signals=(▁ ▂ ▄ ▆ █)
@@ -29,14 +32,14 @@ function get-airport-state() {
           for ((i=0; i < $rssi_; i++ )); do
             signal="${signal}${signals[$i]}"
           done
-          airport=" #[underscore]${ssid}#[default] | ${signal} |"
+          airport=" #[underscore]${ssid}#[default] | ${signal} "
         ;;
         "init" ) airport="#[fg=yellow] ... #[default]" ;;
         * ) airport="#[fg=red] ✘ #[default]" ;;
       esac  
     fi  
   fi
-  echo "#[bold][#[default]${airport}#[bold]]#[default]"
+  echo "#[bold]|#[default]${airport}#[bold]|#[default]"
 }
 
 #sound-volume
