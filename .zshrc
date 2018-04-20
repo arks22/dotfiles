@@ -115,9 +115,11 @@ alias ecc="compile_and_exec_c_file"
 
 function compile_and_exec_c_file() {
   if [[ $# = 1 ]]; then
-    gcc $1 && ./a.out
+    gcc $1 
+    ./a.out
   elif [[ $# = 2 ]]; then
-    gcc -o $1 $2 && ./$1
+    gcc -o $1 $2 
+    ./$1
   else
     echo "argument must be one or two (ecc [FILE_NAME] [EXEC_FILE_NAME])"
   fi
@@ -158,7 +160,6 @@ function precmd() {
     fi
   fi
 }
-
 
 if [ -z $TMUX ]; then
   PROMPT=$'%(?,,%F{red}%K{black} ✘%f %{\e[38;5;010m%}│%f%k)${root}${dir} '
