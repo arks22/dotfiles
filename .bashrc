@@ -66,7 +66,7 @@ alias gac="git add -A && auto-git-commit"
 alias gacp="git_add_commit_push"
 alias gps="git_push_current_branch"
 alias ggl="google"
-alias ecc=compile_and_exec_c_file
+alias ecc="compile_and_exec_c_file"
 
 function compile_and_exec_c_file() {
   if [[ $# = 1 ]]; then
@@ -113,7 +113,7 @@ function get-git-info() {
   echo "$git_info"
 }
 
-PS1="${B_BLACK}\$(get-git-info)${F_CYAN}\w${F_BLUE} > ${DEFAULT}"
+PS1="${B_BLACK}$(get-git-info)${F_CYAN}\w${F_BLUE} > ${DEFAULT}"
 
 
 ######################## cd ########################
@@ -159,5 +159,5 @@ if [ ! -z $TMUX ]; then
   echo "${str}${fg_bold[red]}TMUX ${reset_color}${str}"
   i=0
 elif [[ ! $(whoami) = "root" ]]; then
-  tmuximum
+  tmux attach
 fi

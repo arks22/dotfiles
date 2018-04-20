@@ -18,7 +18,6 @@ zplug "seebi/dircolors-solarized"
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
-
 #install plugins not installed
 if ! zplug check --verbose; then
   printf "Install? [y/N]: "
@@ -112,7 +111,7 @@ alias gac="git add -A && auto-git-commit"
 alias gacp="git_add_commit_push"
 alias gps="git_push_current_branch"
 alias ggl="google"
-alias ecc=compile_and_exec_c_file
+alias ecc="compile_and_exec_c_file"
 
 function compile_and_exec_c_file() {
   if [[ $# = 1 ]]; then
