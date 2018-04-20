@@ -28,7 +28,7 @@ function dotmanager::update() {
 }
 
 function dotmanager::deploy() {
-  echo "dotfiles:"
+  echo "dotmanager:"
   dotmanager::deploy::dotfiles
   dotmanager::deploy::commands
 }
@@ -61,8 +61,8 @@ function dotmanager::deploy::commands() {
 }
 
 function dotmanager::clean() {
-  printf "dotmanager: remove dotfiles? [n/y]: "
-  if read -q; then
+  read -p "dotmanager: remove dotfiles? [n/y]: " answer
+  if [[ "$answer" = "y" ]] ; then
     echo
     for dotfile in ${dotfiles[@]}; do
       unlink ~/$dotfile
@@ -76,8 +76,8 @@ function dotmanager::clean() {
 }
 
 function dotmanager::init() {
-  printf "dotmanager: Install packeges? This task will take some time. [n/y]:"
-  if read -q; then
+  read -p "dotmanager: Install packeges? This task will take some time. [n/y]: " answer
+  if [[ "$answer" = "y" ]]; then
     echo
     if [ $(uname -s) = "Darwin" ]; then
       if ! type brew >/dev/null 2>&1　; then
@@ -94,7 +94,6 @@ function dotmanager::init() {
       echo "dotmanager: not support your OS"
     fi
   fi
-
   if [ ! $SHELL == "/bin/zsh" ] ; then
     echo "dotmanager:  Please put your password to change shell to zsh."
     chsh -s /bin/zsh
