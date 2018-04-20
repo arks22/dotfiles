@@ -61,16 +61,14 @@ function dotmanager::deploy::commands() {
 }
 
 function dotmanager::clean() {
-  printf "dotmanager: remove dotfiles? [n/y]:"
-  read -n 1 answer
-  if [[ "$answer" = "y" ]] ; then
+  printf "dotmanager: remove dotfiles? [n/y]: "
+  if read -q; then
     echo
     for dotfile in ${dotfiles[@]}; do
       unlink ~/$dotfile
       [[ $? = 0 ]] && echo "- unlinked : $dotfile" || echo "! unlink failed : $dotfile"
     done
     rm -rf ~/dotfiles
-    echo "dotmanager::"
     echo "dotfiles were removed."
     echo "To install again, excute \"curl -L raw.github.com/arks22/dotfiles/master/setup/install.bash | bash\"."
     echo "More information about dotfiles : https://github.com/arks22/dotfiles"
@@ -79,8 +77,7 @@ function dotmanager::clean() {
 
 function dotmanager::init() {
   printf "dotmanager: Install packeges? This task will take some time. [n/y]:"
-  read -n 1 answer
-  if [[ "$answer" = "y" ]]; then
+  if read -q; then
     echo
     if [ $(uname -s) = "Darwin" ]; then
       if ! type brew >/dev/null 2>&1　; then
@@ -97,6 +94,7 @@ function dotmanager::init() {
       echo "dotmanager: not support your OS"
     fi
   fi
+
   if [ ! $SHELL == "/bin/zsh" ] ; then
     echo "dotmanager:  Please put your password to change shell to zsh."
     chsh -s /bin/zsh
