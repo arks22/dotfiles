@@ -61,9 +61,9 @@ function dotmanager::deploy::commands() {
 }
 
 function dotmanager::clean() {
-  read -p "dotmanager: remove dotfiles? [n/y]: " answer
+  read -n 1 -p "dotmanager: remove dotfiles? [n/y]: " answer
+  echo
   if [[ "$answer" = "y" ]] ; then
-    echo
     for dotfile in ${dotfiles[@]}; do
       unlink ~/$dotfile
       [[ $? = 0 ]] && echo "- unlinked : $dotfile" || echo "! unlink failed : $dotfile"
@@ -76,9 +76,9 @@ function dotmanager::clean() {
 }
 
 function dotmanager::init() {
-  read -p "dotmanager: Install packeges? This task will take some time. [n/y]: " answer
+  read -n 1 -p "dotmanager: Install packeges? This task will take some time. [n/y]: " answer
+  echo
   if [[ "$answer" = "y" ]]; then
-    echo
     if [ $(uname -s) = "Darwin" ]; then
       if ! type brew >/dev/null 2>&1　; then
         echo "dotmanager: installing Homebrew ..."
