@@ -1,5 +1,5 @@
 if [ -f ~/.bashrc ] ; then
-. ~/.bashrc
+  . ~/.bashrc
 fi
 
 export PATH=$HOME/bin:/usr/local/bin:$PATH

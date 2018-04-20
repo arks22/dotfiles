@@ -16,26 +16,26 @@ SAVEHIST=100000
 
 ####################### colors #######################
 
-readonly F_BLACK="\e[30m"
-readonly F_RED="\e[31m"
-readonly F_GREEN="\e[32m"
-readonly F_YELLOW="\e[33m"
-readonly F_BLUE="\e[34m"
-readonly F_MAGENTA="\e[35m"
-readonly F_CYAN="\e[36m"
-readonly F_WHITE="\e[37m"
+readonly F_BLACK="\[\e[30m\]"
+readonly F_RED="\[\e[31m\]"
+readonly F_GREEN="\[\e[32m\]"
+readonly F_YELLOW="\[\e[33m\]"
+readonly F_BLUE="\[\e[34m\]"
+readonly F_MAGENTA="\[\e[35m\]"
+readonly F_CYAN="\[\e[36m\]"
+readonly F_WHITE="\[\e[37m\]"
 
-readonly B_BLACK="\e[40m"
-readonly B_RED="\e[41m"
-readonly B_GREEN="\e[42m"
-readonly B_YELLOW="\e[43m"
-readonly B_BLUE="\e[44m"
-readonly B_MAGENTA="\e[45m"
-readonly B_CYAN="\e[46m"
-readonly B_WHITE="\e[47m"
+readonly B_BLACK="\[\e[40m\]"
+readonly B_RED="\[\e[41m\]"
+readonly B_GREEN="\[\e[42m\]"
+readonly B_YELLOW="\[\e[43m\]"
+readonly B_BLUE="\[\e[44m\]"
+readonly B_MAGENTA="\[\e[45m\]"
+readonly B_CYAN="\[\e[46m\]"
+readonly B_WHITE="\[\e[47m\]"
 
-readonly BOLD="\e[1m"
-readonly DEFAULT="\e[0m"
+readonly BOLD="\[\e[1m\]"
+readonly DEFAULT="\[\e[0m\]"
 
 
 ######################## aliases ########################
@@ -90,14 +90,14 @@ function git_push_current_branch {
 ######################## prompt ########################
 
 #excute before display prompt
-function precmd() {
+function get-git-info() {
   if [ ! -z $TMUX ]; then
     tmux refresh-client -S
   else
     if git_status=$(git status 2>/dev/null ); then
       git_branch="$(echo $git_status| awk 'NR==1 {print $3}')"
       case $git_status in
-        *Changes\ not\ staged* ) state="{\e[30;48;5;013m%}${F_BLACK} ± ${DEFAULT}" ;;
+        *Changes\ not\ staged* ) state="${F_BLACK} ± ${DEFAULT}" ;;
         *Changes\ to\ be\ committed* ) state="${B_BLUE}${F_BLACK} + ${DEFAULT}" ;;
         * ) state="${B_GREEN}${F_BLACK} ✔ ${DEFAULT}" ;;
       esac
@@ -110,9 +110,10 @@ function precmd() {
       git_info=""
     fi
   fi
+  echo "$git_info"
 }
 
-PS1="${B_BLACK} ${F_CYAN}\w${F_BLUE} > ${DEFAULT}"
+PS1="${B_BLACK}\$(get-git-info)${F_CYAN}\w${F_BLUE} > ${DEFAULT}"
 
 
 ######################## cd ########################
