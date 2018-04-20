@@ -1,56 +1,4 @@
-######################## zplug ########################
-
-if [ ! -e ~/.zplug ]; then
-  git clone https://github.com/b4b4r07/zplug ~/.zplug
-fi
-
-source ~/.zplug/init.zsh
-
-zplug "zplug/zplug", hook-build:'zplug --self-manage'
-zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
-zplug "junegunn/fzf", as:command, use:"bin/fzf-tmux"
-zplug "arks22/zsh-gomi", as:command, use:bin/gomi
-zplug "arks22/auto-git-commit", as:command
-zplug "arks22/fshow", as:command
-zplug "arks22/tmuximum", as:command
-zplug "arks22/tweet", as:command
-zplug "seebi/dircolors-solarized"
-zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
-
-
-#install plugins not installed
-if ! zplug check --verbose; then
-  printf "Install? [y/N]: "
-  if read -q; then
-    echo; zplug install
-  fi
-fi
-
-if [[ ! $PATH =~ "$HOME/.zplug/bin" ]]; then
-  export PATH="$PATH:$HOME/.zplug/bin"
-fi
-
-zplug load --verbose
-
-
 ######################## general ########################
-
-autoload -U colors
-colors
-
-eval $(gdircolors $ZPLUG_HOME/repos/seebi/dircolors-solarized/dircolors.ansi-universal)
-
-zstyle ':completion:*:messages' format $'\e[01;35m -- %d -- \e[00;00m'
-zstyle ':completion:*:warnings' format $'\e[01;31m -- No Matches Found -- \e[00;00m'
-zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d -- \e[00;00m'
-zstyle ':completion:*:corrections' format $'\e[01;33m -- %d -- \e[00;00m'
-
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*' completer _complete _prefix _approximate _history
-zstyle ':completion:*:default' menu select=2
-zstyle ':completion:*' list-separator '-->'
 
 export EDITOR=vim
 export LANG=en_US.UTF-8
@@ -60,25 +8,34 @@ export XDG_CONFIG_HOME=$HOME/.config
 export OS="$(uname -s)"
 
 [[ $OS = "Darwin" ]] && export HARDWARE="$(/usr/sbin/system_profiler SPHardwareDataType | awk '{ if (NR == 5) print $3}')"
-bindkey -v
 
-HISTFILE=$HOME/.zsh-history
+HISTFILE=$HOME/.bash_history
 HISTSIZE=100000
 SAVEHIST=100000
 
-#set options
-setopt auto_cd
-setopt no_beep
-setopt share_history
-setopt mark_dirs
-setopt interactive_comments
-setopt list_types
-setopt print_eight_bit
-setopt auto_param_keys
-setopt auto_list
-setopt correct
-setopt prompt_subst
-setopt no_flow_control
+
+####################### colors #######################
+
+readonly F_BLACK="\e[30m"
+readonly F_RED="\e[31m"
+readonly F_GREEN="\e[32m"
+readonly F_YELLOW="\e[33m"
+readonly F_BLUE="\e[34m"
+readonly F_MAGENTA="\e[35m"
+readonly F_CYAN="\e[36m"
+readonly F_WHITE="\e[37m"
+
+readonly B_BLACK="\e[40m"
+readonly B_RED="\e[41m"
+readonly B_GREEN="\e[42m"
+readonly B_YELLOW="\e[43m"
+readonly B_BLUE="\e[44m"
+readonly B_MAGENTA="\e[45m"
+readonly B_CYAN="\e[46m"
+readonly B_WHITE="\e[47m"
+
+readonly BOLD="\e[1m"
+readonly DEFAULT="\e[0m"
 
 
 ######################## aliases ########################
@@ -94,7 +51,6 @@ alias vi="vim"
 alias q="exit"
 alias tx="tmux"
 alias reload="exec $SHELL -l"
-alias d="gomi"
 alias t="tmuximum"
 alias c="powered_cd"
 alias rl="rails"
@@ -102,10 +58,8 @@ alias cl="clear"
 alias vag="vagrant"
 alias gs="git status"
 alias electron="reattach-to-user-namespace electron"
-alias -g F="| fzf-tmux"
-alias -g G="| grep"
-alias -s rb="ruby"
-alias -s py='python'
+alias rb="ruby"
+alias py='python'
 alias g="git"
 alias glog="git-log-fzf"
 alias gac="git add -A && auto-git-commit"
@@ -137,22 +91,20 @@ function git_push_current_branch {
 
 #excute before display prompt
 function precmd() {
-  [ $(whoami) = "root" ] && root="%K{black}%F{yellow} ⚡ %{\e[38;5;010m%}│%f%k" || root=""
   if [ ! -z $TMUX ]; then
     tmux refresh-client -S
   else
-    dir="%F{cyan}%K{black} %~ %k%f"
     if git_status=$(git status 2>/dev/null ); then
       git_branch="$(echo $git_status| awk 'NR==1 {print $3}')"
       case $git_status in
-        *Changes\ not\ staged* ) state=$'%{\e[30;48;5;013m%}%F{black} ± %f%k' ;;
-        *Changes\ to\ be\ committed* ) state="%K{blue}%F{black} + %k%f" ;;
-        * ) state="%K{green}%F{black} ✔ %f%k" ;;
+        *Changes\ not\ staged* ) state="{\e[30;48;5;013m%}${F_BLACK} ± ${DEFAULT}" ;;
+        *Changes\ to\ be\ committed* ) state="${B_BLUE}${F_BLACK} + ${DEFAULT}" ;;
+        * ) state="${B_GREEN}${F_BLACK} ✔ ${DEFAULT}" ;;
       esac
       if [[ $git_branch = "master" ]]; then
-        git_info="%K{black}%F{blue}⭠ ${git_branch}%f%k ${state}"
+        git_info="${B_BLACK}${F_BLUE}⭠ ${git_branch}${DEFAULT} ${state}"
       else
-        git_info="%K{black}⭠ ${git_branch}%f ${state}"
+        git_info="${B_BLACK}⭠ ${git_branch}${DEFAULT} ${state}"
       fi
     else
       git_info=""
@@ -160,21 +112,7 @@ function precmd() {
   fi
 }
 
-
-if [ -z $TMUX ]; then
-  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %{\e[38;5;010m%}│%f%k)${root}${dir} '
-  RPROMPT=$'${git_info}'
-else
-  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %{\e[38;5;010m%}│%f%k)${root}%F{blue}%K{black} > %f%k'
-fi
-
-SPROMPT='zsh: correct? %F{red}%R%f -> %F{green}%r%f [y/n]:'
-PROMPT2='%F{blue}» %f'
-
-function command_not_found_handler() {
-  echo "zsh: command not found: ${fg[red]}$0${reset_color}"
-  exit 1
-}
+PS1="${B_BLACK} ${F_CYAN}\w${F_BLUE} > ${DEFAULT}"
 
 
 ######################## cd ########################
@@ -206,12 +144,6 @@ function powered_cd() {
     * ) echo "powered_cd: too many arguments" ;;
   esac
 }
-
-_powered_cd() {
-  _files -/
-}
-
-compdef _powered_cd powered_cd
 
 
 ######################## tmux ########################
