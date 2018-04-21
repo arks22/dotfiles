@@ -61,7 +61,8 @@ function dotmanager::deploy::commands() {
 }
 
 function dotmanager::clean() {
-  read -n 1 -p "dotmanager: remove dotfiles? [n/y]: " answer
+  echo -n "dotmanager:remove dotfiles? [n/y]: "
+  read -n 1 answer
   echo
   if [[ "$answer" = "y" ]] ; then
     for dotfile in ${dotfiles[@]}; do
@@ -76,7 +77,8 @@ function dotmanager::clean() {
 }
 
 function dotmanager::init() {
-  read -n 1 -p "dotmanager: Install packeges? This task will take some time. [n/y]: " answer
+  echo -n "dotmanager: Install packeges? This task will take some time. [n/y]: "
+  read -n 1 answer
   echo
   if [[ "$answer" = "y" ]]; then
     if [ $(uname -s) = "Darwin" ]; then
