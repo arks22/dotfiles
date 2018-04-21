@@ -111,7 +111,7 @@ function dotmanager::init::install_packages_for_linux() {
   else
     echo "dotmanager: yum or apt-get is required."
     echo "After installing yum or apt-get, Plese run \`dotmanager init\`"
-    exit 1
+    return 1
   fi
   echo "Installing packeges with $installer. Please put your Password."
   for package in ${packages[@]} ; do
@@ -136,13 +136,13 @@ function main() {
           echo
         fi
         dotmanager::help
-        exit 1
+       return 1 
       ;;
 
     esac
   else
     dotmanager::help
-    exit 1
+    return 1
   fi
 }
 
