@@ -49,14 +49,14 @@ function get-prompt-info() {
     esac
     local git_info
     if [[ $git_branch = "master" ]]; then
-      git_info="#[underscore]#[bg=black,fg=blue] ⭠ ${git_branch} #[default]${state}"
+      git_info="#[underscore]#[bg=black,fg=blue]| ⭠ ${git_branch} #[default]${state}"
     else
-      git_info="#[underscore]#[bg=black,fg=colour014] ⭠ ${git_branch} #[default]${state}"
+      git_info="#[underscore]#[bg=black,fg=colour014]| ⭠ ${git_branch} #[default]${state}"
     fi
   else
     git_info=""
   fi
-  local current_pane_path="#[bg=cyan,fg=black] #[underscore]$current_pane_path #[default]"
+  local current_pane_path="#[bg=black,fg=cyan] #[underscore]$current_pane_path #[default]"
   echo "${current_pane_path}${git_info}"
 }
 
