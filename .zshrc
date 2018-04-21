@@ -16,7 +16,9 @@ zplug "arks22/tmuximum", as:command
 zplug "arks22/tweet", as:command
 zplug "seebi/dircolors-solarized"
 zplug "zsh-users/zsh-completions"
+zplug "zsh-users/zaw"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
+zplug "b4b4r07/zsh-vimode-visual", defer:3
 
 #install plugins not installed
 if ! zplug check --verbose; then
@@ -40,8 +42,9 @@ colors
 
 eval $(gdircolors $ZPLUG_HOME/repos/seebi/dircolors-solarized/dircolors.ansi-universal)
 
+#complerion
 zstyle ':completion:*:messages' format $'\e[01;35m -- %d -- \e[00;00m'
-zstyle ':completion:*:warnings' format $'\e[01;31m -- No Matches Found -- \e[00;00m'
+zstyle ':completion:*:warnings' format $'\e[01;31m -- no matches found -- \e[00;00m'
 zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d -- \e[00;00m'
 zstyle ':completion:*:corrections' format $'\e[01;33m -- %d -- \e[00;00m'
 
@@ -59,7 +62,6 @@ export XDG_CONFIG_HOME=$HOME/.config
 export OS="$(uname -s)"
 
 [[ $OS = "Darwin" ]] && export HARDWARE="$(/usr/sbin/system_profiler SPHardwareDataType | awk '{ if (NR == 5) print $3}')"
-bindkey -v
 
 HISTFILE=$HOME/.zsh-history
 HISTSIZE=100000
@@ -78,6 +80,7 @@ setopt auto_list
 setopt correct
 setopt prompt_subst
 setopt no_flow_control
+
 
 
 ######################## aliases ########################
@@ -138,7 +141,7 @@ function git_push_current_branch {
 
 #excute before display prompt
 function precmd() {
-  [ $(whoami) = "root" ] && root="%K{black}%F{yellow} ⚡ %{\e[38;5;010m%}│%f%k" || root=""
+  [ $(whoami) = "root" ] && root="%K{black}%F{yellow} ⚡ %f|%k" || root=""
   if [ ! -z $TMUX ]; then
     tmux refresh-client -S
   else
@@ -162,10 +165,10 @@ function precmd() {
 }
 
 if [ -z $TMUX ]; then
-  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %{\e[38;5;010m%}│%f%k)${root}${dir} '
+  PROMPT_=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}${dir} '
   RPROMPT=$'${git_info}'
 else
-  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %{\e[38;5;010m%}│%f%k)${root}%F{blue}%K{black} > %f%k'
+  PROMPT_=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}%K{black}%F{blue} > %f%k'
 fi
 
 SPROMPT='zsh: correct? %F{red}%R%f -> %F{green}%r%f [y/n]:'
@@ -175,6 +178,44 @@ function command_not_found_handler() {
   echo "zsh: command not found: ${fg[red]}$0${reset_color}"
   exit 1
 }
+
+
+######################## zle ########################
+
+bindkey -v
+
+autoload -Uz add-zsh-hook
+autoload -Uz terminfo
+
+terminfo_down_sc=$terminfo[cud1]$terminfo[cuu1]$terminfo[sc]$terminfo[cud1]
+left_down_prompt_preexec() {
+    print -rn -- $terminfo[el]
+}
+
+add-zsh-hook preexec left_down_prompt_preexec
+
+function zle-keymap-select zle-line-init zle-line-finish
+{
+    case $KEYMAP in
+        main|viins)
+            PROMPT_2="${fg[green]}-- INSERT --${reset_color}"
+            ;;
+        vicmd)
+            PROMPT_2="${fg[blue]}-- NORMAL --${reset_color}"
+            ;;
+        vivis|vivli)
+            PROMPT_2="${fg[magenta]}-- VISUAL --${reset_color}"
+            ;;
+    esac
+
+    PROMPT="%{$terminfo_down_sc$PROMPT_2$terminfo[rc]%}$PROMPT_"
+    zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-line-finish
+zle -N zle-keymap-select
+zle -N edit-command-line
 
 
 ######################## cd ########################
@@ -217,14 +258,11 @@ compdef _powered_cd powered_cd
 ######################## tmux ########################
 
 if [ ! -z $TMUX ]; then
-  i=0
-  n=$(expr $(tput cols) / 4 - 1)
-  while [ $i -lt $n ] ; do
-    (( i++ ))
+  local n=$(( $(tput cols) / 4 - 1 ))
+  for ((i=0; $i < $n; i++)) ; do
     str="${str}- "
   done
   echo "${str}${fg_bold[red]}TMUX ${reset_color}${str}"
-  i=0
 elif [[ ! $(whoami) = "root" ]]; then
   tmuximum
 fi

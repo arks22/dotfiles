@@ -59,7 +59,7 @@ alias vag="vagrant"
 alias gs="git status"
 alias electron="reattach-to-user-namespace electron"
 alias rb="ruby"
-alias py='python'
+alias py="python"
 alias g="git"
 alias glog="git-log-fzf"
 alias gac="git add -A && auto-git-commit"
@@ -97,23 +97,24 @@ function get-git-info() {
     if git_status=$(git status 2>/dev/null ); then
       git_branch="$(echo $git_status| awk 'NR==1 {print $3}')"
       case $git_status in
-        *Changes\ not\ staged* ) state="${F_BLACK} ± ${DEFAULT}" ;;
-        *Changes\ to\ be\ committed* ) state="${B_BLUE}${F_BLACK} + ${DEFAULT}" ;;
-        * ) state="${B_GREEN}${F_BLACK} ✔ ${DEFAULT}" ;;
+        *Changes\ not\ staged* ) state=" ± " ;;
+        *Changes\ to\ be\ committed* ) state=" + " ;;
+        * ) state=" ✔ " ;;
       esac
       if [[ $git_branch = "master" ]]; then
-        git_info="${B_BLACK}${F_BLUE}⭠ ${git_branch}${DEFAULT} ${state}"
+        export git_info="⭠ ${git_branch} ${state}"
       else
-        git_info="${B_BLACK}⭠ ${git_branch}${DEFAULT} ${state}"
+        export git_info="⭠ ${git_branch} ${state}"
       fi
     else
-      git_info=""
+      export git_info=""
     fi
   fi
-  echo "$git_info"
 }
 
-PS1="${B_BLACK}$(get-git-info)${F_CYAN}\w${F_BLUE} > ${DEFAULT}"
+PROMPT_COMMAND="$PROMPT_COMMAND"$'\n'get-git-info
+
+export PS1="${git_info}\w > "
 
 
 ######################## cd ########################
