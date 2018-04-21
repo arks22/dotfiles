@@ -39,7 +39,7 @@ function dotmanager::deploy::dotfiles() {
     if [ ! -e $HOME/$dotfile ]; then
       (( i++ ))
       ln -s $HOME/dotfiles/$dotfile $HOME/$dotfile
-      [[ $? = 0 ]] && echo "+ linked : $dotfile" || echo "! link failed : $dotfile"
+      [[ $? = 0 ]] && echo "+ linked: $dotfile" || echo "! link failed: $dotfile"
     fi
   done
   [ $i = 0 ] && echo "All dotfiles are already linked."
