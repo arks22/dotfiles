@@ -78,7 +78,7 @@ function dotmanager::clean() {
 
 function dotmanager::init() {
   echo -n "dotmanager: Install packeges? This task will take some time. [n/y]: "
-  read -n 1 answer
+  read -n 1 -t 10 answer
   echo
   if [[ "$answer" = "y" ]]; then
     if [ $(uname -s) = "Darwin" ]; then
