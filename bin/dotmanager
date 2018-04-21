@@ -76,16 +76,10 @@ function dotmanager::clean() {
   fi 
 }
 
-<<<<<<< HEAD:commands/dotmanager
-function dotmanager_init() {
-  echo "dotmanager: Install packeges? This task will take some time. [n/y]:"
-  read answer
-=======
 function dotmanager::init() {
   echo -n "dotmanager: Install packeges? This task will take some time. [n/y]: "
   read -n 1 -t 10 answer
   echo
->>>>>>> master:bin/dotmanager
   if [[ "$answer" = "y" ]]; then
     if [ $(uname -s) = "Darwin" ]; then
       if ! type brew >/dev/null 2>&1　; then
