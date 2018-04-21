@@ -188,24 +188,18 @@ autoload -Uz add-zsh-hook
 autoload -Uz terminfo
 
 terminfo_down_sc=$terminfo[cud1]$terminfo[cuu1]$terminfo[sc]$terminfo[cud1]
+
 left_down_prompt_preexec() {
     print -rn -- $terminfo[el]
 }
 
 add-zsh-hook preexec left_down_prompt_preexec
 
-function zle-keymap-select zle-line-init zle-line-finish
-{
+function zle-keymap-select zle-line-init zle-line-finish {
     case $KEYMAP in
-        main|viins)
-            PROMPT_2="${fg[green]}-- INSERT --${reset_color}"
-            ;;
-        vicmd)
-            PROMPT_2="${fg[blue]}-- NORMAL --${reset_color}"
-            ;;
-        vivis|vivli)
-            PROMPT_2="${fg[magenta]}-- VISUAL --${reset_color}"
-            ;;
+        main|viins)  PROMPT_2="${fg[green]}-- INSERT --${reset_color}" ;;
+        vicmd)       PROMPT_2="${fg[blue]}-- NORMAL --${reset_color}" ;;
+        vivis|vivli) PROMPT_2="${fg[magenta]}-- VISUAL --${reset_color}" ;;
     esac
 
     PROMPT="%{$terminfo_down_sc$PROMPT_2$terminfo[rc]%}$PROMPT_"
@@ -222,7 +216,7 @@ zle -N edit-command-line
 
 function chpwd() {
   if [[ ! $PWD = $HOME ]] ; then
-    echo -n "${fg[yellow]}[list: ${fg[cyan]}$PWD${reset_color} ${fg[yellow]}] -> ${reset_color}"
+    echo "${fg[yellow]}list: \e[4;30m${fg[cyan]}$PWD${reset_color}"
     ls
   fi
   local i=0
