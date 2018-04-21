@@ -96,10 +96,11 @@ function dotmanager::init() {
       echo "dotmanager: not support your OS"
     fi
   fi
-  if [ ! $SHELL == "/bin/zsh" ] ; then
+  
+  if [ ! $SHELL == "/bin/zsh" ] && [ which zsh >/dev/null 2>&1 ]; then
     echo "dotmanager:  Please put your password to change shell to zsh."
     chsh -s /bin/zsh
-    exec $SHELL -l
+    echo "The shell has been changed to zsh. Please restart the terminal."
   fi
 }
 
