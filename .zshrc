@@ -13,10 +13,10 @@ zplug "arks22/zsh-gomi", as:command, use:bin/gomi
 zplug "arks22/auto-git-commit", as:command
 zplug "arks22/fshow", as:command
 zplug "arks22/tmuximum", as:command
+zplug "arks22/tweet", as:command
 zplug "seebi/dircolors-solarized"
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
-
 
 #install plugins not installed
 if ! zplug check --verbose; then
@@ -40,9 +40,6 @@ colors
 
 eval $(gdircolors $ZPLUG_HOME/repos/seebi/dircolors-solarized/dircolors.ansi-universal)
 
-stty stop undef
-stty start undef
-
 zstyle ':completion:*:messages' format $'\e[01;35m -- %d -- \e[00;00m'
 zstyle ':completion:*:warnings' format $'\e[01;31m -- No Matches Found -- \e[00;00m'
 zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d -- \e[00;00m'
@@ -56,21 +53,20 @@ zstyle ':completion:*' list-separator '-->'
 
 export EDITOR=vim
 export LANG=en_US.UTF-8
-
 export TERM=xterm-256color
-
 export XDG_CONFIG_HOME=$HOME/.config
 
+export OS="$(uname -s)"
+
+[[ $OS = "Darwin" ]] && export HARDWARE="$(/usr/sbin/system_profiler SPHardwareDataType | awk '{ if (NR == 5) print $3}')"
 bindkey -v
 
-#save 10000 historys
 HISTFILE=$HOME/.zsh-history
-HISTSIZE=10000
-SAVEHIST=10000
+HISTSIZE=100000
+SAVEHIST=100000
 
 #set options
 setopt auto_cd
-#setopt correct
 setopt no_beep
 setopt share_history
 setopt mark_dirs
@@ -81,14 +77,15 @@ setopt auto_param_keys
 setopt auto_list
 setopt correct
 setopt prompt_subst
+setopt no_flow_control
 
 
 ######################## aliases ########################
 
-if [[ $(uname -s) = "Darwin" ]]; then
+if [[ $OS = "Darwin" ]]; then
   alias l="gls -X --color=auto"
   alias ls="gls -AX --color=auto"
-elif [[ $(uname -s) = "Linux" ]]; then
+elif [[ $OS = "Linux" ]]; then
   alias l="ls"
   alias ls="ls -a"
 fi
@@ -105,6 +102,7 @@ alias vag="vagrant"
 alias gs="git status"
 alias electron="reattach-to-user-namespace electron"
 alias -g F="| fzf-tmux"
+alias -g G="| grep"
 alias -s rb="ruby"
 alias -s py='python'
 alias g="git"
@@ -112,6 +110,20 @@ alias glog="git-log-fzf"
 alias gac="git add -A && auto-git-commit"
 alias gacp="git_add_commit_push"
 alias gps="git_push_current_branch"
+alias ggl="google"
+alias ecc="compile_and_exec_c_file"
+
+function compile_and_exec_c_file() {
+  if [[ $# = 1 ]]; then
+    gcc $1 
+    ./a.out
+  elif [[ $# = 2 ]]; then
+    gcc -o $1 $2 
+    ./$1
+  else
+    echo "argument must be one or two (ecc [FILE_NAME] [EXEC_FILE_NAME])"
+  fi
+}
 
 function git_add_commit_push() {
   git add -A && auto-git-commit && git push origin $(git branch | awk '/\*/' | sed -e "s/*//")
@@ -148,7 +160,6 @@ function precmd() {
     fi
   fi
 }
-
 
 if [ -z $TMUX ]; then
   PROMPT=$'%(?,,%F{red}%K{black} ✘%f %{\e[38;5;010m%}│%f%k)${root}${dir} '

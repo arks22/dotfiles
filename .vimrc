@@ -25,6 +25,7 @@ if dein#load_state(s:dein_dir)
   call dein#add('Shougo/vimfiler.vim')
   call dein#add('altercation/vim-colors-solarized')
   call dein#add('mattn/emmet-vim')
+  call dein#add('itchyny/lightline.vim')
   call dein#add('Yggdroot/indentLine')
   call dein#add('easymotion/vim-easymotion')
   call dein#add('vim-jp/vital.vim')
@@ -70,12 +71,19 @@ if !exists('g:neocomplete#sources#omni#input_patterns')
   let g:neocomplete#sources#omni#input_patterns = {}
 endif
 
+
 "unite
 call unite#custom#source(
   \ 'file_rec/async', 
   \ 'ignore_pattern',
   \ '\(.DS_Store\|repos\|tmp\|gems\|vendor\|bundle\|log\|node_modules\|.png\|.svg\|.jpg\|.jpeg\|.gif\|.mv\|.mp3\|.mp4\|.sqlite3\|.map\|.min\)'
   \ )
+
+
+"lightline.vim
+let g:lightline = {
+  \ 'colorscheme': 'solarized'
+  \ }
 
 
 "vimfiler
@@ -116,11 +124,10 @@ autocmd FileType vimfiler nmap <buffer> v <Plug>(vimfiler_split_edit_file)
 autocmd FileType vimfiler nnoremap <silent><buffer><expr> s vimfiler#do_switch_action('split')
 autocmd FileType vimfiler nnoremap <silent><buffer><expr> t vimfiler#do_switch_action('tabopen')
 
-autocmd FileType vimfiler nmap <buffer> S <Plug>(easymotion-overwin-f2)
-
 
 "vim-easymotion
 let g:EasyMotion_do_mapping = 0
+autocmd FileType vimfiler nmap <buffer> S <Plug>(easymotion-overwin-f2)
 
 
 "indentLine
@@ -137,7 +144,6 @@ let &t_ti.="\e[1 q"
 let &t_SI.="\e[5 q"
 let &t_EI.="\e[1 q"
 let &t_te.="\e[0 q"
-
 
 syntax enable
 set background=dark
@@ -180,8 +186,8 @@ nnoremap q :q<CR>
 nnoremap <Leader>s :%s/
 nnoremap <Leader><Space> :w<CR>
 nnoremap <Leader>n :noh<CR>
-nnoremap <Leader>t :tabnew<CR>
-nnoremap <Leader>e :VimFilerExplorer -winwidth=23<CR>
+nnoremap <Leader>t :tabnew<CR>:VimFilerExplorer -winwidth=26<CR>
+nnoremap <Leader>e :VimFilerExplorer -winwidth=26<CR>
 nnoremap <Leader>f :VimFiler -horizontal<CR>
 nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
@@ -201,3 +207,5 @@ nnoremap : ;
 nnoremap j gj
 nnoremap k gk
 nnoremap Y y$
+
+noh

@@ -1,0 +1,117 @@
+#!/usr/bin/env bash
+
+[[ -z $OS ]] && OS="$(uname -s)"
+
+if [[ $OS = "Darwin" ]] && [[ -z $HARDWARE ]]; then
+  HARDWARE="$(/usr/sbin/system_profiler SPHardwareDataType | awk '{ if (NR == 5) print $3}')"
+fi
+
+#load-average
+function get-load-avg() {
+  echo "#[bold][#[default]#[fg=blue] $(uptime | awk '{print $(NF-2)}') #[default]#[bold]]#[default]"
+}
+
+#airport
+function get-airport-state() {
+  if [[ $OS = "Darwin" ]]; then
+    local airport_path="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
+    local air_info=($(eval "$airport_path" -I | grep -E "^ *(agrCtlRSSI|state|SSID):" | awk '{print $2}'))
+    if [ -n $air_info ]; then
+      local airport_
+      local rssi=${air_info[0]}
+      local state=${air_info[1]}
+      local ssid=${air_info[2]}
+      if (( ${#ssid} > 20 )); then
+        ssid=$(echo $ssid | cut -c 1-20 | sed -e "s/\$/.../")
+      fi
+      case $state in
+        "running" )
+          local signals=(▁ ▂ ▄ ▆ █)
+          local signal
+          rssi_=$(expr 5 - ${rssi} / -20)
+          for ((i=0; i < $rssi_; i++ )); do
+            signal="${signal}${signals[$i]}"
+          done
+          airport=" #[underscore]${ssid}#[default] | ${signal} "
+        ;;
+        "init" ) airport="#[fg=yellow] ... #[default]" ;;
+        * ) airport="#[fg=red] ✘ #[default]" ;;
+      esac  
+    fi  
+  fi
+  echo "#[bold]|#[default]${airport}#[bold]|#[default]"
+}
+
+#sound-volume
+function get-sound-volume() {
+  if [[ $OS = "Darwin" ]]; then
+    local sound_info=$(osascript -e 'get volume settings')
+    local sound
+    if  [[ -n $sound_info ]] && [[ "$(echo $sound_info | awk '{print $8}')" = "muted:false" ]]; then
+      sound_volume=$(( $(echo $sound_info | awk '{print $2}' | sed "s/[^0-9]//g") / 6))
+      local str
+      for ((i=0; i < 16; i++ )); do
+        if (($i<$sound_volume)) ; then
+          str="${str}■" 
+        else
+          str="${str} "
+        fi
+      done
+      sound="${str}"
+    else
+      sound="──────mute──────"
+    fi
+  fi
+  #echo "#[bold][${sound}]#[default]"
+}
+
+#battery
+function get-battery-state() {
+  if [[ "$OS" = "Darwin" ]] || [[ "$HARDWARE" = "MacBook" ]]; then
+    local battery_info=$(/usr/bin/pmset -g ps | awk '{ if (NR == 2) print $3 " " $4 }' | sed -e "s/;//g" -e "s/%//")
+    if [[ -n $battery_info ]]; then
+      local battery_quantity
+      local battery
+      battery_quantity=" $(echo $battery_info | awk '{print $1}')"
+      if [[ ! $battery_info =~ "discharging" ]]; then
+        battery="#[bg=cyan,fg=black] +$battery_quantity% #[default]"
+      elif (( $battery_quantity < 16 )); then
+        battery="#[bg=red,fg=white]$battery_quantity% #[default]"
+      else
+        battery="#[bg=cyan,fg=black]$battery_quantity% #[default]"
+      fi
+    fi
+  fi
+  echo $battery
+}
+
+function get-music-state() {
+  if [[ $(osascript -e 'if application "iTunes" is running then' -e '"running"' -e 'end if') = "running" ]]; then
+    track_name=$(osascript -e 'tell application "iTunes"' -e 'name of current track' -e 'end tell')
+    album_name=$(osascript -e 'tell application "iTunes"' -e 'album of current track' -e 'end tell')
+    is_track_playing=$(osascript -e 'tell application "iTunes"' -e 'player state' -e 'end tell')
+    if [[ $is_track_playing = "paused" ]]; then
+      music=■
+    else
+      if (( $(( ${#track_name} + ${#album_name} )) > 59 )); then
+        (( ${#track_name} > 59 )) && track_name=$(echo $track_name | cut -c 1-30 | sed -e "s/\$/.../")
+        music="#[underscore]${track_name}#[default]"
+      else
+        music="#[underscore]${album_name}#[default] | #[underscore]${track_name}#[default]"
+      fi
+    fi
+    echo "#[bold][#[default] ${music} #[bold]]#[default]"
+  fi
+}
+
+
+function main() {
+  local load_avg=$(get-load-avg)
+  local sound=$(get-sound-volume)
+  local airport=$(get-airport-state)
+  local battery=$(get-battery-state)
+  local music=$(get-music-state)
+  echo "${music}${sound}${load_avg}${airport}${battery}"
+}
+
+main $@
