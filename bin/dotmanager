@@ -62,8 +62,7 @@ function dotmanager::deploy::commands() {
 
 function dotmanager::clean() {
   while true; do
-    read -n 1 -p "dotmanager: remove dotfiles? [n/y]: " answer
-    echo
+    read -n 1 -p "dotmanager: Install packeges? This task will take some time. [n/y]: " answer
     case $answer in
       "y" ) 
         for dotfile in ${dotfiles[@]}; do
