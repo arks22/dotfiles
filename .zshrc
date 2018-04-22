@@ -149,7 +149,7 @@ function precmd() {
     if git_status=$(git status 2>/dev/null ); then
       git_branch="$(echo $git_status| awk 'NR==1 {print $3}')"
       case $git_status in
-        *Changes\ not\ staged* ) state=$'%{\e[30;48;5;013m%}%F{black} ± %f%k' ;;
+        *Changes\ not\ staged* ) state=$'%{\e[30;48;5;013m%} ± %f%k' ;;
         *Changes\ to\ be\ committed* ) state="%K{blue}%F{black} + %k%f" ;;
         * ) state="%K{green}%F{black} ✔ %f%k" ;;
       esac
@@ -165,7 +165,7 @@ function precmd() {
 }
 
 if [ -z $TMUX ]; then
-  PROMPT_=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}${dir} '
+  PROMPT_=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}${dir}%K{black}%F{blue}> %f%k'
   RPROMPT=$'${git_info}'
 else
   PROMPT_=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}%K{black}%F{blue} > %f%k'
@@ -187,23 +187,23 @@ bindkey -v
 autoload -Uz add-zsh-hook
 autoload -Uz terminfo
 
-terminfo_down_sc=$terminfo[cud1]$terminfo[cuu1]$terminfo[sc]$terminfo[cud1]
+terminfo_down_sc=${terminfo[cud1]}${terminfo[cuu1]}${terminfo[sc]}${terminfo[cud1]}
 
 left_down_prompt_preexec() {
-    print -rn -- $terminfo[el]
+  print -rn -- $terminfo[el]
 }
 
 add-zsh-hook preexec left_down_prompt_preexec
 
 function zle-keymap-select zle-line-init zle-line-finish {
-    case $KEYMAP in
-        main|viins)  PROMPT_2="${fg[green]}-- INSERT --${reset_color}" ;;
-        vicmd)       PROMPT_2="${fg[blue]}-- NORMAL --${reset_color}" ;;
-        vivis|vivli) PROMPT_2="${fg[magenta]}-- VISUAL --${reset_color}" ;;
-    esac
+  case $KEYMAP in
+    main|viins)  PROMPT_2="${fg[green]}-- INSERT --${reset_color}" ;;
+    vicmd)       PROMPT_2="${fg[blue]}-- NORMAL --${reset_color}" ;;
+    vivis|vivli) PROMPT_2="${fg[magenta]}-- VISUAL --${reset_color}" ;;
+  esac
 
-    PROMPT="%{$terminfo_down_sc$PROMPT_2$terminfo[rc]%}$PROMPT_"
-    zle reset-prompt
+  PROMPT="%{$terminfo_down_sc$PROMPT_2$terminfo[rc]%}$PROMPT_"
+  zle reset-prompt
 }
 
 zle -N zle-line-init
@@ -216,7 +216,7 @@ zle -N edit-command-line
 
 function chpwd() {
   if [[ ! $PWD = $HOME ]] ; then
-    echo "${fg[yellow]}list: \e[4;30m${fg[cyan]}$PWD${reset_color}"
+    echo "${fg[yellow]}list: \e[4;m${fg[cyan]}$PWD${reset_color}"
     ls
   fi
   local i=0
@@ -252,11 +252,16 @@ compdef _powered_cd powered_cd
 ######################## tmux ########################
 
 if [ ! -z $TMUX ]; then
-  local n=$(( $(tput cols) / 4 - 1 ))
+  n=$(( $(tput cols) / 4 - 3 ))
   for ((i=0; $i < $n; i++)) ; do
     str="${str}- "
   done
-  echo "${str}${fg_bold[red]}TMUX ${reset_color}${str}"
+  echo "${str}${fg_bold[red]}TMUX${reset_color} - ${fg[blue]}zsh ${reset_color}${str}- "
 elif [[ ! $(whoami) = "root" ]]; then
+  n=$(( $(tput cols) / 4 - 1 ))
+  for ((i=0; $i < $n; i++)) ; do
+    str="${str}- "
+  done
+  echo "${str}${fg[blue]}zsh ${reset_color}${str}- "
   tmuximum
 fi

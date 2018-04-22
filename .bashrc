@@ -15,27 +15,26 @@ SAVEHIST=100000
 
 
 ####################### colors #######################
+readonly F_BLACK="\033[30m"
+readonly F_RED="\033[31m"
+readonly F_GREEN="\033[32m"
+readonly F_YELLOW="\033[33m"
+readonly F_BLUE="\033[34m"
+readonly F_MAGENTA="\033[35m"
+readonly F_CYAN="\033[36m"
+readonly F_WHITE="\033[37m"
 
-readonly F_BLACK="\[\e[30m\]"
-readonly F_RED="\[\e[31m\]"
-readonly F_GREEN="\[\e[32m\]"
-readonly F_YELLOW="\[\e[33m\]"
-readonly F_BLUE="\[\e[34m\]"
-readonly F_MAGENTA="\[\e[35m\]"
-readonly F_CYAN="\[\e[36m\]"
-readonly F_WHITE="\[\e[37m\]"
+readonly B_BLACK="\033[40m"
+readonly B_RED="\033[41m"
+readonly B_GREEN="\033[42m"
+readonly B_YELLOW="\033[43m"
+readonly B_BLUE="\033[44m"
+readonly B_MAGENTA="\033[45m"
+readonly B_CYAN="\033[46m"
+readonly B_WHITE="\033[47m"
 
-readonly B_BLACK="\[\e[40m\]"
-readonly B_RED="\[\e[41m\]"
-readonly B_GREEN="\[\e[42m\]"
-readonly B_YELLOW="\[\e[43m\]"
-readonly B_BLUE="\[\e[44m\]"
-readonly B_MAGENTA="\[\e[45m\]"
-readonly B_CYAN="\[\e[46m\]"
-readonly B_WHITE="\[\e[47m\]"
-
-readonly BOLD="\[\e[1m\]"
-readonly DEFAULT="\[\e[0m\]"
+readonly BOLD="\033[1m"
+readonly DEFAULT="\033[0m"
 
 
 ######################## aliases ########################
@@ -97,14 +96,14 @@ function get-git-info() {
     if git_status=$(git status 2>/dev/null ); then
       git_branch="$(echo $git_status| awk 'NR==1 {print $3}')"
       case $git_status in
-        *Changes\ not\ staged* ) state=" ± " ;;
-        *Changes\ to\ be\ committed* ) state=" + " ;;
-        * ) state=" ✔ " ;;
+        *Changes\ not\ staged* ) state="${F_BLACK}\033[30;48;5;013m ± ${DEFAULT}" ;;
+        *Changes\ to\ be\ committed* ) state="${F_BLACK}${B_BLUE} + ${DEFAULT}" ;;
+        * ) state="${F_BLACK}${B_GREEN} ✔ ${DEFAULT}" ;;
       esac
       if [[ $git_branch = "master" ]]; then
-        export git_info="⭠ ${git_branch} ${state}"
+        export git_info="${B_BLACK}⭠ ${BOLD}${git_branch}${DEFAULT}${B_BLACK} ${state}${DEFAULT}"
       else
-        export git_info="⭠ ${git_branch} ${state}"
+        export git_info="${B_BLACK}⭠ ${git_branch} ${state}${DEFAULT}"
       fi
     else
       export git_info=""
@@ -112,9 +111,12 @@ function get-git-info() {
   fi
 }
 
-PROMPT_COMMAND="$PROMPT_COMMAND"$'\n'get-git-info
+function set-prompt() {
+  get-git-info
+  PS1="${git_info}${B_BLACK}${F_CYAN} \w${DEFAULT}${B_BLACK}${F_BLUE} > ${DEFAULT}"
+}
 
-export PS1="${git_info}\w > "
+PROMPT_COMMAND='set-prompt'
 
 
 ######################## cd ########################
@@ -151,14 +153,16 @@ function powered_cd() {
 ######################## tmux ########################
 
 if [ ! -z $TMUX ]; then
-  i=0
-  n=$(expr $(tput cols) / 4 - 1)
-  while [ $i -lt $n ] ; do
-    (( i++ ))
+  n=$(( $(tput cols) / 4 - 2 ))
+  for ((i=0; $i < $n; i++)); do
     str="${str}- "
   done
-  echo "${str}${fg_bold[red]}TMUX ${reset_color}${str}"
-  i=0
+  echo -e "${str}${F_RED}${BOLD}TMUX${DEFAULT} - ${F_GREEN}bash${DEFAULT}${str}"
 elif [[ ! $(whoami) = "root" ]]; then
+  n=$(( $(tput cols) / 4 - 1 ))
+  for ((i=0; $i < $n; i++)) ; do
+    str="${str}- "
+  done
+  echo -e "${str}${F_GREEN}bash ${DEFAULT}${str}"
   tmux attach
 fi
