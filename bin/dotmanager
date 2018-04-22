@@ -39,7 +39,7 @@ function dotmanager::deploy::dotfiles() {
     if [ ! -e $HOME/$dotfile ]; then
       (( i++ ))
       ln -s $HOME/dotfiles/$dotfile $HOME/$dotfile
-      [[ $? = 0 ]] && echo "+ linked: $dotfile" || echo "! link failed: $dotfile"
+      [[ $? = 0 ]] && echo "+ linked: $dotfile"
     fi
   done
   [ $i = 0 ] && echo "All dotfiles are already linked."
@@ -62,19 +62,20 @@ function dotmanager::deploy::commands() {
 
 function dotmanager::clean() {
   while true; do
-    read -n 1 -p "dotmanager: Install packeges? This task will take some time. [n/y]: " answer
+    read -n 1 -p "dotmanager: remove dotfiles? [n/y]: " answer
+    echo
     case $answer in
       "y" ) 
         for dotfile in ${dotfiles[@]}; do
           unlink ~/$dotfile
-          [[ $? = 0 ]] && echo "- unlinked : $dotfile" || echo "! unlink failed : $dotfile"
+          [[ $? = 0 ]] && echo "- unlinked : $dotfile"
         done
         rm -rf ~/dotfiles
         echo "dotfiles were removed."
         echo "To install again, excute \"curl -L raw.github.com/arks22/dotfiles/master/setup/install.bash | bash\"."
         echo "More information about dotfiles : https://github.com/arks22/dotfiles"
       ;;
-      "n" ) break ;;
+      "n" ) exit 0 ;;
       * ) echo "Please press y(yes) or n(no)" ;;
     esac
   done
