@@ -61,47 +61,51 @@ function dotmanager::deploy::commands() {
 }
 
 function dotmanager::clean() {
-  echo -n "dotmanager:remove dotfiles? [n/y]: "
-  read -n 1 answer
-  echo
-  if [[ "$answer" = "y" ]] ; then
-    for dotfile in ${dotfiles[@]}; do
-      unlink ~/$dotfile
-      [[ $? = 0 ]] && echo "- unlinked : $dotfile" || echo "! unlink failed : $dotfile"
-    done
-    rm -rf ~/dotfiles
-    echo "dotfiles were removed."
-    echo "To install again, excute \"curl -L raw.github.com/arks22/dotfiles/master/setup/install.bash | bash\"."
-    echo "More information about dotfiles : https://github.com/arks22/dotfiles"
-  fi 
+  while true; do
+    read -n 1 -p "dotmanager: remove dotfiles? [n/y]: " answer
+    echo
+    case $answer in
+      "y" ) 
+        for dotfile in ${dotfiles[@]}; do
+          unlink ~/$dotfile
+          [[ $? = 0 ]] && echo "- unlinked : $dotfile" || echo "! unlink failed : $dotfile"
+        done
+        rm -rf ~/dotfiles
+        echo "dotfiles were removed."
+        echo "To install again, excute \"curl -L raw.github.com/arks22/dotfiles/master/setup/install.bash | bash\"."
+        echo "More information about dotfiles : https://github.com/arks22/dotfiles"
+      ;;
+      "n" ) return 0 ;;
+      * ) echo "Please press y(yes) or n(no)" ;;
+    esac
+  done
 }
 
 function dotmanager::init() {
-  echo -n "dotmanager: Install packeges? This task will take some time. [n/y]: "
-  read -n 1 -t 10 answer
-  echo
-  if [[ "$answer" = "y" ]]; then
-    if [ $(uname -s) = "Darwin" ]; then
-      if ! type brew >/dev/null 2>&1　; then
-        echo "dotmanager: installing Homebrew ..."
-        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-      fi
-      cp ~/dotfiles/setup/Brewfile ~
-      brew tap Homebrew/bundle
-      brew bundle
-      rm $HOME/Brewfile
-    elif [ $(uname -s) = "Linux" ]; then
-      dotmanager::init::install_packages_for_linux
-    else
-      echo "dotmanager: not support your OS"
-    fi
-  fi
-  
-  if [ ! $SHELL == "/bin/zsh" ] && [ which zsh >/dev/null 2>&1 ]; then
-    echo "dotmanager:  Please put your password to change shell to zsh."
-    chsh -s /bin/zsh
-    echo "The shell has been changed to zsh. Please restart the terminal."
-  fi
+  while true; do
+    read -n 1 -p "dotmanager: remove dotfiles? [n/y]: " answer
+    echo
+    case $answer in
+      "y" ) 
+        if [ $(uname -s) = "Darwin" ]; then
+          if ! type brew >/dev/null 2>&1　; then
+            echo "dotmanager: installing Homebrew ..."
+            /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+          fi
+          cp ~/dotfiles/setup/Brewfile ~
+          brew tap Homebrew/bundle
+          brew bundle
+          rm $HOME/Brewfile
+        elif [ $(uname -s) = "Linux" ]; then
+          dotmanager::init::install_packages_for_linux
+        else
+          echo "dotmanager: not support your OS"
+        fi
+      ;;
+      "n" ) return 0 ;;
+      * ) echo "Please press y(yes) or n(no)" ;;
+    esac
+  done
 }
 
 function dotmanager::init::install_packages_for_linux() {
@@ -127,7 +131,7 @@ function main() {
     case $1 in
       "--help" ) dotmanager::help ;;
       "update" ) dotmanager::update ;;
-      "deploy"   ) dotmanager::deploy;;
+      "deploy" ) dotmanager::deploy;;
       "clean"  ) dotmanager::clean ;;
       "init"   ) dotmanager::init ;;
       * ) 

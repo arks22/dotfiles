@@ -9,14 +9,13 @@ source ~/.zplug/init.zsh
 zplug "zplug/zplug", hook-build:'zplug --self-manage'
 zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
 zplug "junegunn/fzf", as:command, use:"bin/fzf-tmux"
+zplug "mollifier/anyframe"
 zplug "arks22/zsh-gomi", as:command, use:bin/gomi
 zplug "arks22/auto-git-commit", as:command
-zplug "arks22/fshow", as:command
 zplug "arks22/tmuximum", as:command
 zplug "arks22/tweet", as:command
 zplug "seebi/dircolors-solarized"
 zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zaw"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "b4b4r07/zsh-vimode-visual", defer:3
 
@@ -171,8 +170,9 @@ else
   PROMPT_=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}%K{black}%F{blue} > %f%k'
 fi
 
-SPROMPT='zsh: correct? %F{red}%R%f -> %F{green}%r%f [y/n]:'
 PROMPT2='%F{blue}» %f'
+
+SPROMPT='zsh: correct? %F{red}%R%f -> %F{green}%r%f [y/n]:'
 
 function command_not_found_handler() {
   echo "zsh: command not found: ${fg[red]}$0${reset_color}"
