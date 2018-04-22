@@ -74,7 +74,7 @@ function dotmanager::clean() {
         echo "To install again, excute \"curl -L raw.github.com/arks22/dotfiles/master/setup/install.bash | bash\"."
         echo "More information about dotfiles : https://github.com/arks22/dotfiles"
       ;;
-      "n" ) return 0 ;;
+      "n" ) break ;;
       * ) echo "Please press y(yes) or n(no)" ;;
     esac
   done
