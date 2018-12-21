@@ -9,15 +9,15 @@ source ~/.zplug/init.zsh
 zplug "zplug/zplug", hook-build:'zplug --self-manage'
 zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
 zplug "junegunn/fzf", as:command, use:"bin/fzf-tmux"
+zplug "mollifier/anyframe"
 zplug "arks22/zsh-gomi", as:command, use:bin/gomi
 zplug "arks22/auto-git-commit", as:command
-zplug "arks22/fshow", as:command
 zplug "arks22/tmuximum", as:command
 zplug "arks22/tweet", as:command
 zplug "seebi/dircolors-solarized"
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
-
+zplug "b4b4r07/zsh-vimode-visual", defer:3
 
 #install plugins not installed
 if ! zplug check --verbose; then
@@ -41,11 +41,9 @@ colors
 
 eval $(gdircolors $ZPLUG_HOME/repos/seebi/dircolors-solarized/dircolors.ansi-universal)
 
-stty stop undef
-stty start undef
-
+#complerion
 zstyle ':completion:*:messages' format $'\e[01;35m -- %d -- \e[00;00m'
-zstyle ':completion:*:warnings' format $'\e[01;31m -- No Matches Found -- \e[00;00m'
+zstyle ':completion:*:warnings' format $'\e[01;31m -- no matches found -- \e[00;00m'
 zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d -- \e[00;00m'
 zstyle ':completion:*:corrections' format $'\e[01;33m -- %d -- \e[00;00m'
 
@@ -55,17 +53,14 @@ zstyle ':completion:*' completer _complete _prefix _approximate _history
 zstyle ':completion:*:default' menu select=2
 zstyle ':completion:*' list-separator '-->'
 
-export OS="$(uname -s)"
-export UNKOO="UNKO"
-
-[[ $OS = "Darwin" ]] && export HARDWARE="$(/usr/sbin/system_profiler SPHardwareDataType | awk '{ if (NR == 5) print $3}')"
-
 export EDITOR=vim
 export LANG=en_US.UTF-8
 export TERM=xterm-256color
 export XDG_CONFIG_HOME=$HOME/.config
 
-bindkey -v
+export OS="$(uname -s)"
+
+[[ $OS = "Darwin" ]] && export HARDWARE="$(/usr/sbin/system_profiler SPHardwareDataType | awk '{ if (NR == 5) print $3}')"
 
 HISTFILE=$HOME/.zsh-history
 HISTSIZE=100000
@@ -73,7 +68,6 @@ SAVEHIST=100000
 
 #set options
 setopt auto_cd
-#setopt correct
 setopt no_beep
 setopt share_history
 setopt mark_dirs
@@ -84,6 +78,8 @@ setopt auto_param_keys
 setopt auto_list
 setopt correct
 setopt prompt_subst
+setopt no_flow_control
+
 
 
 ######################## aliases ########################
@@ -108,6 +104,7 @@ alias vag="vagrant"
 alias gs="git status"
 alias electron="reattach-to-user-namespace electron"
 alias -g F="| fzf-tmux"
+alias -g G="| grep"
 alias -s rb="ruby"
 alias -s py='python'
 alias g="git"
@@ -116,6 +113,19 @@ alias gac="git add -A && auto-git-commit"
 alias gacp="git_add_commit_push"
 alias gps="git_push_current_branch"
 alias ggl="google"
+alias ecc="compile_and_exec_c_file"
+
+function compile_and_exec_c_file() {
+  if [[ $# = 1 ]]; then
+    gcc $1 
+    ./a.out
+  elif [[ $# = 2 ]]; then
+    gcc -o $1 $2 
+    ./$1
+  else
+    echo "argument must be one or two (ecc [FILE_NAME] [EXEC_FILE_NAME])"
+  fi
+}
 
 function git_add_commit_push() {
   git add -A && auto-git-commit && git push origin $(git branch | awk '/\*/' | sed -e "s/*//")
@@ -130,7 +140,7 @@ function git_push_current_branch {
 
 #excute before display prompt
 function precmd() {
-  [ $(whoami) = "root" ] && root="%K{black}%F{yellow} ⚡ %{\e[38;5;010m%}│%f%k" || root=""
+  [ $(whoami) = "root" ] && root="%K{black}%F{yellow} ⚡ %f|%k" || root=""
   if [ ! -z $TMUX ]; then
     tmux refresh-client -S
   else
@@ -138,7 +148,7 @@ function precmd() {
     if git_status=$(git status 2>/dev/null ); then
       git_branch="$(echo $git_status| awk 'NR==1 {print $3}')"
       case $git_status in
-        *Changes\ not\ staged* ) state=$'%{\e[30;48;5;013m%}%F{black} ± %f%k' ;;
+        *Changes\ not\ staged* ) state=$'%{\e[30;48;5;013m%} ± %f%k' ;;
         *Changes\ to\ be\ committed* ) state="%K{blue}%F{black} + %k%f" ;;
         * ) state="%K{green}%F{black} ✔ %f%k" ;;
       esac
@@ -153,16 +163,16 @@ function precmd() {
   fi
 }
 
-
 if [ -z $TMUX ]; then
-  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %{\e[38;5;010m%}│%f%k)${root}${dir} '
+  PROMPT_=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}${dir}%K{black}%F{blue}> %f%k'
   RPROMPT=$'${git_info}'
 else
-  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %{\e[38;5;010m%}│%f%k)${root}%F{blue}%K{black} > %f%k'
+  PROMPT_=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}%K{black}%F{blue} > %f%k'
 fi
 
-SPROMPT='zsh: correct? %F{red}%R%f -> %F{green}%r%f [y/n]:'
 PROMPT2='%F{blue}» %f'
+
+SPROMPT='zsh: correct? %F{red}%R%f -> %F{green}%r%f [y/n]:'
 
 function command_not_found_handler() {
   echo "zsh: command not found: ${fg[red]}$0${reset_color}"
@@ -170,11 +180,43 @@ function command_not_found_handler() {
 }
 
 
+######################## zle ########################
+
+bindkey -v
+
+autoload -Uz add-zsh-hook
+autoload -Uz terminfo
+
+terminfo_down_sc=${terminfo[cud1]}${terminfo[cuu1]}${terminfo[sc]}${terminfo[cud1]}
+
+left_down_prompt_preexec() {
+  print -rn -- $terminfo[el]
+}
+
+add-zsh-hook preexec left_down_prompt_preexec
+
+function zle-keymap-select zle-line-init zle-line-finish {
+  case $KEYMAP in
+    main|viins)  PROMPT_2="${fg[green]}-- INSERT --${reset_color}" ;;
+    vicmd)       PROMPT_2="${fg[blue]}-- NORMAL --${reset_color}" ;;
+    vivis|vivli) PROMPT_2="${fg[magenta]}-- VISUAL --${reset_color}" ;;
+  esac
+
+  PROMPT="%{$terminfo_down_sc$PROMPT_2$terminfo[rc]%}$PROMPT_"
+  zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-line-finish
+zle -N zle-keymap-select
+zle -N edit-command-line
+
+
 ######################## cd ########################
 
 function chpwd() {
   if [[ ! $PWD = $HOME ]] ; then
-    echo -n "${fg[yellow]}[list: ${fg[cyan]}$PWD${reset_color} ${fg[yellow]}] -> ${reset_color}"
+    echo "${fg[yellow]}list: \e[4;m${fg[cyan]}$PWD${reset_color}"
     ls
   fi
   local i=0
@@ -210,14 +252,16 @@ compdef _powered_cd powered_cd
 ######################## tmux ########################
 
 if [ ! -z $TMUX ]; then
-  i=0
-  n=$(expr $(tput cols) / 4 - 1)
-  while [ $i -lt $n ] ; do
-    (( i++ ))
+  n=$(( $(tput cols) / 4 - 3 ))
+  for ((i=0; $i < $n; i++)) ; do
     str="${str}- "
   done
-  echo "${str}${fg_bold[red]}TMUX ${reset_color}${str}"
-  i=0
+  echo "${str}${fg_bold[red]}TMUX${reset_color} - ${fg[blue]}zsh ${reset_color}${str}- "
 elif [[ ! $(whoami) = "root" ]]; then
+  n=$(( $(tput cols) / 4 - 1 ))
+  for ((i=0; $i < $n; i++)) ; do
+    str="${str}- "
+  done
+  echo "${str}${fg[blue]}zsh ${reset_color}${str}- "
   tmuximum
 fi

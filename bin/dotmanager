@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-dotfiles=$(ls -A $HOME/dotfiles | grep -v 'setup\|bi\|.git\|README.md\|.DS_Store')
+dotfiles=$(ls -A $HOME/dotfiles | grep -v 'setup\|bin\|.git\|README.md\|.DS_Store')
 
 function dotmanager::help() {
   echo "usage: dotmanager [COMMANDS] [OPTIONS]"
@@ -28,7 +28,7 @@ function dotmanager::update() {
 }
 
 function dotmanager::deploy() {
-  echo "dotfiles:"
+  echo "dotmanager:"
   dotmanager::deploy::dotfiles
   dotmanager::deploy::commands
 }
@@ -37,9 +37,9 @@ function dotmanager::deploy::dotfiles() {
   local i=0
   for dotfile in ${dotfiles[@]}; do
     if [ ! -e $HOME/$dotfile ]; then
-      ((i++))
+      (( i++ ))
       ln -s $HOME/dotfiles/$dotfile $HOME/$dotfile
-      [[ $? = 0 ]] && echo "linked : $dotfile" || echo "link failed : $dotfile"
+      [[ $? = 0 ]] && echo "+ linked: $dotfile"
     fi
   done
   [ $i = 0 ] && echo "All dotfiles are already linked."
@@ -47,60 +47,65 @@ function dotmanager::deploy::dotfiles() {
 
 function dotmanager::deploy::commands() {
   local j=0
-  [[ ! $PATH =~ "$HOME/dotfiles/bin" ]] && echo "export PATH=\$PATH:\$HOME/dotfiles/bin" >> $HOME/.zshenv
   commands=$(ls $HOME/dotfiles/bin)
   for command in ${commands[@]}; do
-    if [ ! -x $HOME/dotfiles/bin/$command ] ; then
-      ((j++))
-      chmod a+x ~/dotfiles/bin/$commad
-      [[ $? = 0 ]] && echo "excutable: $command" || echo "failed to make it excutable: $command"
+    if [ ! -x $HOME/dotfiles/bin/$command ]; then
+      (( j++ ))
+      chmod a+x ~/dotfiles/bin/$command
+      [[ $? = 0 ]] && echo "+ grant execute permission: $command" || echo "! failed to make it excutable: $command"
     fi
   done
-  [ $j = 0 ] && echo "All commands are already excutable."
+  if [ $j = 0 ]; then
+    echo "All commands are already excutable."
+  fi
 }
 
 function dotmanager::clean() {
-  echo -n "dotmanager: remove dotfiles? [n/y]:"
-  read -n 1 answer
-  if [[ "$answer" = "y" ]] ; then
+  while true; do
+    read -n 1 -p "dotmanager: remove dotfiles? [n/y]: " answer
     echo
-    for dotfile in ${dotfiles[@]}; do
-      unlink ~/$dotfile
-      [[ $? = 0 ]] && echo "unlinked : $dotfile" || echo "unlink failed : $dotfile"
-    done
-    rm -rf ~/dotfiles
-    echo "dotmanager::"
-    echo "dotfiles were removed."
-    echo "To install again, excute \"curl -L raw.github.com/arks22/dotfiles/master/setup/install.bash | bash\"."
-    echo "More information about dotfiles : https://github.com/arks22/dotfiles"
-  fi 
+    case $answer in
+      "y" ) 
+        for dotfile in ${dotfiles[@]}; do
+          unlink ~/$dotfile
+          [[ $? = 0 ]] && echo "- unlinked : $dotfile"
+        done
+        rm -rf ~/dotfiles
+        echo "dotfiles were removed."
+        echo "To install again, excute \"curl -L raw.github.com/arks22/dotfiles/master/setup/install.bash | bash\"."
+        echo "More information about dotfiles : https://github.com/arks22/dotfiles"
+      ;;
+      "n" ) exit 0 ;;
+      * ) echo "Please press y(yes) or n(no)" ;;
+    esac
+  done
 }
 
 function dotmanager::init() {
-  echo -n "dotmanager: Install packeges? This task will take some time. [n/y]:"
-  read answer
-  if [[ "$answer" = "y" ]]; then
+  while true; do
+    read -n 1 -p "dotmanager: remove dotfiles? [n/y]: " answer
     echo
-    if [ $(uname -s) = "Darwin" ]; then
-      if ! type brew >/dev/null 2>&1　; then
-        echo "dotmanager: installing Homebrew ..."
-        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-      fi
-      cp ~/dotfiles/setup/Brewfile ~
-      brew tap Homebrew/bundle
-      brew bundle
-      rm $HOME/Brewfile
-    elif [ $(uname -s) = "Linux" ]; then
-      dotmanager::init::install_packages_for_linux
-    else
-      echo "dotmanager: not support your OS"
-    fi
-  fi
-  if [ ! $SHELL == "/bin/zsh" ] ; then
-    echo "dotmanager:  Please put your password to change shell to zsh."
-    chsh -s /bin/zsh
-    exec $SHELL -l
-  fi
+    case $answer in
+      "y" ) 
+        if [ $(uname -s) = "Darwin" ]; then
+          if ! type brew >/dev/null 2>&1　; then
+            echo "dotmanager: installing Homebrew ..."
+            /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+          fi
+          cp ~/dotfiles/setup/Brewfile ~
+          brew tap Homebrew/bundle
+          brew bundle
+          rm $HOME/Brewfile
+        elif [ $(uname -s) = "Linux" ]; then
+          dotmanager::init::install_packages_for_linux
+        else
+          echo "dotmanager: not support your OS"
+        fi
+      ;;
+      "n" ) return 0 ;;
+      * ) echo "Please press y(yes) or n(no)" ;;
+    esac
+  done
 }
 
 function dotmanager::init::install_packages_for_linux() {
@@ -113,7 +118,7 @@ function dotmanager::init::install_packages_for_linux() {
   else
     echo "dotmanager: yum or apt-get is required."
     echo "After installing yum or apt-get, Plese run \`dotmanager init\`"
-    exit 1
+    return 1
   fi
   echo "Installing packeges with $installer. Please put your Password."
   for package in ${packages[@]} ; do
@@ -126,7 +131,7 @@ function main() {
     case $1 in
       "--help" ) dotmanager::help ;;
       "update" ) dotmanager::update ;;
-      "deploy"   ) dotmanager::deploy;;
+      "deploy" ) dotmanager::deploy;;
       "clean"  ) dotmanager::clean ;;
       "init"   ) dotmanager::init ;;
       * ) 
@@ -138,13 +143,13 @@ function main() {
           echo
         fi
         dotmanager::help
-        exit 1
+       return 1 
       ;;
 
     esac
   else
     dotmanager::help
-    exit 1
+    return 1
   fi
 }
 
