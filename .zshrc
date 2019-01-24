@@ -27,10 +27,6 @@ if ! zplug check --verbose; then
   fi
 fi
 
-if [[ ! $PATH =~ "$HOME/.zplug/bin" ]]; then
-  export PATH="$PATH:$HOME/.zplug/bin"
-fi
-
 zplug load --verbose
 
 
