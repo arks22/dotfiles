@@ -145,7 +145,6 @@ let &t_EI.="\e[1 q"
 let &t_te.="\e[0 q"
 
 syntax enable
-syntax on
 set background=dark
 colorscheme solarized
 
