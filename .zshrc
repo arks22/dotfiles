@@ -55,7 +55,6 @@ zstyle ':completion:*' list-separator '-->'
 
 export EDITOR=vim
 export LANG=en_US.UTF-8
-export TERM=xterm-256color
 export XDG_CONFIG_HOME=$HOME/.config
 
 export OS="$(uname -s)"
@@ -96,7 +95,7 @@ alias q="exit"
 alias tx="tmux"
 alias reload="exec $SHELL -l"
 alias d="gomi"
-alias t="tmuximum"
+alias txm="tmuximum"
 alias c="powered_cd"
 alias rl="rails"
 alias cl="clear"

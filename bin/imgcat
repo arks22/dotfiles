@@ -1,8 +1,5 @@
 #!/bin/bash
 
-#https://gist.github.com/krtx/533d33d6cc49ecbbb8fab0ae871059ec
-
-
 # tmux requires unrecognized OSC sequences to be wrapped with DCS tmux;
 # <sequence> ST, and for all ESCs in <sequence> to be replaced with ESC ESC. It
 # only accepts ESC backslash for ST.

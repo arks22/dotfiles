@@ -38,7 +38,7 @@ function get-ssh-info {
 
 function get-prompt-info() {
   local current_pane_path="$1"
-  local git_status=$(cd $current_pane_path && git status 2>/dev/null )
+  local git_status=$(cd $current_pane_path && git --no-optional-locks status 2>/dev/null )
   if [[ -n $git_status ]]; then
     local git_branch="$(echo $git_status| awk 'NR==1 {print $3}')"
     local state
@@ -67,6 +67,8 @@ function main() {
   local info
   if [[ $current_pane_command = "ssh" ]]; then
     info="$(get-ssh-info $current_pane_pid)"
+  elif [[ $current_pane_command = "vim" ]]; then
+    info="#[bg=colour034,fg=black] VIM #[default]"
   else
     info="$(get-prompt-info $current_pane_path)"
   fi
