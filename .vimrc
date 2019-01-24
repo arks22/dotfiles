@@ -147,7 +147,6 @@ let &t_te.="\e[0 q"
 syntax enable
 set background=dark
 colorscheme solarized
-highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 
 set wrapscan
 set clipboard=unnamed
@@ -169,6 +168,7 @@ set vb t_vb=
 set autoindent
 set autoindent
 
+highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 
 "maps
 let mapleader = "\<Space>"
