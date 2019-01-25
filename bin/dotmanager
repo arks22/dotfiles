@@ -13,6 +13,9 @@ function dotmanager::help() {
   echo "  deploy    Activate commands in dotfiles/bin"
   echo "  clean     Remove dotfiles"
   echo "  init      Install packeges (this command excuted when you install dotfiles)"
+  echo "            In thos command, you can set OPTION '--full' or '--mini'"
+  echo "            For more details, please type 'dotmanager init --help"
+  return 1
 }
 
 function dotmanager::update() {
@@ -82,74 +85,168 @@ function dotmanager::clean() {
 }
 
 function dotmanager::init() {
-  while true; do
-    read -n 1 -p "dotmanager: remove dotfiles? [n/y]: " answer
-    echo
-    case $answer in
-      "y" ) 
-        if [ $(uname -s) = "Darwin" ]; then
-          if ! type brew >/dev/null 2>&1　; then
-            echo "dotmanager: installing Homebrew ..."
-            /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-          fi
-          cp ~/dotfiles/setup/Brewfile ~
-          brew tap Homebrew/bundle
-          brew bundle
-          rm $HOME/Brewfile
-        elif [ $(uname -s) = "Linux" ]; then
-          dotmanager::init::install_packages_for_linux
-        else
-          echo "dotmanager: not support your OS"
-        fi
-      ;;
-      "n" ) return 0 ;;
-      * ) echo "Please press y(yes) or n(no)" ;;
+  if [[ $# = 1 ]]; then
+    case $1 in
+      "--full" ) dotmanager::init::full ;;
+      "--lite" ) dotmanager::init::lite ;;
+      *        ) dotmanager::init::help ;;
     esac
-  done
+  else
+    echo "dotmanager:"
+    echo "--------------------------------------------"
+    echo "In this command, you can choose between two choices."
+    echo "Depending on the environment, it may take a very long time."
+    echo "It is 'full' or 'lite'. "
+    echo "'full' installs dotfiles completely, lite installs it to a minimum."
+    echo "For more details, please type 'dotmanager init --help"
+    echo "--------------------------------------------"
+    while true; do
+      read -n 1 -p "full or lite ? [f/l]:" answer
+      echo 
+      case $answer in
+        "f" )
+          dotmanager::init::full 
+          return 0
+        ;;
+        "l" )
+          dotmanager::init::lite
+          return 0
+        ;;
+        *   ) echo "Please press f(full) or l(lite)" ;;
+      esac
+    done
+  fi
+} 
+
+function dotmanager::init::help() {
+  echo "dotmanager:"
+  echo "In this command, you can choose between two choices."
+  echo "It is 'full' or 'lite'. "
+  echo "'full' installs dotfiles completely, lite installs it to a minimum."
+  echo "~~~~~~~~~~~"
+  echo "full:"
+  echo "'full' install many Apps and commands and etc"
+  echo "It require a higher level of permission."
+  echo "It is recommended for the main Macintosh and submachines that you can freely use."
+  echo "Depending on the environment, it may take a very long time."
+  echo "~~~~~~~~~~~"
+  echo "lite:"
+  echo "'lite installs only the minimum necessary items."
+  echo "Recommended for Linux Machine or machines that you can not freely use"
+  echo "Instead, 'lite' does not install the following, for example."
 }
 
-function dotmanager::init::install_packages_for_linux() {
-  local packeges=(git ruby zsh tmux)
-  local installer
-  if [ type apt-get >/dev/null 2>&1 ]; then
-    installer="apt-get"
-  elif [ type yum >/dev/null 2>&1 ]; then
-    installer="yum"
-  else
-    echo "dotmanager: yum or apt-get is required."
-    echo "After installing yum or apt-get, Plese run \`dotmanager init\`"
-    return 1
+function dotmanager::init::lite() {
+  cd $HOME
+  mkdir -p "$HOME/local/src"
+  cd $HOME/local/src
+
+  export ncurses=( \
+    "ncurses-5.9" \
+    "http://ftp.gnu.org/pub/gnu/ncurses/ncurses-5.9.tar.gz" \
+    "./configure\ --prefix=$HOME/local/\ --without-cxx-binding\ --with-shared\ --enable-widec" \
+    0 \
+  )
+  export zsh=( \
+    "zsh-5.7" \
+    "https://sourceforge.net/projects/zsh/files/zsh/5.7/zsh-5.7.tar.xz/download" \
+    "./configure --prefix=$HOME/local --enable-cflags=\"-I$HOME/local/include\" --enable-cppflags=\"-I$HOME/local/include\" --enable-ldflags=\"-L$HOME/local/lib\"  --enable-multibyte --enable-locale" \
+    0 \
+  )
+  export vim=( \
+    "vim81" \
+    "ftp://ftp.vim.org/pub/vim/unix/vim-8.1.tar.bz2" \
+    "./configure --prefix=$HOME/local --enable-multibyte --enable-xim --enable-fontset --with-features=big"
+    0 \
+  )
+  export libevent=( \
+    "libevent-2.1.8-stable" \
+    "https://github.com/libevent/libevent/releases/download/release-2.1.8-stable/libevent-2.1.8-stable.tar.gz" \
+    "./configure --prefix=$HOME/local" \
+    0 \
+  )
+  export tmux=( \
+    "tmux-2.8" \
+    "https://github.com/tmux/tmux/releases/download/2.8/tmux-2.8.tar.gz" \
+    "PKG_CONFIG_PATH=$HOME/local/lib/pkgconfig ./configure --prefix=$HOME/local" \
+    0
+  )
+
+  dotmanager::init::lite::install "${ncurses}" || ncurses[3]=1
+  dotmanager::init::lite::install "${zsh[@]}" || zsh[3]=1
+  dotmanager::init::lite::install "${vim[@]}" || vim[3]=1
+  dotmanager::init::lite::install "${libevent[@]}" || libevent[3]=1
+  dotmanager::init::lite::install "${tmux[@]}" || tmux[3]=1
+  
+  dotmanager::init::lite::catch_error "${ncurses[@]}"
+  dotmanager::init::lite::catch_error "${zsh[@]}"
+  dotmanager::init::lite::catch_error "${vim[@]}"
+  dotmanager::init::lite::catch_error "${libevent[@]}"
+  dotmanager::init::lite::catch_error "${tmux[@]}"
+
+  cd $HOME
+}
+
+function dotmanager::init::lite::install() {
+  cd $HOME/local/src
+  local tarball="$2"
+
+  if type curl >/dev/null 2>&1; then
+    echo "Downloading $1 with curl..."
+    curl -L "$tarball" | tar zx
+  elif type wget >/dev/null 2>&1; then
+    echo "Downloading $1 with wget..."
+    wget -O - "$tarball" | tar zx
   fi
-  echo "Installing packeges with $installer. Please put your Password."
-  for package in ${packages[@]} ; do
-    type $package >/dev/null 2>&1 || sudo $installer install $package
-  done
+  cd $1
+  eval $3 && make && make install
+  if [[ $? != 0 ]]; then
+    return 1
+  else
+    return 0
+  fi
+
+}
+
+function dotmanager::init::lite::catch_error() {
+  if [[ $4 = 1 ]]; then
+    echo "Sorry, $1 installation failed."
+  fi
+}
+
+function dotmanager::init::full() {
+  if [ $(uname -s) = "Darwin" ]; then
+    if ! type brew >/dev/null 2>&1　; then
+      echo "dotmanager: installing Homebrew ..."
+      /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    fi
+    cp ~/dotfiles/setup/Brewfile ~
+    brew tap Homebrew/bundle
+    brew bundle
+    rm $HOME/Brewfile
+  elif [ $(uname -s) = "Linux" ]; then
+    echo "dotmanager: Please excute 'dotmanager init lite'"
+  else
+    echo "dotmanager: Not support your OS"
+  fi
 }
 
 function main() {
-  if [[ $# = 1 ]] ; then
+  if [[ $# = 1 ]]; then
     case $1 in
       "--help" ) dotmanager::help ;;
       "update" ) dotmanager::update ;;
       "deploy" ) dotmanager::deploy;;
       "clean"  ) dotmanager::clean ;;
       "init"   ) dotmanager::init ;;
-      * ) 
-        if [[ "$1" =~ ^- ]]; then
-          echo "dotmanager: illegal option $1"
-          echo
-        else
-          echo "dotmanager: illegal command $1"
-          echo
-        fi
-        dotmanager::help
-       return 1 
-      ;;
-
+      *        ) dotmanager::help ;;
+    esac
+  elif [[ $# = 2 ]]; then
+    case $1 in
+      "init"   ) dotmanager::init $2 ;;
     esac
   else
     dotmanager::help
-    return 1
   fi
 }
 

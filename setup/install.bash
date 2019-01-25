@@ -14,8 +14,8 @@ if [ ! -e $HOME/dotfiles ]; then
     mv -f dotfiles-master ~/dotfiles
   fi
   source $HOME/dotfiles/bin/dotmanager >/dev/null 2>&1
-  dotmanager::deploy
   dotmanager::init
+  dotmanager::deploy
 else
   echo "dotfiles are already exists."
   echo "If you want to install arks22/dotfiles, you need to delete ( or move ) your ~/dotfiles."

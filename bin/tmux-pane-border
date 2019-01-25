@@ -49,9 +49,9 @@ function get-prompt-info() {
     esac
     local git_info
     if [[ $git_branch = "master" ]]; then
-      git_info="#[underscore]#[bg=black,fg=colour014]|#[bold] ⭠ ${git_branch} #[default]${state}"
+      git_info="#[bg=black,fg=colour014]|#[underscore]#[bold] ⭠ ${git_branch} #[default]${state}"
     else
-      git_info="#[underscore]#[bg=black,fg=colour014]| ⭠ ${git_branch} #[default]${state}"
+      git_info="#[bg=black,fg=colour014]|#[underscore] ⭠ ${git_branch} #[default]${state}"
     fi
   else
     git_info=""
