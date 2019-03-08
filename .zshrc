@@ -32,6 +32,11 @@ zplug load --verbose
 
 ######################## general ########################
 
+#install tpm(tmux plugin manager)
+if [ ! -e ~/.tmux/plugins/tpm ]; then
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
+
 autoload -U colors
 colors
 
