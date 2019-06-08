@@ -56,6 +56,7 @@ endif
 
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 
+
 function! s:my_cr_function()
   return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
 endfunction
@@ -69,7 +70,6 @@ autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 if !exists('g:neocomplete#sources#omni#input_patterns')
   let g:neocomplete#sources#omni#input_patterns = {}
 endif
-
 
 "unite
 call unite#custom#source(
@@ -206,5 +206,10 @@ nnoremap : ;
 nnoremap j gj
 nnoremap k gk
 nnoremap Y y$
+
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-h> <Left>
+inoremap <C-l> <Right>
 
 noh
