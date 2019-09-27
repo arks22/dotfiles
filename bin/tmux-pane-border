@@ -36,8 +36,17 @@ function get-ssh-info {
   echo "#[bg=colour013,fg=black] ssh:$user@$host #[default]"
 }
 
+
 function get-vim-info {
-  echo "#[bg=colour034,fg=black] VIM #[default]"
+  local pane_index="$1"
+  local pane_is_active="$2"
+  if [[ ${pane_is_active} = "1" ]]; then
+    local index="#[bg=green,fg=black] ACTIVE PANE(${pane_index}) #[default]"
+  else
+    local index="#[bg=colour014,fg=black] ${pane_index} #[default]"
+  fi
+  
+  echo "${index}#[bg=colour034,fg=black] vim #[default]"
 }
 
 
@@ -48,13 +57,13 @@ function get-prompt-info() {
   local git_status=$(cd $pane_path && git --no-optional-locks status 2>/dev/null )
   
   if [[ ${pane_is_active} = "1" ]]; then
-    index_format="#[bg=blue,fg=white]"
-    branch_format="#[bg=black,fg=colour014]"
-    path_format="#[bg=black,fg=cyan]#[underscore]"
+    local index="#[bg=green,fg=black] ACTIVE PANE(${pane_index}) #[default]"
+    local branch_format="#[bg=black,fg=colour014]"
+    local path_format="#[bg=black,fg=cyan]#[underscore]"
   else
-    index_format="#[bg=blue,fg=black]"
-    branch_format="#[bg=colour236,fg=colour014]"
-    path_format="#[bg=colour236,fg=colour037]#[underscore]"
+    local index="#[bg=colour014,fg=black] ${pane_index} #[default]"
+    local branch_format="#[bg=colour236,fg=colour014]"
+    local path_format="#[bg=colour236,fg=colour037]#[underscore]"
   fi
   git_symbol_1_format="#[bg=colour013,fg=black]"
   git_symbol_2_format="#[bg=blue,fg=black]"
@@ -79,7 +88,6 @@ function get-prompt-info() {
   fi
 
 
-  local index="${index_format} ${pane_index} #[default]"
   local path="${path_format} ${pane_path} #[default]"
   echo "${index}${path}${git_info}"
 }
@@ -95,7 +103,7 @@ function main() {
   if [[ $pane_command = "ssh" ]]; then
     info="$(get-ssh-info $pane_pid)"
   elif [[ $pane_command = "vim" ]]; then
-    info="$(get-vim-info)"
+    info="$(get-vim-info $pane_index $pane_is_active)"
   else
     info="$(get-prompt-info $pane_path $pane_index $pane_is_active)"
   fi
