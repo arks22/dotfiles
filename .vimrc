@@ -146,7 +146,12 @@ let &t_te.="\e[0 q"
 
 syntax enable
 set background=dark
+
+autocmd ColorScheme * highlight Normal ctermbg=none
+autocmd ColorScheme * highlight LineNr ctermbg=none
+
 colorscheme solarized
+
 
 set wrapscan
 set clipboard=unnamed
