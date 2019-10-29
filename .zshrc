@@ -13,11 +13,9 @@ zplug "mollifier/anyframe"
 zplug "arks22/zsh-gomi", as:command, use:bin/gomi
 zplug "arks22/auto-git-commit", as:command
 zplug "arks22/tmuximum", as:command
-zplug "arks22/tweet", as:command
 zplug "seebi/dircolors-solarized"
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
-zplug "b4b4r07/zsh-vimode-visual", defer:3
 
 #install plugins not installed
 if ! zplug check --verbose; then
@@ -202,7 +200,6 @@ function zle-keymap-select zle-line-init zle-line-finish {
   case $KEYMAP in
     main|viins)  PROMPT_2="${fg[green]}-- INSERT --${reset_color}" ;;
     vicmd)       PROMPT_2="${fg[blue]}-- NORMAL --${reset_color}" ;;
-    vivis|vivli) PROMPT_2="${fg[magenta]}-- VISUAL --${reset_color}" ;;
   esac
 
   PROMPT="%{$terminfo_down_sc$PROMPT_2$terminfo[rc]%}$PROMPT_"
