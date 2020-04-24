@@ -52,7 +52,7 @@ zstyle ':completion:*' completer _complete _prefix _approximate _history
 zstyle ':completion:*:default' menu select=2
 zstyle ':completion:*' list-separator '-->'
 
-export EDITOR=vim
+export EDITOR=nvim
 export LANG=en_US.UTF-8
 export XDG_CONFIG_HOME=$HOME/.config
 
@@ -91,7 +91,8 @@ elif [[ $OS = "Linux" ]]; then
   alias l="ls"
   alias ls="ls -a"
 fi
-alias vi="vim"
+alias vi="nvim"
+alias vim="nvim"
 alias q="exit"
 alias tx="tmux"
 alias reload="exec $SHELL -l"
