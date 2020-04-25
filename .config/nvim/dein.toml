@@ -13,6 +13,12 @@ repo = 'Shougo/denite.nvim'
 repo = 'Shougo/defx.nvim'
 
 [[plugins]]
+repo = 'ryanoasis/vim-devicons'
+
+[[plugins]]
+repo = 'kristijanhusak/defx-icons'
+
+[[plugins]]
 repo = 'icymind/NeoSolarized'
 
 [[plugins]]

@@ -32,20 +32,34 @@ endif
 
 
 
-"defx
-autocmd VimEnter * execute 'Defx -split=vertical -winwidth=40 -direction=topleft -show-ignored-files'
+"defx.nvim
+autocmd VimEnter * execute 'Defx'
 
-nnoremap <silent><buffer><expr> <CR>
-  \ defx#is_directory() ?
-  \  defx#do_action('open_directory') :
-  \  defx#do_action('multi', ['drop', 'quit'])
+"update defx status automatically when changing file
+autocmd BufEnter * call defx#redraw() 
+autocmd BufWritePost* call defx#redraw() 
 
+call defx#custom#option('_', {
+  \ 'winwidth': 40,
+  \ 'split': 'vertical',
+  \ 'direction': 'topleft',
+  \ 'show_ignored_files': 1,
+  \ 'buffer_name': 'exproler',
+  \ 'toggle': 1,
+  \ 'columns': 'icon:indent:icons:filename',
+  \ 'resume': 1,
+  \ })
+
+
+call defx#custom#column('icon', {
+  \ 'directory_icon': '▸',
+  \ 'opened_icon': '▾',
+  \ })
+
+"mapping
 autocmd FileType defx call s:defx_my_settings()
 
-autocmd BufWritePost * call defx#redraw() "update defx status automatically when changing file
-
 function! s:defx_my_settings() abort
-  " Define mappings
   nnoremap <silent><buffer><expr> <CR>
    \ defx#do_action('drop')
   nnoremap <silent><buffer><expr> c
@@ -170,7 +184,7 @@ nnoremap <Leader>s :%s/
 nnoremap <Leader><Space> :w<CR>
 nnoremap <Leader>n :noh<CR>
 nnoremap <Leader>t :tabnew<CR> 
-nnoremap <silent> <Leader>f :<C-u> Defx -split=vertical -winwidth=40 -direction=topleft -resume -show-ignored-files <CR>
+nnoremap <silent> <Leader>f :<C-u> Defx <CR>
 nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
 nnoremap <Leader>l <C-w>l
