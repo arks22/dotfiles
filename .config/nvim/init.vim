@@ -33,6 +33,8 @@ endif
 
 
 "defx
+autocmd VimEnter * execute 'Defx -split=vertical -winwidth=40 -direction=topleft -show-ignored-files'
+
 nnoremap <silent><buffer><expr> <CR>
   \ defx#is_directory() ?
   \  defx#do_action('open_directory') :
@@ -55,6 +57,8 @@ autocmd BufWritePost * call defx#redraw() "update defx status automatically when
 	  \ defx#do_action('paste')
 	  nnoremap <silent><buffer><expr> l
 	  \ defx#do_action('drop')
+	  nnoremap <silent><buffer><expr> t
+	  \ defx#do_action('open','tabnew')
 	  nnoremap <silent><buffer><expr> E
 	  \ defx#do_action('drop', 'vsplit')
 	  nnoremap <silent><buffer><expr> P
@@ -166,8 +170,8 @@ nnoremap q :q<CR>
 nnoremap <Leader>s :%s/
 nnoremap <Leader><Space> :w<CR>
 nnoremap <Leader>n :noh<CR>
-nnoremap <Leader>t :tabnew<CR>
-nnoremap <silent> <Leader>f :<C-u> Defx -split=vertical -winwidth=40 -direction=topleft -show-ignored-files <CR>
+nnoremap <Leader>t :tabnew<CR> 
+nnoremap <silent> <Leader>f :<C-u> Defx -split=vertical -winwidth=40 -direction=topleft -resume -show-ignored-files <CR>
 nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
 nnoremap <Leader>l <C-w>l
