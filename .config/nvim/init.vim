@@ -1,6 +1,6 @@
 "init.vim is configuration file for 'NeoVim'.
 
-"dein.vim
+""""""""dein.vim""""""""
 if &compatible
   set nocompatible
 endif
@@ -32,28 +32,40 @@ endif
 
 
 
-"defx.nvim
+
+""""""""defx.nvim""""""""
 autocmd VimEnter * execute 'Defx'
 
 "update defx status automatically when changing file
 autocmd BufEnter * call defx#redraw() 
-autocmd BufWritePost* call defx#redraw() 
+autocmd BufWritePost * call defx#redraw() 
 
 call defx#custom#option('_', {
   \ 'winwidth': 40,
   \ 'split': 'vertical',
   \ 'direction': 'topleft',
   \ 'show_ignored_files': 1,
-  \ 'buffer_name': 'exproler',
+  \ 'buffer_name': 'explorer',
   \ 'toggle': 1,
-  \ 'columns': 'icon:indent:icons:filename',
   \ 'resume': 1,
+  \ 'columns': 'indent:git:icons:filename:mark'
   \ })
 
+"call defx#custom#column('icon', {
+"  \ 'directory_icon': '▸',
+"  \ 'opened_icon': '▾',
+"  \ })
 
-call defx#custom#column('icon', {
-  \ 'directory_icon': '▸',
-  \ 'opened_icon': '▾',
+
+call defx#custom#column('git', 'indicators', {
+  \ 'Modified'  : '✹',
+  \ 'Staged'    : '✚',
+  \ 'Untracked' : '✭',
+  \ 'Renamed'   : '➜',
+  \ 'Unmerged'  : '═',
+  \ 'Ignored'   : '☒',
+  \ 'Deleted'   : '✖',
+  \ 'Unknown'   : '?'
   \ })
 
 "mapping
@@ -84,9 +96,6 @@ function! s:defx_my_settings() abort
   \ defx#do_action('new_file')
   nnoremap <silent><buffer><expr> M
   \ defx#do_action('new_multiple_files')
-  nnoremap <silent><buffer><expr> C
-  \ defx#do_action('toggle_columns',
-  \                'mark:indent:icon:filename:type:size:time')
   nnoremap <silent><buffer><expr> S
   \ defx#do_action('toggle_sort', 'time')
   nnoremap <silent><buffer><expr> d
@@ -109,8 +118,8 @@ function! s:defx_my_settings() abort
   \ defx#do_action('cd')
   nnoremap <silent><buffer><expr> q
   \ defx#do_action('quit')
-  nnoremap <silent><buffer><expr> <Space>
-  \ defx#do_action('toggle_select') . 'j'
+  nnoremap <silent><buffer><expr> s
+  \ defx#do_action('toggle_select')
   nnoremap <silent><buffer><expr> *
   \ defx#do_action('toggle_select_all')
   nnoremap <silent><buffer><expr> j
@@ -170,7 +179,7 @@ set autoindent
 set autoindent
 
 
-"maps
+""""""""maps""""""""
 let mapleader = "\<Space>"
 
 command! Reload source ~/.config/nvim/init.vim

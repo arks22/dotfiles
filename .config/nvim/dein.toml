@@ -16,6 +16,9 @@ repo = 'Shougo/defx.nvim'
 repo = 'ryanoasis/vim-devicons'
 
 [[plugins]]
+repo = 'kristijanhusak/defx-git'
+
+[[plugins]]
 repo = 'kristijanhusak/defx-icons'
 
 [[plugins]]
