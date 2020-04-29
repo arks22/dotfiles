@@ -58,6 +58,7 @@ call defx#custom#option('_', {
 "  \ })
 
 
+
 call defx#custom#column('git', 'indicators', {
   \ 'Modified'  : '✹',
   \ 'Staged'    : '✚',
@@ -127,8 +128,6 @@ function! s:defx_my_settings() abort
   \ line('.') == line('$') ? 'gg' : 'j'
   nnoremap <silent><buffer><expr> k
   \ line('.') == 1 ? 'G' : 'k'
-  nnoremap <silent><buffer><expr> <C-l>
-  \ defx#do_action('redraw')
   nnoremap <silent><buffer><expr> <C-g>
   \ defx#do_action('print')
   nnoremap <silent><buffer><expr> cd
@@ -194,7 +193,8 @@ nnoremap <Leader>s :%s/
 nnoremap <Leader><Space> :w<CR>
 nnoremap <Leader>n :noh<CR>
 nnoremap <Leader>t :tabnew<CR> 
-nnoremap <silent> <Leader>f :<C-u> Defx <CR>
+nnoremap <Leader>f :<C-u> Deol <CR>
+nnoremap <Leader>f :<C-u> Defx <CR>
 nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
 nnoremap <Leader>l <C-w>l

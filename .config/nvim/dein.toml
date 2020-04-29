@@ -13,6 +13,9 @@ repo = 'Shougo/denite.nvim'
 repo = 'Shougo/defx.nvim'
 
 [[plugins]]
+repo = 'Shougo/deol.nvim'
+
+[[plugins]]
 repo = 'ryanoasis/vim-devicons'
 
 [[plugins]]
