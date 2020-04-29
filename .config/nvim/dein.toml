@@ -25,7 +25,7 @@ repo = 'kristijanhusak/defx-git'
 repo = 'kristijanhusak/defx-icons'
 
 [[plugins]]
-repo = 'icymind/NeoSolarized'
+repo = 'simeji/winresizer'
 
 [[plugins]]
-repo = 'Yggdroot/indentLine'
+repo = 'icymind/NeoSolarized'

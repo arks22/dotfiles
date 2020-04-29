@@ -140,8 +140,13 @@ filetype plugin indent on
 
 
 "indentLine
-let g:indentLine_faster = 1
-let g:indentLine_char = "│"
+"let g:indentLine_faster = 1
+"let g:indentLine_char = "│"
+
+
+"winresizer
+let g:winresizer_vert_resize = 3
+let g:winresizer_start_key = '<Leader>r'
 
 
 "general
@@ -176,7 +181,6 @@ set showcmd
 set wildmenu
 set vb t_vb=
 set autoindent
-set autoindent
 
 
 """"""""maps""""""""
@@ -189,20 +193,16 @@ noremap <S-j> }
 noremap <S-k> {
 noremap <S-l> $
 nnoremap q :q<CR>
+nnoremap <Leader>o :<C-u> Deol -split=otherwise<CR>
+nnoremap <Leader>f :<C-u> Defx <CR>
 nnoremap <Leader>s :%s/
 nnoremap <Leader><Space> :w<CR>
 nnoremap <Leader>n :noh<CR>
 nnoremap <Leader>t :tabnew<CR> 
-nnoremap <Leader>f :<C-u> Deol <CR>
-nnoremap <Leader>f :<C-u> Defx <CR>
 nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
 nnoremap <Leader>l <C-w>l
 nnoremap <Leader>h <C-w>h
-nnoremap <Leader>, <C-w><<C-w><<C-w><
-nnoremap <Leader>. <C-w>><C-w>><C-w>>
-nnoremap <Leader>+ <C-w>+<C-w>+<C-w>+
-nnoremap <Leader>- <C-w>-<C-w>-<C-w>-
 nnoremap <Leader>d "_d
 nnoremap <Leader>D "_D
 nnoremap <C-l> gt
