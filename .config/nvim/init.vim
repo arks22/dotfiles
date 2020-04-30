@@ -193,8 +193,9 @@ noremap <S-j> }
 noremap <S-k> {
 noremap <S-l> $
 nnoremap q :q<CR>
-nnoremap <Leader>o :<C-u> Deol -split=otherwise<CR>
-nnoremap <Leader>f :<C-u> Defx <CR>
+nnoremap <Leader>oo :<C-u> Deol -split=otherwise<CR>
+nnoremap <Leader>of :<C-u> Deol -split=floating<CR>
+nnoremap <Leader>f :<C-u> Defx -split=floating<CR>
 nnoremap <Leader>s :%s/
 nnoremap <Leader><Space> :w<CR>
 nnoremap <Leader>n :noh<CR>
@@ -207,6 +208,14 @@ nnoremap <Leader>d "_d
 nnoremap <Leader>D "_D
 nnoremap <C-l> gt
 nnoremap <C-h> gT
+
+"insert mode maps
+inoremap <silent> jj <ESC>
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-h> <Left>
+inoremap <C-l> <Right>
+
 nnoremap x "_x
 nnoremap ; :
 nnoremap : ;
