@@ -52,7 +52,7 @@ zstyle ':completion:*' completer _complete _prefix _approximate _history
 zstyle ':completion:*:default' menu select=2
 zstyle ':completion:*' list-separator '-->'
 
-export EDITOR=vim
+export EDITOR=nvim
 export LANG=en_US.UTF-8
 export XDG_CONFIG_HOME=$HOME/.config
 
@@ -91,7 +91,8 @@ elif [[ $OS = "Linux" ]]; then
   alias l="ls"
   alias ls="ls -a"
 fi
-alias vi="vim"
+alias vi="nvim"
+alias vim="nvim"
 alias q="exit"
 alias tx="tmux"
 alias reload="exec $SHELL -l"
@@ -165,10 +166,10 @@ function precmd() {
 }
 
 if [ -z $TMUX ]; then
-  PROMPT_=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}${dir}%K{black}%F{blue}> %f%k'
+  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}${dir}%K{black}%F{blue}> %f%k'
   RPROMPT=$'${git_info}'
 else
-  PROMPT_=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}%K{black}%F{blue} > %f%k'
+  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}%K{black}%F{blue} > %f%k'
 fi
 
 PROMPT2='%F{blue}» %f'
@@ -180,36 +181,6 @@ function command_not_found_handler() {
   exit 1
 }
 
-
-######################## zle ########################
-
-bindkey -v
-
-autoload -Uz add-zsh-hook
-autoload -Uz terminfo
-
-terminfo_down_sc=${terminfo[cud1]}${terminfo[cuu1]}${terminfo[sc]}${terminfo[cud1]}
-
-left_down_prompt_preexec() {
-  print -rn -- $terminfo[el]
-}
-
-add-zsh-hook preexec left_down_prompt_preexec
-
-function zle-keymap-select zle-line-init zle-line-finish {
-  case $KEYMAP in
-    main|viins)  PROMPT_2="${fg[green]}-- INSERT --${reset_color}" ;;
-    vicmd)       PROMPT_2="${fg[blue]}-- NORMAL --${reset_color}" ;;
-  esac
-
-  PROMPT="%{$terminfo_down_sc$PROMPT_2$terminfo[rc]%}$PROMPT_"
-  zle reset-prompt
-}
-
-zle -N zle-line-init
-zle -N zle-line-finish
-zle -N zle-keymap-select
-zle -N edit-command-line
 
 
 ######################## cd ########################

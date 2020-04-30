@@ -1,6 +1,6 @@
 "init.vim is configuration file for 'NeoVim'.
 
-"dein.vim
+""""""""dein.vim""""""""
 if &compatible
   set nocompatible
 endif
@@ -16,92 +16,137 @@ execute 'set runtimepath^=' . s:dein_repo_dir
 
 if dein#load_state(s:dein_dir)
   call dein#begin(s:dein_dir)
-  call dein#add(s:dein_repo_dir)
-  call dein#add('Shougo/vimproc.vim', {'build': 'make'})
-  call dein#add('Shougo/deoplete.nvim')
-  if !has('nvim')
-    call dein#add('roxma/nvim-yarp')
-    call dein#add('roxma/vim-hug-neovim-rpc')
-  endif
-  call dein#add('Shougo/denite.nvim')
-  call dein#add('Shougo/unite.vim')
-  call dein#add('Shougo/vimfiler.vim')
-  call dein#add('iCyMind/NeoSolarized')
-  call dein#add('mattn/emmet-vim')
-  call dein#add('Yggdroot/indentLine')
-  call dein#add('easymotion/vim-easymotion')
+  call dein#load_toml('~/.config/nvim/dein.toml',{'lazy':0})
+  call dein#load_toml('~/.config/nvim/dein_lazy.toml', {'lazy': 1})
   call dein#end()
   call dein#save_state()
+endif
+
+if dein#check_install(['vimproc'])
+  call dein#install(['vimproc'])
 endif
 
 if dein#check_install()
   call dein#install()
 endif
 
-"deoplete.vim
-let g:deoplete#enable_at_startup = 1 
 
 
-"unite
-call unite#custom#source(
-  \ 'file_rec/async', 
-  \ 'ignore_pattern',
-  \ '\(.DS_Store\|repos\|tmp\|gems\|vendor\|bundle\|log\|node_modules\|.png\|.svg\|.jpg\|.jpeg\|.gif\|.mv\|.mp3\|.mp4\|.sqlite3\|.map\|.min\)'
-  \ )
+
+""""""""defx.nvim""""""""
+autocmd VimEnter * execute 'Defx'
+
+"update defx status automatically when changing file
+autocmd BufEnter * call defx#redraw() 
+autocmd BufWritePost * call defx#redraw() 
+
+call defx#custom#option('_', {
+  \ 'winwidth': 40,
+  \ 'split': 'vertical',
+  \ 'direction': 'topleft',
+  \ 'show_ignored_files': 1,
+  \ 'buffer_name': 'explorer',
+  \ 'toggle': 1,
+  \ 'resume': 1,
+  \ 'columns': 'indent:git:icons:filename:mark',
+  \ 'root_marker':' [Root]:'
+  \ })
+
+"call defx#custom#column('icon', {
+"  \ 'directory_icon': '▸',
+"  \ 'opened_icon': '▾',
+"  \ })
 
 
-"vimfiler
-if !argc()
-  autocmd VimEnter * VimFilerExplorer
-endif
 
-let g:vimfiler_no_default_key_mappings = 1
-let g:vimfiler_as_default_explorer = 1
-let g:vimfiler_enable_auto_cd = 1
-let g:vimfiler_ignore_pattern ='^\%(\.\|\..\|\.git\|\.DS_Store\|\.tmp\)$'
-let g:vimfiler_tree_closed_icon = "▸"
-let g:vimfiler_tree_opened_icon = "▾"
-let g:vimfiler_tree_leaf_icon = "│"
-let g:vimfiler_file_icon = " "
-let g:vimfiler_readonly_file_icon = "⭤"
-let g:vimfiler_safe_mode_by_default = 0
+call defx#custom#column('git', 'indicators', {
+  \ 'Modified'  : '✹',
+  \ 'Staged'    : '✚',
+  \ 'Untracked' : '✭',
+  \ 'Renamed'   : '➜',
+  \ 'Unmerged'  : '═',
+  \ 'Ignored'   : '☒',
+  \ 'Deleted'   : '✖',
+  \ 'Unknown'   : '?'
+  \ })
 
-autocmd FileType vimfiler nmap <buffer> j <Plug>(vimfiler_loop_cursor_down)
-autocmd FileType vimfiler nmap <buffer> k <Plug>(vimfiler_loop_cursor_up)
-autocmd FileType vimfiler nmap <buffer> g <Plug>(vimfiler_cursor_top)
-autocmd FileType vimfiler nmap <buffer> R <Plug>(vimfiler_redraw_screen)
-autocmd FileType vimfiler nmap <buffer> * <Plug>(vimfiler_toggle_mark_all_lines)
-autocmd FileType vimfiler nmap <buffer> c <Plug>(vimfiler_copy_file)
-autocmd FileType vimfiler nmap <buffer> m <Plug>(vimfiler_move_file)
-autocmd FileType vimfiler nmap <buffer> d <Plug>(vimfiler_delete_file)
-autocmd FileType vimfiler nmap <buffer> r <Plug>(vimfiler_rename_file)
-autocmd FileType vimfiler nmap <buffer> K <Plug>(vimfiler_make_directory)
-autocmd FileType vimfiler nmap <buffer> N <Plug>(vimfiler_new_file)
-autocmd FileType vimfiler nmap <buffer> o <Plug>(vimfiler_cd_or_edit)
-autocmd FileType vimfiler nmap <buffer> l <Plug>(vimfiler_smart_l)
-autocmd FileType vimfiler nmap <buffer> h <Plug>(vimfiler_smart_h)
-autocmd FileType vimfiler nmap <buffer> q <Plug>(vimfiler_hide)
-autocmd FileType vimfiler nmap <buffer> Q <Plug>(vimfiler_exit)
-autocmd FileType vimfiler nmap <buffer> , <Plug>(vimfiler_toggle_mark_current_line)
-autocmd FileType vimfiler nmap <buffer> v <Plug>(vimfiler_split_edit_file)
-autocmd FileType vimfiler nmap <buffer> S <Plug>(easymotion-overwin-f2)
-autocmd FileType vimfiler nnoremap <silent><buffer><expr> s vimfiler#do_switch_action('split')
-autocmd FileType vimfiler nnoremap <silent><buffer><expr> t vimfiler#do_switch_action('tabopen')
+"mapping
+autocmd FileType defx call s:defx_my_settings()
+
+function! s:defx_my_settings() abort
+  nnoremap <silent><buffer><expr> <CR>
+   \ defx#do_action('drop')
+  nnoremap <silent><buffer><expr> c
+  \ defx#do_action('copy')
+  nnoremap <silent><buffer><expr> m
+  \ defx#do_action('move')
+  nnoremap <silent><buffer><expr> p
+  \ defx#do_action('paste')
+  nnoremap <silent><buffer><expr> l
+  \ defx#do_action('drop')
+  nnoremap <silent><buffer><expr> t
+  \ defx#do_action('open','tabnew')
+  nnoremap <silent><buffer><expr> E
+  \ defx#do_action('drop', 'vsplit')
+  nnoremap <silent><buffer><expr> P
+  \ defx#do_action('drop', 'pedit')
+  nnoremap <silent><buffer><expr> o
+  \ defx#do_action('open_or_close_tree')
+  nnoremap <silent><buffer><expr> K
+  \ defx#do_action('new_directory')
+  nnoremap <silent><buffer><expr> N
+  \ defx#do_action('new_file')
+  nnoremap <silent><buffer><expr> M
+  \ defx#do_action('new_multiple_files')
+  nnoremap <silent><buffer><expr> S
+  \ defx#do_action('toggle_sort', 'time')
+  nnoremap <silent><buffer><expr> d
+  \ defx#do_action('remove')
+  nnoremap <silent><buffer><expr> r
+  \ defx#do_action('rename')
+  nnoremap <silent><buffer><expr> !
+  \ defx#do_action('execute_command')
+  nnoremap <silent><buffer><expr> x
+  \ defx#do_action('execute_system')
+  nnoremap <silent><buffer><expr> yy
+  \ defx#do_action('yank_path')
+  nnoremap <silent><buffer><expr> .
+  \ defx#do_action('toggle_ignored_files')
+  nnoremap <silent><buffer><expr> ;
+  \ defx#do_action('repeat')
+  nnoremap <silent><buffer><expr> h
+  \ defx#do_action('cd', ['..'])
+  nnoremap <silent><buffer><expr> ~
+  \ defx#do_action('cd')
+  nnoremap <silent><buffer><expr> q
+  \ defx#do_action('quit')
+  nnoremap <silent><buffer><expr> s
+  \ defx#do_action('toggle_select')
+  nnoremap <silent><buffer><expr> *
+  \ defx#do_action('toggle_select_all')
+  nnoremap <silent><buffer><expr> j
+  \ line('.') == line('$') ? 'gg' : 'j'
+  nnoremap <silent><buffer><expr> k
+  \ line('.') == 1 ? 'G' : 'k'
+  nnoremap <silent><buffer><expr> <C-g>
+  \ defx#do_action('print')
+  nnoremap <silent><buffer><expr> cd
+  \ defx#do_action('change_vim_cwd')
+endfunction
+
 
 
 filetype plugin indent on
 
-"vim-easymotion
-let g:EasyMotion_do_mapping = 0
-
 
 "indentLine
-let g:indentLine_faster = 1
-let g:indentLine_char = "│"
+"let g:indentLine_faster = 1
+"let g:indentLine_char = "│"
 
 
-"emmet
-let g:user_emmet_leader_key = '<C-m>'
+"winresizer
+let g:winresizer_vert_resize = 3
+let g:winresizer_start_key = '<Leader>r'
 
 
 "general
@@ -136,39 +181,41 @@ set showcmd
 set wildmenu
 set vb t_vb=
 set autoindent
-set autoindent
 
 
-"maps
+""""""""maps""""""""
 let mapleader = "\<Space>"
 
-command! Reload source ~/.vimrc
+command! Reload source ~/.config/nvim/init.vim
 
-nmap s <Plug>(easymotion-overwin-f2)
-nmap S <Plug>(easymotion-overwin-f2)
 noremap <S-h> ^
 noremap <S-j> }
 noremap <S-k> {
 noremap <S-l> $
 nnoremap q :q<CR>
+nnoremap <Leader>oo :<C-u> Deol -split=otherwise<CR>
+nnoremap <Leader>of :<C-u> Deol -split=floating<CR>
+nnoremap <Leader>f :<C-u> Defx -split=vertical<CR>
 nnoremap <Leader>s :%s/
 nnoremap <Leader><Space> :w<CR>
 nnoremap <Leader>n :noh<CR>
-nnoremap <Leader>t :tabnew<CR>
-nnoremap <Leader>e :VimFilerExplorer -winwidth=26<CR>
-nnoremap <Leader>f :VimFiler -horizontal<CR>
+nnoremap <Leader>t :tabnew<CR> 
 nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
 nnoremap <Leader>l <C-w>l
 nnoremap <Leader>h <C-w>h
-nnoremap <Leader>, <C-w><<C-w><<C-w><
-nnoremap <Leader>. <C-w>><C-w>><C-w>>
-nnoremap <Leader>+ <C-w>+<C-w>+<C-w>+
-nnoremap <Leader>- <C-w>-<C-w>-<C-w>-
 nnoremap <Leader>d "_d
 nnoremap <Leader>D "_D
 nnoremap <C-l> gt
 nnoremap <C-h> gT
+
+"insert mode maps
+inoremap <silent> jj <ESC>
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-h> <Left>
+inoremap <C-l> <Right>
+
 nnoremap x "_x
 nnoremap ; :
 nnoremap : ;
