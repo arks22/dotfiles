@@ -195,7 +195,7 @@ noremap <S-l> $
 nnoremap q :q<CR>
 nnoremap <Leader>oo :<C-u> Deol -split=otherwise<CR>
 nnoremap <Leader>of :<C-u> Deol -split=floating<CR>
-nnoremap <Leader>f :<C-u> Defx -split=floating<CR>
+nnoremap <Leader>f :<C-u> Defx -split=vertical<CR>
 nnoremap <Leader>s :%s/
 nnoremap <Leader><Space> :w<CR>
 nnoremap <Leader>n :noh<CR>
