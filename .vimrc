@@ -23,7 +23,6 @@ if dein#load_state(s:dein_dir)
   call dein#add('Shougo/unite.vim')
   call dein#add('Shougo/vimfiler.vim')
   call dein#add('altercation/vim-colors-solarized')
-  call dein#add('mattn/emmet-vim')
   call dein#add('itchyny/lightline.vim')
   call dein#add('Yggdroot/indentLine')
   call dein#add('easymotion/vim-easymotion')
@@ -133,9 +132,6 @@ autocmd FileType vimfiler nmap <buffer> S <Plug>(easymotion-overwin-f2)
 let g:indentLine_faster = 1
 let g:indentLine_char = "│"
 
-
-"emmet
-let g:user_emmet_leader_key = '<C-m>'
 
 
 "general
