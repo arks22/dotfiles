@@ -57,6 +57,10 @@ call defx#custom#option('_', {
 "  \ 'opened_icon': '▾',
 "  \ })
 
+call defx#custom#column('mark', {
+  \ 'readonly_icon': '',
+  \ })
+
 
 
 call defx#custom#column('git', 'indicators', {
@@ -231,3 +235,4 @@ inoremap <C-l> <Right>
 tnoremap <C-[> <C-\><C-n>
 tnoremap <C-l> <C-\><C-n>gt
 tnoremap <C-h> <C-\><C-n>gT
+
