@@ -136,7 +136,7 @@ endfunction
 
 
 "deol
-
+set sh=bash
 
 
 "filetype plugin indent on
@@ -210,6 +210,12 @@ nnoremap <Leader>d "_d
 nnoremap <Leader>D "_D
 nnoremap <C-l> gt
 nnoremap <C-h> gT
+nnoremap x "_x
+nnoremap ; :
+nnoremap : ;
+nnoremap j gj
+nnoremap k gk
+nnoremap Y y$
 
 "insert mode maps
 inoremap <silent> jj <ESC>
@@ -218,9 +224,6 @@ inoremap <C-k> <Up>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
 
-nnoremap x "_x
-nnoremap ; :
-nnoremap : ;
-nnoremap j gj
-nnoremap k gk
-nnoremap Y y$
+"terminal mode maps
+tnoremap <C-[> <C-\><C-n>
+
