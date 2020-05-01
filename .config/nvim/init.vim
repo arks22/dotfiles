@@ -136,7 +136,7 @@ endfunction
 
 
 "deol
-set sh=bash
+set sh=zsh
 
 
 "filetype plugin indent on
@@ -195,9 +195,11 @@ noremap <S-j> }
 noremap <S-k> {
 noremap <S-l> $
 nnoremap q :q<CR>
-nnoremap <Leader>oo :<C-u> Deol -split=otherwise<CR>
-nnoremap <Leader>of :<C-u> Deol -split=floating<CR>
-nnoremap <Leader>f :<C-u> Defx -split=vertical<CR>
+nnoremap <Leader>oh :<C-u>Deol -split=otherwise<CR>
+nnoremap <Leader>ov :<C-u>Deol -split=otherwise<CR>
+nnoremap <Leader>of :<C-u>Deol -split=floating<CR>
+nnoremap <Leader>oo :<C-u>tabnew<CR>:Deol<CR>
+nnoremap <Leader>f :<C-u>Defx -split=vertical<CR>
 nnoremap <Leader>s :%s/
 nnoremap <Leader><Space> :w<CR>
 nnoremap <Leader>n :noh<CR>
@@ -208,14 +210,15 @@ nnoremap <Leader>l <C-w>l
 nnoremap <Leader>h <C-w>h
 nnoremap <Leader>d "_d
 nnoremap <Leader>D "_D
-nnoremap <C-l> gt
-nnoremap <C-h> gT
 nnoremap x "_x
 nnoremap ; :
 nnoremap : ;
 nnoremap j gj
 nnoremap k gk
 nnoremap Y y$
+nnoremap <C-l> gt
+nnoremap <C-h> gT
+
 
 "insert mode maps
 inoremap <silent> jj <ESC>
@@ -226,4 +229,5 @@ inoremap <C-l> <Right>
 
 "terminal mode maps
 tnoremap <C-[> <C-\><C-n>
-
+tnoremap <C-l> <C-\><C-n>gt
+tnoremap <C-h> <C-\><C-n>gT
