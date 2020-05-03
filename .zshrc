@@ -143,9 +143,7 @@ function git_push_current_branch {
 #excute before display prompt
 function precmd() {
   [ $(whoami) = "root" ] && root="%K{black}%F{yellow} ⚡ %f|%k" || root=""
-  if [ ! -z $TMUX ]; then
-    tmux refresh-client -S
-  else
+  if [ -z $TMUX ] || [ ! -z $VIMRUNTIME ]; then
     dir="%F{cyan}%K{black} %~ %k%f"
     if git_status=$(git status 2>/dev/null ); then
       git_branch="$(echo $git_status| awk 'NR==1 {print $3}')"
@@ -155,17 +153,19 @@ function precmd() {
         * ) state="%K{green}%F{black} ✔ %f%k" ;;
       esac
       if [[ $git_branch = "master" ]]; then
-        git_info="%K{black}%F{blue}⭠ ${git_branch}%f%k ${state}"
+        git_info="%K{black}%F{blue} ${git_branch} %f%k${state}"
       else
-        git_info="%K{black}⭠ ${git_branch}%f ${state}"
+        git_info="%K{black} ${git_branch}%f ${state}"
       fi
     else
       git_info=""
     fi
+  else
+    tmux refresh-client -S
   fi
 }
 
-if [ -z $TMUX ]; then
+if [ -z $TMUX ] || [ ! -z $VIMRUNTIME ]; then
   PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}${dir}%K{black}%F{blue}> %f%k'
   RPROMPT=$'${git_info}'
 else
@@ -234,5 +234,5 @@ elif [[ ! $(whoami) = "root" ]]; then
     str="${str}- "
   done
   echo "${str}${fg[blue]}zsh ${reset_color}${str}- "
-  tmuximum
+  #tmuximum
 fi
