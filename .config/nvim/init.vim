@@ -146,10 +146,10 @@ set sh=zsh
 "filetype plugin indent on
 
 
-"indentLine
-"let g:indentLine_faster = 1
-"let g:indentLine_char = "│"
-
+"lightline
+let g:lightline = {
+  \ 'colorscheme': 'solarized'
+  \ }
 
 "winresizer
 let g:winresizer_vert_resize = 3
@@ -187,6 +187,8 @@ set showcmd
 set wildmenu
 set vb t_vb=
 set autoindent
+set splitbelow
+set splitright
 
 
 """"""""maps""""""""
@@ -199,8 +201,8 @@ noremap <S-j> }
 noremap <S-k> {
 noremap <S-l> $
 nnoremap q :q<CR>
-nnoremap <Leader>oh :<C-u>Deol -split=otherwise<CR>
-nnoremap <Leader>ov :<C-u>Deol -split=otherwise<CR>
+nnoremap <Leader>o\ :<C-u>Deol -split=vertical<CR>
+nnoremap <Leader>o- :<C-u>Deol -split=otherwise<CR>
 nnoremap <Leader>of :<C-u>Deol -split=floating<CR>
 nnoremap <Leader>oo :<C-u>tabnew<CR>:Deol<CR>
 nnoremap <Leader>f :<C-u>Defx -split=vertical<CR>
@@ -212,6 +214,8 @@ nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
 nnoremap <Leader>l <C-w>l
 nnoremap <Leader>h <C-w>h
+nnoremap <Leader>- :new<CR>
+nnoremap <Leader>\ :vertical new<CR>
 nnoremap <Leader>d "_d
 nnoremap <Leader>D "_D
 nnoremap x "_x

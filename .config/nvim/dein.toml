@@ -29,3 +29,8 @@ repo = 'simeji/winresizer'
 
 [[plugins]]
 repo = 'icymind/NeoSolarized'
+
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+
+
