@@ -46,7 +46,7 @@ call defx#custom#option('_', {
   \ 'direction': 'topleft',
   \ 'show_ignored_files': 1,
   \ 'buffer_name': 'explorer',
-  \ 'toggle': 1,
+  \ 'toggle': 0,
   \ 'resume': 1,
   \ 'columns': 'indent:git:icons:filename:mark',
   \ 'root_marker':' [Root]:'
@@ -201,15 +201,17 @@ noremap <S-j> }
 noremap <S-k> {
 noremap <S-l> $
 nnoremap q :q<CR>
-nnoremap <Leader>o\ :<C-u>Deol -split=vertical<CR>
-nnoremap <Leader>o- :<C-u>Deol -split=otherwise<CR>
-nnoremap <Leader>of :<C-u>Deol -split=floating<CR>
-nnoremap <Leader>oo :<C-u>tabnew<CR>:Deol<CR>
-nnoremap <Leader>f :<C-u>Defx -split=vertical<CR>
-nnoremap <Leader>s :%s/
+"nnoremap <Leader>o\ :<C-u>Deol -split=vertical<CR>
+"nnoremap <Leader>o- :<C-u>Deol -split=otherwise<CR>
+"nnoremap <Leader>of :<C-u>Deol -split=floating<CR>
+"nnoremap <Leader>oo :<C-u>tabnew<CR>:Deol<CR>
+nnoremap <Leader>t\ :<C-u>vertical split<CR>:terminal<CR>
+nnoremap <Leader>t- :<C-u>split<CR>:terminal<CR>
+nnoremap <Leader>to :<C-u>tabnew<CR>:terminal<CR>
+nnoremap <Leader>f :<C-u>Defx -new<CR>
 nnoremap <Leader><Space> :w<CR>
 nnoremap <Leader>n :noh<CR>
-nnoremap <Leader>t :tabnew<CR> 
+nnoremap <Leader>t :tabnew<CR>
 nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
 nnoremap <Leader>l <C-w>l
@@ -239,4 +241,3 @@ inoremap <C-l> <Right>
 tnoremap <C-[> <C-\><C-n>
 tnoremap <C-l> <C-\><C-n>gt
 tnoremap <C-h> <C-\><C-n>gT
-
