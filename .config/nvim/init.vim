@@ -207,7 +207,7 @@ nnoremap q :q<CR>
 "nnoremap <Leader>oo :<C-u>tabnew<CR>:Deol<CR>
 nnoremap <Leader>t\ :<C-u>vertical split<CR>:terminal<CR>
 nnoremap <Leader>t- :<C-u>split<CR>:terminal<CR>
-nnoremap <Leader>to :<C-u>tabnew<CR>:terminal<CR>
+nnoremap <Leader>tt :<C-u>tabnew<CR>:terminal<CR>
 nnoremap <Leader>f :<C-u>Defx -new<CR>
 nnoremap <Leader><Space> :w<CR>
 nnoremap <Leader>n :noh<CR>
