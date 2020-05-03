@@ -40,7 +40,7 @@ colors
 
 eval $(gdircolors $ZPLUG_HOME/repos/seebi/dircolors-solarized/dircolors.ansi-universal)
 
-#complerion
+#completion
 zstyle ':completion:*:messages' format $'\e[01;35m -- %d -- \e[00;00m'
 zstyle ':completion:*:warnings' format $'\e[01;31m -- no matches found -- \e[00;00m'
 zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d -- \e[00;00m'
@@ -165,11 +165,15 @@ function precmd() {
   fi
 }
 
-if [ -z $TMUX ] || [ ! -z $VIMRUNTIME ]; then
+
+if [ ! -z $VIMRUNTIME ]; then
   PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}${dir}%K{black}%F{blue}> %f%k'
   RPROMPT=$'${git_info}'
-else
+elif [ ! -z $TMUX ]; then 
   PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}%K{black}%F{blue} > %f%k'
+else
+  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}${dir}%K{black}%F{blue}> %f%k'
+  RPROMPT=$'${git_info}'
 fi
 
 PROMPT2='%F{blue}» %f'
@@ -222,12 +226,18 @@ compdef _powered_cd powered_cd
 
 ######################## tmux ########################
 
-if [ ! -z $TMUX ]; then
+if [ ! -z $VIMRUNTIME ]; then
   n=$(( $(tput cols) / 4 - 3 ))
   for ((i=0; $i < $n; i++)) ; do
     str="${str}- "
   done
-  echo "${str}${fg_bold[red]}TMUX${reset_color} - ${fg[blue]}zsh ${reset_color}${str}- "
+  echo "${str}${fg[green]}VIM${reset_color} - ${fg[blue]}zsh ${reset_color}${str}- "
+elif [ ! -z $TMUX ]; then
+  n=$(( $(tput cols) / 4 - 3 ))
+  for ((i=0; $i < $n; i++)) ; do
+    str="${str}- "
+  done
+  echo "${str}${fg[green]}TMUX${reset_color} - ${fg[blue]}zsh ${reset_color}${str}- "
 elif [[ ! $(whoami) = "root" ]]; then
   n=$(( $(tput cols) / 4 - 1 ))
   for ((i=0; $i < $n; i++)) ; do
