@@ -31,6 +31,10 @@ if dein#check_install()
 endif
 
 
+"call map(dein#check_clean(), "delete(v:val, 'rf')")
+
+""""""""deoplete""""""""
+let g:deoplete#enable_at_startup = 1
 
 
 """"""""defx.nvim""""""""
@@ -51,11 +55,6 @@ call defx#custom#option('_', {
   \ 'columns': 'indent:git:icons:filename:mark',
   \ 'root_marker':' [Root]:'
   \ })
-
-"call defx#custom#column('icon', {
-"  \ 'directory_icon': '▸',
-"  \ 'opened_icon': '▾',
-"  \ })
 
 call defx#custom#column('mark', {
   \ 'readonly_icon': '',
@@ -139,7 +138,7 @@ function! s:defx_my_settings() abort
 endfunction
 
 
-"deol
+"terminal
 set sh=zsh
 
 
@@ -187,6 +186,7 @@ set showcmd
 set wildmenu
 set vb t_vb=
 set autoindent
+set smartindent
 set splitbelow
 set splitright
 
