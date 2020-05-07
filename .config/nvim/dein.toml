@@ -15,6 +15,9 @@ repo = 'Shougo/defx.nvim'
 [[plugins]]
 repo = 'Shougo/deol.nvim'
 
+#[[plugins]]
+#repo = 'Shougo/deoppet.nvim'
+
 [[plugins]]
 repo = 'ryanoasis/vim-devicons'
 
@@ -29,3 +32,8 @@ repo = 'simeji/winresizer'
 
 [[plugins]]
 repo = 'icymind/NeoSolarized'
+
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+
+

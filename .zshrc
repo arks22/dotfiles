@@ -40,7 +40,7 @@ colors
 
 eval $(gdircolors $ZPLUG_HOME/repos/seebi/dircolors-solarized/dircolors.ansi-universal)
 
-#complerion
+#completion
 zstyle ':completion:*:messages' format $'\e[01;35m -- %d -- \e[00;00m'
 zstyle ':completion:*:warnings' format $'\e[01;31m -- no matches found -- \e[00;00m'
 zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d -- \e[00;00m'
@@ -143,9 +143,7 @@ function git_push_current_branch {
 #excute before display prompt
 function precmd() {
   [ $(whoami) = "root" ] && root="%K{black}%F{yellow} ⚡ %f|%k" || root=""
-  if [ ! -z $TMUX ]; then
-    tmux refresh-client -S
-  else
+  if [ -z $TMUX ] || [ ! -z $VIMRUNTIME ]; then
     dir="%F{cyan}%K{black} %~ %k%f"
     if git_status=$(git status 2>/dev/null ); then
       git_branch="$(echo $git_status| awk 'NR==1 {print $3}')"
@@ -155,21 +153,27 @@ function precmd() {
         * ) state="%K{green}%F{black} ✔ %f%k" ;;
       esac
       if [[ $git_branch = "master" ]]; then
-        git_info="%K{black}%F{blue}⭠ ${git_branch}%f%k ${state}"
+        git_info="%K{black}%F{blue} ${git_branch} %f%k${state}"
       else
-        git_info="%K{black}⭠ ${git_branch}%f ${state}"
+        git_info="%K{black} ${git_branch}%f ${state}"
       fi
     else
       git_info=""
     fi
+  else
+    tmux refresh-client -S
   fi
 }
 
-if [ -z $TMUX ]; then
+
+if [ ! -z $VIMRUNTIME ]; then
   PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}${dir}%K{black}%F{blue}> %f%k'
   RPROMPT=$'${git_info}'
-else
+elif [ ! -z $TMUX ]; then 
   PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}%K{black}%F{blue} > %f%k'
+else
+  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}${dir}%K{black}%F{blue}> %f%k'
+  RPROMPT=$'${git_info}'
 fi
 
 PROMPT2='%F{blue}» %f'
@@ -222,17 +226,23 @@ compdef _powered_cd powered_cd
 
 ######################## tmux ########################
 
-if [ ! -z $TMUX ]; then
+if [ ! -z $VIMRUNTIME ]; then
   n=$(( $(tput cols) / 4 - 3 ))
   for ((i=0; $i < $n; i++)) ; do
     str="${str}- "
   done
-  echo "${str}${fg_bold[red]}TMUX${reset_color} - ${fg[blue]}zsh ${reset_color}${str}- "
+  echo "${str}${fg[green]}VIM${reset_color} - ${fg[blue]}zsh ${reset_color}${str}- "
+elif [ ! -z $TMUX ]; then
+  n=$(( $(tput cols) / 4 - 3 ))
+  for ((i=0; $i < $n; i++)) ; do
+    str="${str}- "
+  done
+  echo "${str}${fg[green]}TMUX${reset_color} - ${fg[blue]}zsh ${reset_color}${str}- "
 elif [[ ! $(whoami) = "root" ]]; then
   n=$(( $(tput cols) / 4 - 1 ))
   for ((i=0; $i < $n; i++)) ; do
     str="${str}- "
   done
   echo "${str}${fg[blue]}zsh ${reset_color}${str}- "
-  tmuximum
+  #tmuximum
 fi

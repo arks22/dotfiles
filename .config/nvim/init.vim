@@ -29,8 +29,13 @@ endif
 if dein#check_install()
   call dein#install()
 endif
+"! Note:  excute dein#update when you update plugin list
 
 
+"call map(dein#check_clean(), "delete(v:val, 'rf')")
+
+""""""""deoplete""""""""
+let g:deoplete#enable_at_startup = 1
 
 
 """"""""defx.nvim""""""""
@@ -46,16 +51,15 @@ call defx#custom#option('_', {
   \ 'direction': 'topleft',
   \ 'show_ignored_files': 1,
   \ 'buffer_name': 'explorer',
-  \ 'toggle': 1,
+  \ 'toggle': 0,
   \ 'resume': 1,
   \ 'columns': 'indent:git:icons:filename:mark',
   \ 'root_marker':' [Root]:'
   \ })
 
-"call defx#custom#column('icon', {
-"  \ 'directory_icon': '▸',
-"  \ 'opened_icon': '▾',
-"  \ })
+call defx#custom#column('mark', {
+  \ 'readonly_icon': '',
+  \ })
 
 
 
@@ -135,14 +139,17 @@ function! s:defx_my_settings() abort
 endfunction
 
 
+"terminal
+set sh=zsh
 
-filetype plugin indent on
+
+"filetype plugin indent on
 
 
-"indentLine
-"let g:indentLine_faster = 1
-"let g:indentLine_char = "│"
-
+"lightline
+let g:lightline = {
+  \ 'colorscheme': 'solarized'
+  \ }
 
 "winresizer
 let g:winresizer_vert_resize = 3
@@ -154,7 +161,6 @@ let &t_ti.="\e[1 q"
 let &t_SI.="\e[5 q"
 let &t_EI.="\e[1 q"
 let &t_te.="\e[0 q"
-
 
 "colorscheme
 set background=dark
@@ -181,6 +187,9 @@ set showcmd
 set wildmenu
 set vb t_vb=
 set autoindent
+set smartindent
+set splitbelow
+set splitright
 
 
 """"""""maps""""""""
@@ -193,21 +202,34 @@ noremap <S-j> }
 noremap <S-k> {
 noremap <S-l> $
 nnoremap q :q<CR>
-nnoremap <Leader>oo :<C-u> Deol -split=otherwise<CR>
-nnoremap <Leader>of :<C-u> Deol -split=floating<CR>
-nnoremap <Leader>f :<C-u> Defx -split=vertical<CR>
-nnoremap <Leader>s :%s/
+"nnoremap <Leader>o\ :<C-u>Deol -split=vertical<CR>
+"nnoremap <Leader>o- :<C-u>Deol -split=otherwise<CR>
+"nnoremap <Leader>of :<C-u>Deol -split=floating<CR>
+"nnoremap <Leader>oo :<C-u>tabnew<CR>:Deol<CR>
+nnoremap <Leader>t\ :<C-u>vertical split<CR>:terminal<CR>
+nnoremap <Leader>t- :<C-u>split<CR>:terminal<CR>
+nnoremap <Leader>tt :<C-u>tabnew<CR>:terminal<CR>
+nnoremap <Leader>f :<C-u>Defx -new<CR>
 nnoremap <Leader><Space> :w<CR>
 nnoremap <Leader>n :noh<CR>
-nnoremap <Leader>t :tabnew<CR> 
+nnoremap <Leader>t :tabnew<CR>
 nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
 nnoremap <Leader>l <C-w>l
 nnoremap <Leader>h <C-w>h
+nnoremap <Leader>- :new<CR>
+nnoremap <Leader>\ :vertical new<CR>
 nnoremap <Leader>d "_d
 nnoremap <Leader>D "_D
+nnoremap x "_x
+nnoremap ; :
+nnoremap : ;
+nnoremap j gj
+nnoremap k gk
+nnoremap Y y$
 nnoremap <C-l> gt
 nnoremap <C-h> gT
+
 
 "insert mode maps
 inoremap <silent> jj <ESC>
@@ -216,9 +238,7 @@ inoremap <C-k> <Up>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
 
-nnoremap x "_x
-nnoremap ; :
-nnoremap : ;
-nnoremap j gj
-nnoremap k gk
-nnoremap Y y$
+"terminal mode maps
+tnoremap <C-[> <C-\><C-n>
+tnoremap <C-l> <C-\><C-n>gt
+tnoremap <C-h> <C-\><C-n>gT
