@@ -12,7 +12,7 @@ zplug "junegunn/fzf", as:command, use:"bin/fzf-tmux"
 zplug "mollifier/anyframe"
 zplug "arks22/zsh-gomi", as:command, use:bin/gomi
 zplug "arks22/auto-git-commit", as:command
-zplug "arks22/tmuximum", as:command
+zplug "arks22/tmuximum", as:command, at:develop
 zplug "seebi/dircolors-solarized"
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
@@ -21,7 +21,8 @@ zplug "zsh-users/zsh-syntax-highlighting", defer:2
 if ! zplug check --verbose; then
   printf "Install? [y/N]: "
   if read -q; then
-    echo; zplug install
+    echo
+    zplug install
   fi
 fi
 
