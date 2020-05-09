@@ -190,6 +190,7 @@ set autoindent
 set smartindent
 set splitbelow
 set splitright
+set modifiable
 
 
 """"""""maps""""""""
