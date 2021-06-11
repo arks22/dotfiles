@@ -8,7 +8,7 @@ fi
 
 #load-average
 function get-load-avg() {
-  echo "#[bold][#[default]#[fg=blue] $(uptime | awk '{print $(NF-2)}') #[default]#[bold]]#[default]"
+  echo "#[fg=colour014][#[default]#[fg=blue] $(uptime | awk '{print $(NF-2)}') #[default]#[fg=colour014]]#[default]"
 }
 
 #airport
@@ -32,14 +32,14 @@ function get-airport-state() {
           for ((i=0; i < $rssi_; i++ )); do
             signal="${signal}${signals[$i]}"
           done
-          airport=" #[underscore]${ssid}#[default] | ${signal} "
+          airport=" #[underscore]#[fg=blue]${ssid}#[default]#[fg=colour014]  ${signal} "
         ;;
         "init" ) airport="#[fg=yellow] ... #[default]" ;;
         * ) airport="#[fg=red] ✘ #[default]" ;;
       esac  
     fi  
   fi
-  echo "#[bold]|#[default]${airport}#[bold]|#[default]"
+  echo "#[fg=colour014]|#[default]${airport}|#[default]"
 }
 
 #sound-volume
@@ -62,7 +62,7 @@ function get-sound-volume() {
       sound="──────mute──────"
     fi
   fi
-  #echo "#[bold][${sound}]#[default]"
+  echo "#[fg=colour014][#[bold]${sound}#[default]#[fg=colour014]]"
 }
 
 #battery
