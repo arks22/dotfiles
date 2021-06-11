@@ -29,6 +29,7 @@ endif
 if dein#check_install()
   call dein#install()
 endif
+
 "! Note:  excute dein#update when you update plugin list
 
 
