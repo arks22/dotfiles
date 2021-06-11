@@ -87,20 +87,20 @@ function get-battery-state() {
 
 function get-music-state() {
   if [[ $(osascript -e 'if application "Music" is running then' -e '"running"' -e 'end if') = "running" ]]; then
-    track_name=$(osascript -e 'tell application "Music"' -e 'name of current track' -e 'end tell')
-    album_name=$(osascript -e 'tell application "Music"' -e 'album of current track' -e 'end tell')
     is_track_playing=$(osascript -e 'tell application "Music"' -e 'player state' -e 'end tell')
-    if [[ $is_track_playing = "paused" ]]  && [[ -n $track_name ]]; then
+    if [[ ! $is_track_playing = "playing" ]] ; then
       music=■
     else
+      track_name=$(osascript -e 'tell application "Music"' -e 'name of current track' -e 'end tell')
+      album_name=$(osascript -e 'tell application "Music"' -e 'album of current track' -e 'end tell')
       if (( $(( ${#track_name} + ${#album_name} )) > 59 )); then
         (( ${#track_name} > 59 )) && track_name=$(echo $track_name | cut -c 1-30 | sed -e "s/\$/.../")
         music="#[underscore]${track_name}#[default]"
       else
         music="#[underscore]${album_name}#[default] #[fg=colour014]| #[underscore]${track_name}#[default]"
       fi
-      echo "#[fg=colour014][#[default] #[fg=colour014]${music} #[fg=colour014]]#[default]"
     fi
+    echo "#[fg=colour014][#[default] #[fg=colour014]${music} #[fg=colour014]]#[default]"
   fi
 }
 
