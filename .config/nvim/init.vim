@@ -162,6 +162,11 @@ let &t_SI.="\e[5 q"
 let &t_EI.="\e[1 q"
 let &t_te.="\e[0 q"
 
+"python PATH
+let g:python_host_prog  = '/usr/bin/python2'
+let g:python3_host_prog = '/usr/local/bin/python3'
+
+
 "colorscheme
 set background=dark
 colorscheme NeoSolarized
