@@ -90,7 +90,7 @@ function get-music-state() {
     track_name=$(osascript -e 'tell application "Music"' -e 'name of current track' -e 'end tell')
     album_name=$(osascript -e 'tell application "Music"' -e 'album of current track' -e 'end tell')
     is_track_playing=$(osascript -e 'tell application "Music"' -e 'player state' -e 'end tell')
-    if [[ $is_track_playing = "paused" ]]; then
+    if [[ $is_track_playing = "paused" ]]  && [[ -n $track_name ]]; then
       music=■
     else
       if (( $(( ${#track_name} + ${#album_name} )) > 59 )); then
