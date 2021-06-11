@@ -99,8 +99,8 @@ function get-music-state() {
       else
         music="#[underscore]${album_name}#[default] #[fg=colour014]| #[underscore]${track_name}#[default]"
       fi
+      echo "#[fg=colour014][#[default] #[fg=colour014]${music} #[fg=colour014]]#[default]"
     fi
-    echo "#[fg=colour014][#[default] #[fg=colour014]${music} #[fg=colour014]]#[default]"
   fi
 }
 
