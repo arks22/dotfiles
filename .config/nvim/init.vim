@@ -164,8 +164,8 @@ let &t_EI.="\e[1 q"
 let &t_te.="\e[0 q"
 
 "python PATH
-let g:python_host_prog  = '/usr/bin/python2'
-let g:python3_host_prog = '/usr/local/bin/python3'
+let g:python_host_prog  = system('echo -n $(which python2)')
+let g:python3_host_prog = system('echo -n $(which python3)')
 
 
 "colorscheme
