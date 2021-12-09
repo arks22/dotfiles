@@ -65,6 +65,13 @@ function dotmanager::deploy::commands() {
   fi
 }
 
+function dotmanager::recommend() {
+  echo "Recommended tasks:"
+  echo "  set up colorscheme : solarized color"
+  echo "  install neovim"
+  echo "  install tmux"
+}
+
 function dotmanager::clean() {
   while true; do
     read -n 1 -p "dotmanager: remove dotfiles? [n/y]: " answer
