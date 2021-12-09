@@ -29,6 +29,7 @@ endif
 if dein#check_install()
   call dein#install()
 endif
+"! Note:  excute dein#update when you update plugin list
 
 "colorscheme
 set background=dark
@@ -36,11 +37,9 @@ colorscheme NeoSolarized
 syntax on
 highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 
-highlight Defx_filename_directory ctermfg=100
-highlight Defx_filename_root ctermfg=100
-highlight Defx_filename ctermfg=100
-
-"! Note:  excute dein#update when you update plugin list
+highlight Defx_filename_directory ctermfg=003
+highlight Defx_filename_root ctermfg=002
+highlight DefxIconsOpenedTreeIcon ctermfg=002
 
 
 "call map(dein#check_clean(), "delete(v:val, 'rf')")
