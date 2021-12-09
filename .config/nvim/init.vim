@@ -30,6 +30,16 @@ if dein#check_install()
   call dein#install()
 endif
 
+"colorscheme
+set background=dark
+colorscheme NeoSolarized
+syntax on
+highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
+
+highlight Defx_filename_directory ctermfg=100
+highlight Defx_filename_root ctermfg=100
+highlight Defx_filename ctermfg=100
+
 "! Note:  excute dein#update when you update plugin list
 
 
@@ -54,14 +64,13 @@ call defx#custom#option('_', {
   \ 'buffer_name': 'explorer',
   \ 'toggle': 0,
   \ 'resume': 1,
-  \ 'columns': 'indent:git:icons:filename:mark',
-  \ 'root_marker':' [Root]:'
+  \ 'columns': 'indent:git:icons::mark:filename',
+  \ 'root_marker':' [In]:'
   \ })
 
 call defx#custom#column('mark', {
   \ 'readonly_icon': '',
   \ })
-
 
 
 call defx#custom#column('git', 'indicators', {
@@ -74,6 +83,21 @@ call defx#custom#column('git', 'indicators', {
   \ 'Deleted'   : '✖',
   \ 'Unknown'   : '?'
   \ })
+
+let g:defx_icons_enable_syntax_highlight = 1
+let g:defx_icons_column_length = 1
+let g:defx_icons_directory_icon = ''
+let g:defx_icons_mark_icon = '*'
+let g:defx_icons_copy_icon = ''
+let g:defx_icons_link_icon = ''
+let g:defx_icons_move_icon = ''
+let g:defx_icons_parent_icon = ''
+let g:defx_icons_default_icon = ''
+let g:defx_icons_directory_symlink_icon = ''
+let g:defx_icons_root_opened_tree_icon = ''
+let g:defx_icons_nested_opened_tree_icon = ''
+let g:defx_icons_nested_closed_tree_icon = ''
+
 
 "mapping
 autocmd FileType defx call s:defx_my_settings()
@@ -168,11 +192,6 @@ let g:python_host_prog  = system('echo -n $(which python2)')
 let g:python3_host_prog = system('echo -n $(which python3)')
 
 
-"colorscheme
-set background=dark
-colorscheme NeoSolarized
-syntax on
-highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 
 set statusline=
 set clipboard=unnamed
