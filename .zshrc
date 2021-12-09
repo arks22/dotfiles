@@ -86,11 +86,11 @@ eval "$(rbenv init -)"
 ######################## aliases ########################
 
 if [[ $OS = "Darwin" ]]; then
-  alias l="gls -X --color=auto"
-  alias ls="gls -AX --color=auto"
+  alias l="gls -CFX --color=auto"
+  alias ls="gls -ACFX --color=auto"
 elif [[ $OS = "Linux" ]]; then
-  alias l="ls"
-  alias ls="ls -a"
+  alias l="ls -CF"
+  alias ls="ls -aCF"
 fi
 alias vi="nvim"
 alias vim="nvim"
