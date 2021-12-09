@@ -177,7 +177,7 @@ if [ ! -z $VIMRUNTIME ]; then
 elif [ ! -z $TMUX ]; then #in TMUX 
   PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}%K{black}%F{green} %T%F{blue} > %f%k'
 else
-  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}${dir}%K{black}%F{green}%T%F{blue} > %f%k'
+  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)%K{black}${root}%F{green} %T%F{cyan}${dir}%K{black}%F{blue} > %f%k'
   RPROMPT=$'${git_info}'
 fi
 
