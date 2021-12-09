@@ -89,7 +89,7 @@ if [[ $OS = "Darwin" ]]; then
   alias l="gls -CFX --color=auto"
   alias ls="gls -ACFX --color=auto"
 elif [[ $OS = "Linux" ]]; then
-  alias l="ls -CF"
+  alias l="$(which ls) -CF"
   alias ls="ls -aCF"
 fi
 
@@ -171,10 +171,10 @@ function precmd() {
 if [ ! -z $VIMRUNTIME ]; then
   PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}${dir}%K{black}%F{blue}> %f%k'
   RPROMPT=$'${git_info}'
-elif [ ! -z $TMUX ]; then 
-  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}%K{black}%F{blue} > %f%k'
+elif [ ! -z $TMUX ]; then #in TMUX 
+  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}%K{black}%F{green} %T%F{blue} > %f%k'
 else
-  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}${dir}%K{black}%F{blue}> %f%k'
+  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}${dir}%K{black}%F{green}%T%F{blue} > %f%k'
   RPROMPT=$'${git_info}'
 fi
 
