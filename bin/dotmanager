@@ -52,9 +52,14 @@ function dotmanager::deploy::commands() {
     if [ ! -x $HOME/dotfiles/bin/$command ]; then
       (( j++ ))
       chmod a+x ~/dotfiles/bin/$command
-      [[ $? = 0 ]] && echo "+ grant execute permission: $command" || echo "! failed to make it excutable: $command"
+      if [ $(which $command) = "$HOME/dotfiles/bin/$command" ]; then
+        echo "+ Permission granted: $command"
+      else
+        echo "! Failed to make it excutable: $command"
+      fi
     fi
   done
+
   if [ $j = 0 ]; then
     echo "All commands are already excutable."
   fi
@@ -82,48 +87,14 @@ function dotmanager::clean() {
 }
 
 function dotmanager::init() {
-  while true; do
-    read -n 1 -p "dotmanager: remove dotfiles? [n/y]: " answer
-    echo
-    case $answer in
-      "y" ) 
-        if [ $(uname -s) = "Darwin" ]; then
-          if ! type brew >/dev/null 2>&1　; then
-            echo "dotmanager: installing Homebrew ..."
-            /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-          fi
-          cp ~/dotfiles/setup/Brewfile ~
-          brew tap Homebrew/bundle
-          brew bundle
-          rm $HOME/Brewfile
-        elif [ $(uname -s) = "Linux" ]; then
-          dotmanager::init::install_packages_for_linux
-        else
-          echo "dotmanager: not support your OS"
-        fi
-      ;;
-      "n" ) return 0 ;;
-      * ) echo "Please press y(yes) or n(no)" ;;
-    esac
-  done
-}
-
-function dotmanager::init::install_packages_for_linux() {
-  local packeges=(git ruby zsh tmux)
-  local installer
-  if [ type apt-get >/dev/null 2>&1 ]; then
-    installer="apt-get"
-  elif [ type yum >/dev/null 2>&1 ]; then
-    installer="yum"
+  if [ $(uname -s) = "Darwin" ]; then
+    echo "Please install and set up Brew"
+    echo "Brewfile is Here -> dotfiles/setup/Brewfile" 
+  elif [ $(uname -s) = "Linux" ]; then
+    echo "Please install the required packages manually"
   else
-    echo "dotmanager: yum or apt-get is required."
-    echo "After installing yum or apt-get, Plese run \`dotmanager init\`"
-    return 1
+    echo "dotmanager: not support your OS"
   fi
-  echo "Installing packeges with $installer. Please put your Password."
-  for package in ${packages[@]} ; do
-    type $package >/dev/null 2>&1 || sudo $installer install $package
-  done
 }
 
 function main() {
