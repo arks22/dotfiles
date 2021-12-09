@@ -92,7 +92,8 @@ elif [[ $OS = "Linux" ]]; then
   alias l="ls -CF"
   alias ls="ls -aCF"
 fi
-alias vi="nvim"
+
+alias original-vim="$(which vim)"
 alias vim="nvim"
 alias q="exit"
 alias tx="tmux"
