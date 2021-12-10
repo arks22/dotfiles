@@ -63,7 +63,7 @@ call defx#custom#option('_', {
   \ 'buffer_name': 'explorer',
   \ 'toggle': 0,
   \ 'resume': 1,
-  \ 'columns': 'indent:git:icons:filename:mark',
+  \ 'columns': 'indent:git:icons:space:filename:mark',
   \ 'root_marker':' [In]:'
   \ })
 
