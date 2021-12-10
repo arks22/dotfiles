@@ -37,9 +37,9 @@ colorscheme NeoSolarized
 syntax on
 highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 
-highlight Defx_filename_directory ctermfg=003
-highlight Defx_filename_root ctermfg=002
-highlight DefxIconsOpenedTreeIcon ctermfg=002
+highlight Defx_filename_directory ctermfg=004
+highlight Defx_filename_root ctermfg=006
+highlight DefxIconsOpenedTreeIcon ctermfg=006
 
 
 "call map(dein#check_clean(), "delete(v:val, 'rf')")
