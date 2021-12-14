@@ -250,8 +250,13 @@ elif [[ ! $(whoami) = "root" ]]; then
   for ((i=0; $i < $n; i++)) ; do
     str="${str}- "
   done
-  echo "${str}${fg[blue]}$hostname : ZSH ${reset_color}${str}- "
-  #tmuximum
+  echo "${str}${fg[green]}$hostname${reset_color}${fg[blue]} : ZSH ${reset_color}${str}- "
+
+  tmux ls > /dev/null 2>&1
+  if [ $? -ne 1 ]; then
+    tmuximum
+  fi
+  
 fi
 
 # >>> conda initialize >>>
