@@ -248,7 +248,7 @@ elif [[ ! $(whoami) = "root" ]]; then
   for ((i=0; $i < $n; i++)) ; do
     str="${str}- "
   done
-  echo "${str}${fg[blue]}zsh ${reset_color}${str}- "
+  echo "${str}${fg[blue]}$(hostname) : ZSH ${reset_color}${str}- "
   #tmuximum
 fi
 
