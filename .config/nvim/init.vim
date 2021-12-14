@@ -144,8 +144,31 @@ set sh=zsh
 
 "lightline
 let g:lightline = {
-  \ 'colorscheme': 'solarized'
+  \ 'colorscheme': 'solarized',
   \ }
+
+function! LightLineFileNameWithParentDir()
+  if expand('%:t') ==# ''
+      let filename = '[No Name]'
+  else
+      let dirfiles = split(expand('%:p'), '/')
+      if len(dirfiles) < 2
+          let filename = dirfiles[0]
+      else
+          let filename = dirfiles[-2] . '/' . dirfiles[-1]
+      endif
+  endif
+  return 'Hello!'
+endfunction
+
+
+function! LightlineTabFilename(n) abort
+  let buflist = tabpagebuflist(a:n)
+  let winnr = tabpagewinnr(a:n)
+  let _ = pathshorten(expand('#'.buflist[winnr - 1].':f'))
+  return _ !=# '' ? _ : '[No Name]'
+endfunction
+
 
 "winresizer
 let g:winresizer_vert_resize = 3
