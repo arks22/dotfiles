@@ -236,19 +236,21 @@ if [ ! -z $VIMRUNTIME ]; then
   for ((i=0; $i < $n; i++)) ; do
     str="${str}- "
   done
-  echo "${str}${fg[green]}VIM${reset_color} - ${fg[blue]}zsh ${reset_color}${str}- "
+  echo "${str}${fg[green]}VIM${reset_color} - ${fg[blue]}ZSH ${reset_color}${str}- "
 elif [ ! -z $TMUX ]; then
   n=$(( $(tput cols) / 4 - 3 ))
   for ((i=0; $i < $n; i++)) ; do
     str="${str}- "
   done
-  echo "${str}${fg[green]}TMUX${reset_color} - ${fg[blue]}zsh ${reset_color}${str}- "
+  echo "${str}${fg[green]}TMUX${reset_color} - ${fg[blue]}ZSH ${reset_color}${str}- "
 elif [[ ! $(whoami) = "root" ]]; then
-  n=$(( $(tput cols) / 4 - 1 ))
+  hostname=$(hostname)
+  hostnamelength=${#hostname}
+  n=$(( $(tput cols) / 4 - hostnamelength / 4 - 3 ))
   for ((i=0; $i < $n; i++)) ; do
     str="${str}- "
   done
-  echo "${str}${fg[blue]}$(hostname) : ZSH ${reset_color}${str}- "
+  echo "${str}${fg[blue]}$hostname : ZSH ${reset_color}${str}- "
   #tmuximum
 fi
 
