@@ -145,6 +145,9 @@ set sh=zsh
 "lightline
 let g:lightline = {
   \ 'colorscheme': 'solarized',
+  \ 'component_function': {
+  \   'filename': 'LightLineFileNameWithParentDir'
+  \ }
   \ }
 
 function! LightLineFileNameWithParentDir()
@@ -158,7 +161,7 @@ function! LightLineFileNameWithParentDir()
           let filename = dirfiles[-2] . '/' . dirfiles[-1]
       endif
   endif
-  return 'Hello!'
+  return filename
 endfunction
 
 
