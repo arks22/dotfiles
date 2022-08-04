@@ -79,9 +79,6 @@ setopt correct
 setopt prompt_subst
 setopt no_flow_control
 
-#ruby
-eval "$(rbenv init -)"
-
 
 ######################## aliases ########################
 

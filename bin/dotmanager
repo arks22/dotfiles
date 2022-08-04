@@ -68,8 +68,8 @@ function dotmanager::deploy::commands() {
 function dotmanager::recommend() {
   echo "Recommended tasks:"
   echo "  set up colorscheme : solarized color"
-  echo "  install git"
   echo "  install zsh"
+  echo "  install git"
   echo "  install neovim"
   echo "  install tmux"
 }
