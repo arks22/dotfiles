@@ -51,6 +51,10 @@ let g:deoplete#enable_at_startup = 1
 """"""""defx.nvim""""""""
 autocmd VimEnter * execute 'Defx'
 
+""""""""vimtex""""""""
+let g:vimtex_quickfix_mode=0
+let g:vimtex_view_method='skim'
+
 "update defx status automatically when changing file
 autocmd BufEnter * call defx#redraw() 
 autocmd BufWritePost * call defx#redraw() 

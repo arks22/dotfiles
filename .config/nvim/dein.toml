@@ -36,4 +36,5 @@ repo = 'icymind/NeoSolarized'
 [[plugins]]
 repo = 'itchyny/lightline.vim'
 
-
+[[plugins]]
+repo = 'lervag/vimtex'

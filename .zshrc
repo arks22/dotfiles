@@ -139,6 +139,10 @@ function git_push_current_branch {
   git push origin $(git branch | awk '/\*/' | sed -e "s/*//")
 }
 
+function imgcat_tmux() {
+  imgcat "$1"
+  read && clear
+}
 
 ######################## prompt ########################
 
