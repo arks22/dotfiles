@@ -52,8 +52,11 @@ let g:deoplete#enable_at_startup = 1
 autocmd VimEnter * execute 'Defx'
 
 """"""""vimtex""""""""
-let g:vimtex_quickfix_mode=0
-let g:vimtex_view_method='skim'
+let g:vimtex_syntax_enabled = 0
+
+let g:vimtex_view_general_viewer = '/Applications/Skim.app/Contents/SharedSupport/displayline'
+
+let g:vimtex_view_general_options = '-r @line @pdf @tex'
 
 "update defx status automatically when changing file
 autocmd BufEnter * call defx#redraw() 
