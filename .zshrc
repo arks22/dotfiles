@@ -111,7 +111,7 @@ alias g="git"
 alias gs="git status"
 alias ga="git add -A"
 alias gc="git commit -m"
-alias gp="git push origin master"
+alias gp="git push origin main"
 alias glog="git-log-fzf"
 alias gac="git add -A && auto-git-commit"
 alias gacp="git_add_commit_push"
@@ -158,7 +158,7 @@ function precmd() {
         *Changes\ to\ be\ committed* ) state="%K{blue}%F{black} + %k%f" ;;
         * ) state="%K{green}%F{black} ✔ %f%k" ;;
       esac
-      if [[ $git_branch = "master" ]]; then
+      if [[ $git_branch = "main" ]]; then
         git_info="%K{black}%F{blue} ${git_branch} %f%k${state}"
       else
         git_info="%K{black} ${git_branch}%f ${state}"
