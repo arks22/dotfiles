@@ -17,7 +17,7 @@ function dotmanager::help() {
 
 function dotmanager::update() {
   cd $HOME/dotfiles >/dev/null 2>&1
-  msg=$(git fetch origin master && git reset --hard origin/master)
+  msg=$(git fetch origin main&& git reset --hard origin/main)
   er=$?
   cd - >/dev/null 2>&1
   if [[ $msg =~ "Already up-to-date." ]] ; then
