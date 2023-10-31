@@ -15,6 +15,9 @@ repo = 'Shougo/defx.nvim'
 [[plugins]]
 repo = 'Shougo/deol.nvim'
 
+[[plugins]]
+repo = 'github/copilot.vim'
+
 #[[plugins]]
 #repo = 'Shougo/deoppet.nvim'
 
