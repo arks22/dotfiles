@@ -26,6 +26,7 @@ if dein#load_state(s:dein_dir)
   call dein#save_state()
 endif
 
+
 if dein#check_install(['vimproc'])
   call dein#install(['vimproc'])
 endif
@@ -253,6 +254,10 @@ nnoremap k gk
 nnoremap Y y$
 nnoremap <C-l> gt
 nnoremap <C-h> gT
+noremap <S-h> ^
+noremap <S-j> }
+noremap <S-k> {
+noremap <S-l> $
 
 if !exists('g:vscode')
   nnoremap <Leader>o\ :<C-u>Deol -split=vertical<CR>
@@ -275,10 +280,6 @@ if !exists('g:vscode')
   nnoremap <Leader>\ :vertical new<CR>
   nnoremap <Leader>d "_d
   nnoremap <Leader>D "_D
-  noremap <S-h> ^
-  noremap <S-j> }
-  noremap <S-k> {
-  noremap <S-l> $
 endif
 
 
