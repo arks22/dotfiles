@@ -9,9 +9,4 @@ $dvipdf = 'dvipdfmx %O -o %D %S';
 $makeindex = 'mendex %O -o %D %S';
 
 $bibtex = 'pbibtex';
-#$pdf_update_method = 2;
-#$pdf_previewer = "start mupdf %O %S";
-#max_repeat       = 5;
-# Prevent latexmk from removing PDF after typeset.
-# $pvc_view_file_via_temporary = 0;
-#   $pdf_previewer    = "open -ga /Applications/Skim.app";
+$recorder = 1;
