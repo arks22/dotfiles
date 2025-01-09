@@ -208,27 +208,28 @@ function precmd() {
     fi
   fi
 
-
   if [ ! -z $TMUX ]; then
     tmux refresh-client -S
   fi
+
+  # "と'の扱いに注意！
+  _prompt_error='%(?,,%F{red}%K{black} ✘%f%f|%k)'
+  _prompt_time='%F{green}%T%f'
+  _prompt_end='%F{blue}> %f%k'
+  _prompt_gh_user="%F{magenta}${GITHUB_USER}%f"
+  _prompt_current_dir="%F{cyan}${dir}%f"
 }
 
-# "と'の扱いに注意！
-_prompt_error='%(?,,%F{red}%K{black} ✘%f%f|%k)'
-_prompt_time='%F{green}%T%f'
-_prompt_user="%F{magenta}${GITHUB_USER}%f"
-_prompt_end='%F{blue}> %f%k'
 
 # 環境に応じてプロンプトを構築
 if [ ! -z $VIMRUNTIME ]; then # in VIM
-  PROMPT='${_prompt_error}${root}${_prompt_time} ${_prompt_user} %F{cyan}${dir}%f ${_prompt_end}'
+  PROMPT='${_prompt_error}${root}${_prompt_time} ${_prompt_gh_user} ${_prompt_current_dir} ${_prompt_end}'
 elif [ ! -z $TMUX ]; then #in TMUX 
-  PROMPT='${_prompt_error}${root}${_prompt_time} ${_prompt_user} ${_prompt_end}'
+  PROMPT='${_prompt_error}${root}${_prompt_time} ${_prompt_gh_user} ${_prompt_end}'
 elif [ $TERM_PROGRAM = "vscode" ]; then # in VSCode
-  PROMPT='${_prompt_error}${root}${_prompt_time} ${_prompt_user} %F{cyan}${dir}%f ${_prompt_end}'
+  PROMPT='${_prompt_error}${root}${_prompt_time} ${_prompt_gh_user} ${_prompt_current_dir} ${_prompt_end}'
 else # raw terminal
-  PROMPT='${_prompt_error}${root}${_prompt_time} ${_prompt_user} $%F{cyan}${dir}%f ${_prompt_end}'
+  PROMPT='${_prompt_error}${root}${_prompt_time} ${_prompt_gh_user} ${_prompt_current_dir} ${_prompt_end}'
   RPROMPT='${git_info}'
 fi
 
