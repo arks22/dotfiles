@@ -204,41 +204,39 @@ function precmd() {
     if [ "$PWD" = "$VSCODE_WORKSPACE" ]; then
       dir="{project}"
     elif [[ "$PWD" =~ "$VSCODE_WORKSPACE" ]]; then
-        dir="{project}$rel_path"
+      dir="{project}$rel_path"
     fi
   fi
 
-  _prompt_error='%(?,,%F{red}%K{black} ✘%f%f|%k)'
-  _prompt_time='%F{green}%T%f'
-  _prompt_user='%F{magenta}${GITHUB_USER}%f'
-  _prompt_end='%F{blue}> %f%k'
-  _prompt_dir="%F{cyan}$dir%f"
-
-  # 環境に応じてプロンプトを構築
-  if [ ! -z $VIMRUNTIME ]; then # in VIM
-    PROMPT="${_prompt_error}${root}${_prompt_time} ${_prompt_user} ${_prompt_dir} ${_prompt_end}"
-  elif [ ! -z $TMUX ]; then #in TMUX 
-    PROMPT="${_prompt_error}${root}${_prompt_time} ${_prompt_user} ${_prompt_end}"
-  elif [ $TERM_PROGRAM = "vscode" ]; then
-    PROMPT="${_prompt_error}${root}${_prompt_time} ${_prompt_user} ${_prompt_dir} ${_prompt_end}"
-  else
-    PROMPT="${_prompt_error}${root}${_prompt_time} ${_prompt_user} ${_prompt_dir} ${_prompt_end}"
-    RPROMPT='${git_info}'
-  fi
-
-  # 改行
-  PROMPT2='%F{blue}» %f'
-
-  # 打ち間違い
-  SPROMPT='zsh: correct? %F{red}%R%f -> %F{green}%r%f [y/n]:'
 
   if [ ! -z $TMUX ]; then
     tmux refresh-client -S
   fi
 }
 
-# シェル起動時にも実行
-precmd
+# "と'の扱いに注意！
+_prompt_error='%(?,,%F{red}%K{black} ✘%f%f|%k)'
+_prompt_time='%F{green}%T%f'
+_prompt_user="%F{magenta}${GITHUB_USER}%f"
+_prompt_end='%F{blue}> %f%k'
+
+# 環境に応じてプロンプトを構築
+if [ ! -z $VIMRUNTIME ]; then # in VIM
+  PROMPT='${_prompt_error}${root}${_prompt_time} ${_prompt_user} %F{cyan}${dir}%f ${_prompt_end}'
+elif [ ! -z $TMUX ]; then #in TMUX 
+  PROMPT='${_prompt_error}${root}${_prompt_time} ${_prompt_user} ${_prompt_end}'
+elif [ $TERM_PROGRAM = "vscode" ]; then # in VSCode
+  PROMPT='${_prompt_error}${root}${_prompt_time} ${_prompt_user} %F{cyan}${dir}%f ${_prompt_end}'
+else # raw terminal
+  PROMPT='${_prompt_error}${root}${_prompt_time} ${_prompt_user} $%F{cyan}${dir}%f ${_prompt_end}'
+  RPROMPT='${git_info}'
+fi
+
+# 改行
+PROMPT2='%F{blue}» %f'
+
+# 打ち間違い
+SPROMPT='zsh: correct? %F{red}%R%f -> %F{green}%r%f [y/n]:'
 
 function command_not_found_handler() {
   echo "zsh: command not found: ${fg[red]}$0${reset_color}"
