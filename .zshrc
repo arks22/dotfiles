@@ -55,7 +55,11 @@ zstyle ':completion:*' list-separator '-->'
 export EDITOR=nvim
 export LANG=en_US.UTF-8
 export XDG_CONFIG_HOME=$HOME/.config
+# dockerコマンドを実行したときにlimaではなくローカル環境でdockerが動いてしまうため、dockerコマンドのhost設定を環境変数に設定する。
 export export DOCKER_HOST=unix:///${HOME}/.lima/docker/sock/docker.sock # for lima
+export PATH="$HOME/.jenv/bin:$PATH"
+export PATH=$(go env GOPATH)/bin:$PATH
+eval "$(jenv init -)"
 
 export OS="$(uname -s)"
 
@@ -109,15 +113,16 @@ alias -s rb="ruby"
 alias -s py='python'
 alias g="git"
 alias gs="git status"
-alias ga="git add -A"
-alias gc="git commit -m"
-alias gp="git push origin main"
-alias glog="git-log-fzf"
+alias ga="git add"
+alias gc="git commit"
+alias gco="git checkout"
+alias gpl="git pull"
+alias gps="git push -u origin HEAD"
 alias gac="git add -A && auto-git-commit"
 alias gacp="git_add_commit_push"
-alias gps="git_push_current_branch"
 alias ggl="google"
 alias ecc="compile_and_exec_c_file"
+alias grw="./gradlew"
 
 function compile_and_exec_c_file() {
   if [[ $# = 1 ]]; then
@@ -132,7 +137,7 @@ function compile_and_exec_c_file() {
 }
 
 function git_add_commit_push() {
-  git add -A && auto-git-commit && git push origin $(git branch | awk '/\*/' | sed -e "s/*//")
+  git add -A && auto-git-commit && git push origin HEAD
 }
 
 function git_push_current_branch {
@@ -146,52 +151,99 @@ function imgcat_tmux() {
 
 ######################## prompt ########################
 
+# GitHubユーザー情報を格納するグローバル変数
+typeset -g GITHUB_USER=""
+
+# GitHubユーザー情報を更新する関数
+update_github_user() {
+    GITHUB_USER=$(command gh auth status 2>&1　| grep -B1 "Active account: true" | head -1 | sed 's/.*account \([^ ]*\).*/\1/')
+}
+
+# シェル起動時に実行
+update_github_user
+
+gh() {
+    command gh "$@"
+    local exit_status=$?
+
+    # authコマンドの実行時のみユーザー情報を更新
+    if [[ $# -gt 0 ]] && [[ $1 == "auth" ]]; then
+        update_github_user
+    fi
+
+    return $exit_status
+}
+
 #excute before display prompt
 function precmd() {
   [ $(whoami) = "root" ] && root="%K{black}%F{yellow} ⚡ %f|%k" || root=""
-  if [ -z $TMUX ] || [ ! -z $VIMRUNTIME ]; then
-    dir="%F{cyan}%K{black} %~ %k%f"
-    if git_status=$(git status 2>/dev/null ); then
+
+  # 素のシェルの場合
+  if [ -z $TMUX ] && [ -z $VIMRUNTIME ] && [ ! $TERM_PROGRAM = "vscode" ]; then
+    if git_status=$(git status -uno 2>/dev/null ); then
       git_branch="$(echo $git_status| awk 'NR==1 {print $3}')"
       case $git_status in
-        *Changes\ not\ staged* ) state=$'%{\e[30;48;5;013m%} ± %f%k' ;;
-        *Changes\ to\ be\ committed* ) state="%K{blue}%F{black} + %k%f" ;;
-        * ) state="%K{green}%F{black} ✔ %f%k" ;;
+        *Changes\ not\ staged* ) state="%F{magenta}±%f" ;;
+        *Changes\ to\ be\ committed* ) state="%F{blue}+%f" ;;
+        * ) state="%F{green}✔%f" ;;
       esac
-      if [[ $git_branch = "main" ]]; then
-        git_info="%K{black}%F{blue} ${git_branch} %f%k${state}"
+      if [[ $git_branch = "main" ]] || [[ $git_branch = "master" ]] then
+        git_info="%F{blue} ${git_branch} %f%k%B${state}%b"
       else
-        git_info="%K{black} ${git_branch}%f ${state}"
+        git_info="${git_branch} %B${state}%b"
       fi
     else
       git_info=""
     fi
+  fi
+
+  # カレントディレクトリ
+  dir="%~"
+  if [ $TERM_PROGRAM = "vscode" ] && [ -n "$VSCODE_WORKSPACE" ]; then
+    local rel_path="${PWD#$VSCODE_WORKSPACE}"
+    if [ "$PWD" = "$VSCODE_WORKSPACE" ]; then
+      dir="{project}"
+    elif [[ "$PWD" =~ "$VSCODE_WORKSPACE" ]]; then
+        dir="{project}$rel_path"
+    fi
+  fi
+
+  _prompt_error='%(?,,%F{red}%K{black} ✘%f%f|%k)'
+  _prompt_time='%F{green}%T%f'
+  _prompt_user='%F{magenta}${GITHUB_USER}%f'
+  _prompt_end='%F{blue}> %f%k'
+  _prompt_dir="%F{cyan}$dir%f"
+
+  # 環境に応じてプロンプトを構築
+  if [ ! -z $VIMRUNTIME ]; then # in VIM
+    PROMPT="${_prompt_error}${root}${_prompt_time} ${_prompt_user} ${_prompt_dir} ${_prompt_end}"
+  elif [ ! -z $TMUX ]; then #in TMUX 
+    PROMPT="${_prompt_error}${root}${_prompt_time} ${_prompt_user} ${_prompt_end}"
+  elif [ $TERM_PROGRAM = "vscode" ]; then
+    PROMPT="${_prompt_error}${root}${_prompt_time} ${_prompt_user} ${_prompt_dir} ${_prompt_end}"
   else
+    PROMPT="${_prompt_error}${root}${_prompt_time} ${_prompt_user} ${_prompt_dir} ${_prompt_end}"
+    RPROMPT='${git_info}'
+  fi
+
+  # 改行
+  PROMPT2='%F{blue}» %f'
+
+  # 打ち間違い
+  SPROMPT='zsh: correct? %F{red}%R%f -> %F{green}%r%f [y/n]:'
+
+  if [ ! -z $TMUX ]; then
     tmux refresh-client -S
   fi
 }
 
-
-if [ ! -z $VIMRUNTIME ]; then
-  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}${dir}%K{black}%F{blue}> %f%k'
-  RPROMPT=$'${git_info}'
-elif [ ! -z $TMUX ]; then #in TMUX 
-  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)${root}%K{black}%F{green} %T%F{blue} > %f%k'
-else
-  PROMPT=$'%(?,,%F{red}%K{black} ✘%f %f|%k)%K{black}${root}%F{green} %T%F{cyan}${dir}%K{black}%F{blue} > %f%k'
-  RPROMPT=$'${git_info}'
-fi
-
-PROMPT2='%F{blue}» %f'
-
-SPROMPT='zsh: correct? %F{red}%R%f -> %F{green}%r%f [y/n]:'
+# シェル起動時にも実行
+precmd
 
 function command_not_found_handler() {
   echo "zsh: command not found: ${fg[red]}$0${reset_color}"
   exit 1
 }
-
-
 
 ######################## cd ########################
 

@@ -12,3 +12,5 @@ export PATH="/Library/TeX/texbin:$PATH" #MacTex
 export PATH="$PATH:$HOME/dotfiles/bin"
 
 export PATH="usr/local/bin:$PATH"
+
+export PATH="/usr/local/go/bin:$PATH"
