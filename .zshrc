@@ -27,7 +27,6 @@ fi
 
 zplug load --verbose
 
-
 ######################## general ########################
 
 #install tpm(tmux plugin manager)
@@ -56,7 +55,7 @@ export EDITOR=nvim
 export LANG=en_US.UTF-8
 export XDG_CONFIG_HOME=$HOME/.config
 # dockerコマンドを実行したときにlimaではなくローカル環境でdockerが動いてしまうため、dockerコマンドのhost設定を環境変数に設定する。
-export export DOCKER_HOST=unix:///${HOME}/.lima/docker/sock/docker.sock # for lima
+export DOCKER_HOST=unix:///${HOME}/.lima/docker/sock/docker.sock # for lima
 export PATH="$HOME/.jenv/bin:$PATH"
 export PATH=$(go env GOPATH)/bin:$PATH
 eval "$(jenv init -)"
@@ -179,7 +178,7 @@ function precmd() {
   [ $(whoami) = "root" ] && root="%K{black}%F{yellow} ⚡ %f|%k" || root=""
 
   # 素のシェルの場合
-  if [ -z $TMUX ] && [ -z $VIMRUNTIME ] && [ ! $TERM_PROGRAM = "vscode" ]; then
+  if [ -z $TMUX ] && [ -z $VIMRUNTIME ]; then
     if git_status=$(git status -uno 2>/dev/null ); then
       git_branch="$(echo $git_status| awk 'NR==1 {print $3}')"
       case $git_status in
@@ -219,7 +218,6 @@ function precmd() {
   _prompt_gh_user="%F{magenta}${GITHUB_USER}%f"
   _prompt_current_dir="%F{cyan}${dir}%f"
 }
-
 
 # 環境に応じてプロンプトを構築
 if [ ! -z $VIMRUNTIME ]; then # in VIM
@@ -310,3 +308,16 @@ elif [[ ! $(whoami) = "root" ]]; then
   fi
   
 fi
+
+######################## lima ########################
+
+# limaが起動しているか確認し、起動していなければ起動する
+function check_and_start_lima() {
+  if ! limactl list | grep -q "Running"; then
+    echo "Starting lima..."
+    limactl start docker
+  fi
+}
+
+# シェル起動時にlima確認処理を実行
+check_and_start_lima
