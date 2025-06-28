@@ -2,3 +2,13 @@
 .zshrc_zgen
 .config/github-copilot/hosts.json
 .config/github-copilot/versions.json
+*.db
+*.log
+*.log.*
+*.log.*.*
+*.log.*.*.*
+*.log.*.*.*.*
+*.log.*.*.*.*.*
+*.log.*.*.*.*.*.*
+*.log.*.*.*.*.*.*.*
+*.log.*.*.*.*.*.*.*.*

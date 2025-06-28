@@ -72,7 +72,7 @@ setopt list_types
 setopt print_eight_bit
 setopt auto_param_keys
 setopt auto_list
-setopt correct
+# setopt correct  # 修正候補機能を無効化（入力待ちを避けるため）
 setopt prompt_subst
 setopt no_flow_control
 
@@ -116,6 +116,7 @@ alias gcp="git cherry-pick"
 alias ggl="google"
 alias ecc="compile_and_exec_c_file"
 alias grw="./gradlew"
+alias python="python3"
 
 function compile_and_exec_c_file() {
   if [[ $# = 1 ]]; then
@@ -290,8 +291,8 @@ fi
 # 改行
 PROMPT2='%F{blue}» %f'
 
-# 打ち間違い
-SPROMPT='zsh: correct? %F{red}%R%f -> %F{green}%r%f [y/n]:'
+# 打ち間違い（correct機能は無効化済み）
+# SPROMPT='zsh: correct? %F{red}%R%f -> %F{green}%r%f [y/n]:'
 
 function command_not_found_handler() {
   echo "[INFO] command not found: ${fg[red]}$0${reset_color}"
@@ -368,12 +369,27 @@ fi
 ######################## lima ########################
 
 # limaが起動しているか確認し、起動していなければ起動する
+
 function check_and_start_lima() {
+  # Check if limactl command exists
+  if ! which limactl > /dev/null 2>&1; then
+    echo "[INFO] 'limactl' command not found. Skipping Lima check and start."
+    return 0
+  fi
+
+  # If limactl exists, proceed with checking and starting
   if ! limactl list | grep -q "Running"; then
     echo "[INFO] Starting Lima..."
     limactl start docker
+  else
+    echo "[INFO] Lima is already running." # Optional: Add message when already running
   fi
 }
 
+
 # シェル起動時にlima確認処理を実行
 check_and_start_lima
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
